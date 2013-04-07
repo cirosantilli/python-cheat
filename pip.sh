@@ -39,3 +39,5 @@
 #uninstall package:
 
     sudo pip uninstall $pkg
+
+    sudo pip install git@github.com:cirosantilli/python.git
