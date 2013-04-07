@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#!note=8
 
-##sources
+"""
+#sources
 
 #- <http://www.diveintopython.net/index.html>
 
     #good beginners tutorial
+"""
+
 
 ##learning path
 

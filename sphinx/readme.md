@@ -1,24 +1,36 @@
-generate srt doc for python source
+doc html/pdf documentation from rest markdown.
 
-may use docstrings
+may use docstrings with a default extension.
 
 it is used on the python official documentation
 
-uses reST as base markup language.
+the automatic doc finding/generation is not yet very good IMHO,
+but the rest works good.
 
-the automatic doc finding/generation is not yet very good IMHO.
-
-install:
+#install
 
     sudo pip install sphinx
 
-#get stated
+#dir structure
 
-    sphinx-quickstart
+this simulates a real project, with documentation in `doc/`, and `mod` and `mod2` are modules.
 
-generates lots of template files.
+##build
 
-##generate doc from docstrings
+    make html
+
+I added a make `firefox` rule to the `Makefile` to make it easier to test:
+
+    firefox: html
+        firefox $(BUILDDIR)/html/index.html
+
+and also automated `sphinx-autodoc` generation on my `Makefile`.
+
+#extensions
+
+##autodoc
+
+generate doc from docstrings
 
 enable `autodoc`. Add:
 
@@ -31,8 +43,6 @@ to `extensions` and the module to path:
     sys.path.append( os.path.join( os.path.dirname( os.getcwd() ) ) )
 
 in `conf.py`.
-
-##use docstrings
 
 From now on, you can the following directive once for each module
 in path you want to autogenerate documentation to:
@@ -84,13 +94,30 @@ but adapted for `apidoc`.
 Note however that in current version if you add a file to your module, it is not automatically
 added on the default make, and you have to run `sphinx-apidoc` manually.
 
-##build
+##math
 
-    make html
+there are two default methods: mathjax or png.
 
-I added a make `firefox` rule to the `Makefile` to make it easier to test:
+###png
 
-    firefox: html
-        firefox $(BUILDDIR)/html/index.html
+I prefer png because it loads instanteneously.
 
-and also automated `sphinx-autodoc` generation on my `Makefile`.
+for png math, you need to have the `dvipng` program installed and in your path.
+
+this program converts dvi to png *surprise!*
+
+on ubuntu:
+
+    sudo aptitude install dvipng
+
+##doctest
+
+check all `>>>` snippets
+
+enable extension:
+
+    'sphinx.ext.doctest',
+
+build for it:
+
+    sphinxbuild -b doctest
