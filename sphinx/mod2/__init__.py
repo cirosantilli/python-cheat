@@ -1,0 +1,3 @@
+"""
+mod2 docstring
+"""
