@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#!note=8
+#?note=8
 
 """
 #sources
@@ -1164,42 +1164,6 @@ a is None
     #for example, to always true, while is cannot
     #http://jaredgrubb.blogspot.com.br/2009/04/python-is-none-vs-none.html
 
-###hasattr
-
-class A:
-    a = 10
-if hasattr(A, 'a'): 
-    print True
-
-###geattr
-
-value = obj.attribute
-value = getattr(obj, "attribute")
-
-#of a module
-
-### settings.py ###
-PARAM = True
-
-### otherfile.py
-param = getattr(settings, "PARAM", False) #default to False
-
-###setattr
-
-class A:
-    pass #empty class
-setattr(A, 'name', 'value')
-
-###any expression goes
-
-hasa = True
-class A:
-    if hasa:
-        a = 1
-    else:
-        a = 0
-assert A.a == 1
-
 ###classes can be made inside functions
 
 def func(val):
@@ -1675,15 +1639,53 @@ class C(object):
 
 __builtins__.dir()
 
-###functions
+###hasattr
 
-####dir
+class A:
+    a = 1
+    def f():
+        pass
 
-#list all available names in current scope:
+assert hasattr(A, 'a')
+assert hasattr(A, 'f')
+assert not hasattr(A, 'b')
+
+assert hasattr(A(), 'a')
+assert hasattr(A(), 'f')
+assert not hasattr(A(), 'b')
+
+###geattr
+
+value = obj.attribute
+value = getattr(obj, "attribute")
+
+###setattr
+
+class A: pass
+
+setattr(A, 'name', 'value')
+assert A.name == 'value'
+
+###any expression goes
+
+hasa = True
+class A:
+    if hasa:
+        a = 1
+    else:
+        a = 0
+
+assert A.a == 1
+
+###dir
+
+#list all available names in current scope
+
+#but not functions
 
 dir()
 
-#list all attruibutes of name (module, class, function):
+#list all attributes of name (module, class, function):
 
 import 
 dir(os)
