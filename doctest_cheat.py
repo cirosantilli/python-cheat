@@ -1,48 +1,75 @@
 #!/usr/bin/env python
 
-#use as quick and dirty testing for simpler functions
-#cannot replace really unit tests, specially for more complex functions
-#serves as good example documentation
+#cannot replace unittest, specially for more complex functions
 
-def local_search(self, query, numresults=_LOCAL_RESULTS_PER_PAGE, **kwargs):
+#serves mainly as good example for documentation
+
+def f():
     """
-    Searches Google Local for the string `query` and returns a
-    dictionary of the results.
+    pass:
 
-    >>> print "asdf"
-    adsf
-    >>> for a in [1,3,2]:
+    >>> print 'abc'
+    abc
+
+    fail:
+
+    >>> print 1
+    2
+
+    define stuff:
+
+    >>> a = 1
+    >>> print a
+    1
+
+    indent:
+
+    >>> if True:
+    ...     print 'a'
+    a
+
+    multiline output:
+
+    >>> for a in [1,2]:
     ...   print a
     1
-    3
     2
-    >>> function_defined_on_this_module():
-    out
+
+    call itself:
+
+    >>> print f()
+    1
+
+    call other funcs:
+
+    >>> print f2()
+    2
+
+    unpredictable output:
+
+    >>> f # doctest: +ELLIPSIS
+    <function f at 0x...>
+
+    the comment `# doctest: +ELLIPSIS` is obligatory and is called a directive.
+
+    exceptions:
+
+    >>> raise ZeroDivisionError
+    Traceback (most recent call last):
+        File "<stdin>", line 1, in <module>
+    ZeroDivisionError
+
+    >>> raise ZeroDivisionError
+    Traceback (most recent call last):
+        File "<stdin>", line 1, in <module>
+    AnotherError
+
     """
+    return 1
+
+def f2():
+    return 2
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-#unpredictable output
-    class MyClass(object):
-        pass
-
-    def unpredictable(obj):
-        """Returns a new list containing obj.
-
-        >>> unpredictable(MyClass()) #doctest: +ELLIPSIS
-        [<doctest_ellipsis.MyClass object at 0x...>]
-        """
-        return [obj]
-
-###exceptions
-
-def this_raises():
-    """This function always raises an exception.
-
-    >>> this_raises()
-    Traceback (most recent call last):
-    RuntimeError: here is the error
-    """
-    raise RuntimeError('here is the error')
