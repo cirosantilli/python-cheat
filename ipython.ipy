@@ -1,0 +1,141 @@
+#!/usr/bin/env ipython
+
+#must use ipy extension, or ipython uses regular python with python file
+
+##review
+
+#pythonlike shell
+
+#advantages:
+
+#- all programming contructs are sane (python)
+#- easier to call system shell
+#- autocompletion
+#- some bash built-ins like cd
+#- quick documentation with ?
+
+#still some important features missing.
+
+##regular python
+
+#all of normal python works
+
+a = 1
+print a
+
+def f(a):
+    print a
+
+def f2(a,b):
+    """
+    docstring of f2
+    """
+    print a + b
+
+##tab completion
+
+#works even for python objects in current scope.
+
+#type f, hit tab, and see `f2`!
+
+##bash built ins
+
+#cd works
+
+##documentation
+
+f2?
+
+##magic
+
+#call python functions with less typing
+
+#only work at start of strings
+
+#avoid typing parenthesis and commas:
+
+/f2 1,2
+/f2 1 2
+
+#any space is converted to a comma:
+    #/f2 1, 2
+
+#also autoquote:
+
+,f2 ab cd
+,f2 12 34
+
+#autoquote as single argument:
+
+;f a b
+
+#TODO how to get their return values?
+
+##shell
+
+!echo a
+!echo a | cat
+
+!echo A > a.tmp
+!cat a.tmp
+!rm a.tmp
+
+#it really runs inside your shell:
+
+!echo *
+
+#TODO how to avoid running in a shell?
+
+###get stdout err
+
+a = !echo abc
+assert a[0] == 'abc'
+
+a = !echo abc 1>&2
+assert a[0] == 'abc'
+
+#TODO how to separate stdout and stderr? I would love to write:
+
+#out, err = !somecommand
+
+a = !echo 'ab\ncd'
+assert a == ['ab','cd']
+
+#other expressions besides equality don't work:
+
+    #a = [1] + !echo ab
+
+###pass python variable
+
+a = 'ab cd'
+!echo $a
+
+###strings are python strings
+
+a = !echo 'ab\ncd'
+assert a == ['ab','cd'] 
+
+###exit status
+
+!false
+assert _exit_code == 1
+
+#but does not work when you capture stdout/stderr:
+
+!false
+a = !true
+assert _exit_code == 1
+
+#TODO how to do this?
+
+#simply does not change.
+
+##rehashx
+
+#once used, you don't need '!' anymore
+
+#TODO it works in interactive, why not here?
+
+%rehashx
+
+#echo b

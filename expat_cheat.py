@@ -1,56 +1,103 @@
+#!/usr/bin/env python
+
+"""
+sequential xml parsing
+
+no child/parent concept
+
+harder to use, but very memory efficient
+"""
+
 import os.path
 from xml.parsers import expat
 
 class Parser:
 
     def __init__(self):
-	self._result = '<ul>\n'
+        self._result = 'begin\n'
         self._parser = expat.ParserCreate()
-        self._parser.StartElementHandler = self.start
-        self._parser.EndElementHandler = self.end
-        self._parser.CharacterDataHandler = self.data
+
+        #set what function does what
+        self._parser.StartElementHandler    = self.tagOpen
+        self._parser.EndElementHandler      = self.tagClose
+        self._parser.CharacterDataHandler   = self.tagData
+
+        #find attributes of matching opening tag of a closing tag
+        self._attr_stack = []
 
     def feed(self, data):
+        """
+        set data to process
+        """
         self._parser.Parse(data, 0)
 
     def close(self):
-        self._parser.Parse("", 1) # end of data
-        del self._parser # get rid of circular references
-	self._result += '</ul>'
-
-    def start(self, tag, attrs):
-	id = attrs['id']
-        self._result += '<li><a href="index.html?' + id  + '">' + id + '</a></li>\n'
-
-    def end(self, tag):
-	1
-#        self._result += "END" + str(tag) + "\n"
-
-    def data(self, data):
-	1
-#        self._result+= "DATA" + repr(data)
+        """
+        called after input is over
+        """
+        #self._parser.Parse("", 1)   # end of data
+        #del self._parser            # get rid of circular references
+        self._result += 'end\n'
 
     def result(self):
-	return self._result
+        """
+        returns the processed input
+        """
+        return self._result
 
-home_dir = os.path.dirname(os.path.dirname(__file__))
+    def tagOpen(self, tag, attrs):
+        """
+        tag open
+        """
+        self._result += 'open: ' + tag + ' ' + str(attrs) + '\n'
+        self._attr_stack.append(attrs)
 
-input_path = os.path.join(home_dir,'toc.xml')
-output_path = os.path.join(home_dir,'toc.html')
+    def tagData(self, data):
+        """
+        data inside tags
+        """
+        self._result+= 'data: ' + repr(data) + '\n'
 
-#get input from file
-file = open(input_path,'r')
-input = file.read()
-file.close()
+    def tagClose(self, tag):
+        """
+        tag close
+        """
+        self._result += 'close: ' + tag + ' ' + str(self._attr_stack[-1]) + '\n'
+        del self._attr_stack[-1]
 
-#transform xml
+##get input
+
+xml_data = '''<t a="v" a2="v2">
+    d
+    d2
+    <t2 a21="v" a22="v2">
+        d3
+        d4
+    </t2>
+    d5
+    d6
+</t>'''
+
+###from file
+
+#file = open(argv[1],'r')
+#xml_data = file.read()
+#file.close()
+
+##parse
+
 p = Parser()
 p.feed(xml_data)
 p.close()
 output = p.result()
 
-#do something with output
-print result
+##do something with output
+
+print output
+
+###to a file
+
+#output_path = os.path.join(home_dir,'a.html')
 #file = open(output_path,'w')
 #file.write(output)
 #file.close()

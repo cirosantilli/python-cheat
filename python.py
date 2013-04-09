@@ -167,7 +167,10 @@ assert a == 1
 assert b == 1
 assert 2 * 3 == 6
 assert 1 / 2 == 0
-assert 1. / 2. == 5
+assert 1 / 2 == 0
+assert 1 / 2. == .5
+a = 2
+assert 1 / float(2) == .5   #`typecast`
 assert 5 % 3            #mod == 2
 assert 2 ** 3           #pow == 8
 assert 9 // 2           #floor division == 4
@@ -381,6 +384,13 @@ assert l[2:]  == [2, 3]
 assert l[-2:] == [0, 1]
 assert l[:-2] == [2, 3]
 
+l = range(5)
+assert l[::2]   == [0, 2, 4]
+assert l[:3:2]  == [0, 2]
+assert l[2::2]  == [2, 4]
+assert l[0:3:2] == [0, 2]
+assert l[::-1]  == [4,3,2,1,0] #invert list!
+
 #####default value if overflow
 
 l[i] if len(l) > i else default
@@ -541,27 +551,31 @@ print {key: value for (key, value) in [(1, 2), (3, 4)] }
 
 ###set
 
-#list without order of unique elements
+#list *without* order of unique elements
 
-#- len(s) 	  	cardinality of set s
-#- x in s 	  	test x for membership in s
-#- x not in s 	  	test x for non-membership in s
-#- s.issubset(t) 	s <= t 	test whether every element in s is in t
-#- s.issuperset(t) 	s >= t 	test whether every element in t is in s
-#- s.union(t) 	s | t 	new set with elements from both s and t
-#- s.intersection(t) 	s & t 	new set with elements common to s and t
-#- s.difference(t) 	s - t 	new set with elements in s but not in t
-#- s.symmetric_difference(t) 	s ^ t 	new set with elements in either s or t but not both
-#- s.copy() 	  	new set with a shallow copy of s 
-#- s.update(t) 	s |= t 	return set s with elements added from t
-#- s.intersection_update(t) 	s &= t 	return set s keeping only elements also found in t
-#- s.difference_update(t) 	s -= t 	return set s after removing elements found in t
-#- s.symmetric_difference_update(t) 	s ^= t 	return set s with elements from s or t but not both
-#- s.add(x) 	  	add element x to set s
-#- s.remove(x) 	  	remove x from set s; raises KeyError if not present
-#- s.discard(x) 	  	removes x from set s if present
-#- s.pop() 	  	remove and return an arbitrary element from s; raises KeyError if empty
-#- s.clear() 	  	remove all elements from set s
+#iteration order is not fixed from run to run!
+
+#uses hashmap data, so ultra cheap find/insert ($O(1)$)!
+
+#- len(s) 	  	                    cardinality of set s
+#- x in s 	  	                    test x for membership in s
+#- x not in s 	  	                test x for non-membership in s
+#- s.issubset(t) 	                s <= t 	test whether every element in s is in t
+#- s.issuperset(t) 	                s >= t 	test whether every element in t is in s
+#- s.union(t) 	                    s | t 	new set with elements from both s and t
+#- s.intersection(t) 	            s & t 	new set with elements common to s and t
+#- s.difference(t) 	                s - t 	new set with elements in s but not in t
+#- s.symmetric_difference(t) 	    s ^ t 	new set with elements in either s or t but not both
+#- s.copy() 	  	                new set with a shallow copy of s 
+#- s.update(t) 	                    s |= t 	return set s with elements added from t
+#- s.intersection_update(t) 	    s &= t 	return set s keeping only elements also found in t
+#- s.difference_update(t) 	        s -= t 	return set s after removing elements found in t
+#- s.symmetric_difference_update(t)	s ^= t 	return set s with elements from s or t but not both
+#- s.add(x) 	  	                add element x to set s
+#- s.remove(x) 	  	                remove x from set s; raises KeyError if not present
+#- s.discard(x) 	  	            removes x from set s if present
+#- s.pop() 	  	                    remove and return an arbitrary element from s; raises KeyError if empty
+#- s.clear() 	  	                remove all elements from set s
 
 assert set( [2, 1] ) == set( [1, 2] )
 assert set( [1, 2] ).add(3) == set([1, 2, 3])
@@ -579,7 +593,9 @@ elif False:
 else:
     pass
 
-####non booleans
+####non booleans ##is
+
+#for built-in types, `is` is more strict than `==`
 
 if 1:
     pass
@@ -986,7 +1002,7 @@ class A():
     def __init__(self, a, b):
         print "Constructor A was called"
         self.a = a 
-
+        self.b = b
 
     #def __cmp__(self, other):
         #"""
@@ -1031,6 +1047,24 @@ class A():
         """
         return
 
+    def __add__(self, other):
+        """
+        >>> A(1,2) + A(3,4)
+        4 6
+        """
+
+    #exists for all operators:
+    #__not__
+    #__and__
+    #__or__
+
+    #<http://docs.python.org/2/library/operator.html>
+
+    def __add__(self, other):
+        """
+        >>> A(1,2) + A(3,4)
+        """
+
     def __hash__(self, other):
         """
         makes hashable, allowing it to be for example a dictionnary key
@@ -1060,7 +1094,7 @@ class A():
         >>> A()
         class A()
         """
-        return 'class A()'
+        return self.a + ' ' + self.b
 
     def __len__(self):
         """
@@ -1522,10 +1556,15 @@ import itertools
 #- izip: count to infinity
 #- count: count to infinity
 
+###default iterators
+
+####product
+
+#cartesian product
+
 for i, j in itertools.product(xrange(3), xrange(3)):
     print i, j
 
-###default iterators
 
 ####enumerate
 
@@ -2003,16 +2042,6 @@ re.split(r'[ab]+', '0abba1aaaaa2')
     #python curses insterface
     
     #see curses_cheatsheet.py
-
-###random
-
-import random
-
-random.sample([1, 2, 3, 4, 5, 6], 2)
-#takes elements at random from list
-
-for i in random.sample(xrange(2), 2):
-    print i;
 
 ##os
 

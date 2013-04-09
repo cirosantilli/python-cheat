@@ -4,6 +4,14 @@
 
 #serves mainly as good example for documentation
 
+"""
+this is a docstring for the module, so it is tested:
+
+>>> 1+1
+3
+>>> mod_doc = 1
+"""
+
 def f():
     """
     pass:
@@ -16,11 +24,21 @@ def f():
     >>> print 1
     2
 
-    define stuff:
+    define names:
 
     >>> a = 1
     >>> print a
     1
+
+    only works for stuff defined in current docstring:
+
+    >>> mod_doc
+    Traceback (most recent call last):
+        File "/usr/lib/python2.7/doctest.py", line 1289, in __run
+            compileflags, 1) in test.globs
+        File "<doctest __main__.f[4]>", line 1, in <module>
+            mod_doc
+    NameError: name 'mod_doc' is not defined
 
     indent:
 
@@ -50,7 +68,7 @@ def f():
     >>> f # doctest: +ELLIPSIS
     <function f at 0x...>
 
-    the comment `# doctest: +ELLIPSIS` is obligatory and is called a directive.
+    the comment `# doctest: +ELLIPSIS` is obligatory and is called a *directive*
 
     exceptions:
 
@@ -66,6 +84,15 @@ def f():
 
     """
     return 1
+
+"""
+not a docstring becaues there is stuff before it.
+
+not tested:
+
+>>> 1+1
+4
+"""
 
 def f2():
     return 2
