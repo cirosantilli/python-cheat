@@ -528,6 +528,11 @@ print d
 del d["b"]
 print d
 
+#add new if not defined:
+
+assert {1:2}.setdefault(1:3) == {1:2}
+assert {   }.setdefault(1:3) == {1:2}
+
 d  = dict([('sape', 4139), ('guido', 4127), ('jack', 4098)])
 #dict from list of pairs
 
@@ -546,8 +551,20 @@ d1.update({'as':12})
 d1.update(1 = 2, 3 = 4)
 #update d1 to add/update values of dict d2 and d3 and as key
 
-#dictionnary comprehentions
+#dictionnary comprehentions:
+
 print {key: value for (key, value) in [(1, 2), (3, 4)] } 
+
+#check is key is in dict:
+d = {1:2}
+
+if 1 in d:
+    pass
+else:
+    assert False
+
+if 2 in d:
+    assert False
 
 ###set
 
@@ -817,16 +834,16 @@ def f(a):
 
 #if you have default values to a large number of them kwargs
 #this is a good way, which saves you from writting lots of ``gets``
-def f(**non_default_kwargs):
+
+def f( **non_default_kwargs ):
 
     kwargs = {
-        'default':False,
-        'action':'store_true',
-        'help':"if given, do not ignore case (enabled by default)",
+        'a':1,
+        'b':2,
     }
-    kwargs.update(non_default_kwargs)
+    kwargs.update( non_default_kwargs )
 
-    other_func(**kwargs)
+    f2( **kwargs )
 
 ###variables can contain functions
 
@@ -1368,30 +1385,38 @@ except Exception, e:
 
 ###reraise
 
-#to add/modify info
+#can be used to add/modify info
+
+#it is hard to modify and reraise i python 2
+
+#it seems python 3 introduces the `raise from` statement which makes that much easier!
+
+#<http://stackoverflow.com/questions/696047/re-raising-exceptions-with-a-different-type-and-message-preserving-existing-inf>
+
 try:
+
     raise Exception("msg")
 
 except Exception, e:
 
-    raise Exception("updated msg")
     #YOU LOSE THE TRACEBACK!!
+    raise Exception( "updated msg\n" + str(e) )
 
-    #to print you traceback
-    import traceback
-    traceback.print_exc(
-        #file = sys.stdout #stderr is the default
-    )
+    #to keep traceback:
+    #import traceback
+    #traceback.print_exc(
+        ##file = sys.stdout #stderr is the default
+    #)
 
-    #for more info
+    #for more info on current exception:
     print sys.exc_info()
     print sys.exc_type
     print sys.exc_value
     print sys.exc_traceback
 
+    #those keep the traceback
     raise e
     raise
-    #same thing
 
 ###standard exceptions
 
@@ -2242,12 +2267,28 @@ termcolor.cprint(
 import os
 
 #a dictionnary that contains all environment variables:
+
 print os.environ
 
 #get one from the dict:
-print os.environ['PATH']
 
-##bad
+if 'PATH' in os.environ:
+    print os.environ['PATH']
+
+#always check if it is defined!
+
+###set values
+
+####good
+
+#one by one
+
+os.environ['SOME_VAR'] = 'abc'
+assert os.environ['SOME_VAR'] == 'abc'
+
+#subprocess will inherit this, for example those opened with `Popen`.
+
+####bad
 
 #this does *not* work!:
 os.environ = {'a':'b'}
@@ -2258,16 +2299,6 @@ os.environ
 #the docs say it only sets os.environ the first time it is imported!
 
 #you have onlly change what the name environ means here.
-
-###setdefault
-
-#if already defined, return old value and do not change the value:
-print os.environ.setdefault('PATH', 'asdf')
-print os.environ['PATH']
-
-#if not defined, set it and return new value
-print os.environ.setdefault['I_AM_PROBABLY_NOT_DEFINED', 'asdf']
-print os.environ['I_AM_PROBABLY_NOT_DEFINED']
 
 ##command line arguments
 

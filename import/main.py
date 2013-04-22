@@ -134,7 +134,8 @@ print sys.path
 
 ####environment variable
 
-print os.environ['PYTHONPATH']
+if 'PYTHONPATH' in os.environ:
+    print os.environ['PYTHONPATH']
 
 #``:`` separated list of paths to search for *before* other paths
 

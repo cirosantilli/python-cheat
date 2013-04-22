@@ -16,8 +16,6 @@
 
 #<http://webpython.codepoint.net/wsgi_environment_dictionary>
 
-from wsgiref.simple_server import make_server
-
 def application(environ, start_response):
     """
     this function must have this signature:
@@ -55,6 +53,8 @@ def application(environ, start_response):
 ### test server
 
 #### set server params
+
+from wsgiref.simple_server import make_server
 
 httpd = make_server(
     'localhost', #hostname
