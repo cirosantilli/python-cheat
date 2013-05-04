@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-current best maths package for python
+current best math package for python
 """
 
 ##numpy vs scipy

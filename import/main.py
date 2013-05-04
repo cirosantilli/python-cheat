@@ -12,6 +12,28 @@ import sys
 #- relative to current file ( possibly != from ``os.getcwd()`` ! )
 #- python module search path
 
+##module search path
+
+#view current python module search path:
+
+print sys.path
+
+###append to module search path
+
+####environment variable
+
+if 'PYTHONPATH' in os.environ:
+    print os.environ['PYTHONPATH']
+
+#``:`` separated list of paths to search for *before* other paths
+
+#has higher precedence than installation default paths
+
+####sys.path
+
+sys.path.append( '/the/new/path' )
+sys.path.insert( 0, '/the/new/path' )
+
 ##__init__
 
 #a *module* is either:
@@ -123,26 +145,6 @@ except Exception:
     pass
 else:
     assert False
-
-##path
-
-#view current python module search path:
-
-print sys.path
-
-###append to module search path
-
-####environment variable
-
-if 'PYTHONPATH' in os.environ:
-    print os.environ['PYTHONPATH']
-
-#``:`` separated list of paths to search for *before* other paths
-
-####sys.path
-
-sys.path.append( '/the/new/path' )
-sys.path.insert( 0, '/the/new/path' )
 
 ##relative imports
 

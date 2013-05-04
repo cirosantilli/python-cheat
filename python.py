@@ -18,23 +18,6 @@
     
 import timedate
 
-###tox
-
-#sudo pip install tox
-
-#TODO
-
-###package macking
-#http://guide.python-distribute.org/creation.html
-import setup
-
-###sphinx
-
-#generate python documentation from docstrings
-
-#- <http://packages.python.org/an_example_pypi_project/sphinx.html>
-#- <http://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html>
-
 ###web
 
 ####django
@@ -901,22 +884,23 @@ assert f(2) == False
 
 ####global
 
-def setA_wrong(b):
-    a = b
+def setA_wrong():
+    a = 2
 
-def setA_right(b):
+def setA_right():
     global a
-    a = b
+    a = 2
 
 a = 1
-setA_wrong(2)
+setA_wrong()
 assert a == 1
-setA_right(2)
+setA_right()
 assert a == 2
 
 ###nested functions
 
 #this is the way to go
+
 def ex8():
     ex8.var = 'foo'
     def inner():
@@ -1277,6 +1261,14 @@ class C:
 c = C('the my object')
 c.print_all()
 
+###virtual method
+
+#method that must be overridden on inheritting class
+
+class A:
+    def f():
+        raise NotImplementedError
+
 ##__dict__
 
 #readonly
@@ -1295,6 +1287,7 @@ assert f.__dict__ == { 'a' : 1 }
 ###object
 
 class C:
+
     def __init__(self):
         self.a = 1
         self.b = "abc"
@@ -1590,7 +1583,6 @@ import itertools
 for i, j in itertools.product(xrange(3), xrange(3)):
     print i, j
 
-
 ####enumerate
 
 assert list( enumerate( ['a', 'c', 'b'] ) ) == [(0, 'a'), (1, 'c'), (2, 'b'), ]
@@ -1849,7 +1841,7 @@ print C.a
 
 #there are however some operations may be only
 #available to certain types of streams.
-I get
+
 #for example, search operations can be done on files, but not on stdin/out
 
 ###read methods
@@ -1869,6 +1861,10 @@ f.read()
 #read up to 128 bytes:
 
 f.read(128)
+
+#read single ascii char:
+
+f.read(1)
 
 #read up to first \n or EOF:
 
@@ -1995,22 +1991,21 @@ print datetime.datetime.fromtimestamp(0) #get a datetime from a seconds after 19
 
 ##regex
 
-    import re
+import re
 
 ###get match objects from compiled re
 
-#match() 	Determine if the RE matches at the beginning of the string.
-#search() 	Scan through a string, looking for any location where this RE matches.
-#findall() 	return list of all matching *strings*, *not* match objects
-#finditer() 	return iterator of match objects
+#match() 	    get match for **THE ENTIRE**!!!!!!! string
+#search() 	    first match anywhere in the string
+#findall() 	    iterator of matching *strings*, **NOT**!!! match objects
+#finditer() 	iterator of match objects
 
 ###match object functions
 
 #group() 	Return the string matched by the RE
 #start() 	Return the starting position of the match
-#end() 	Return the ending position of the match
+#end() 	    Return the ending position of the match
 #span() 	Return a tuple containing the (start, end) positions of the match
-
 
 ###predefined classes
 
@@ -2021,19 +2016,41 @@ print datetime.datetime.fromtimestamp(0) #get a datetime from a seconds after 19
 #- \w [a-zA-Z0-9_].
 #- \W
 
-p = re.compile(r"find(\d)", re.IGNORECASE | re.DOTALL)
+###lookahead
+
+#don't eat front part or regex
+
+p = re.compile( r'a.' )
+assert p.sub( '0', 'abaac' ) == '00c'
+
+p = re.compile( r'a(?=.)' )
+assert p.sub( '0', 'abaac' ) == '0b00c'
+
+###flags
+
+p = re.compile( r'a', re.IGNORECASE | re.DOTALL )
 
 ###sub
 
-p = re.compile( '(blue|white|red)')
-p.sub( 'colour', 'blue socks and red shoes')
-'colour socks and colour shoes'
-p.sub( 'colour', 'blue socks and red shoes', count = 1)
-'colour socks and red shoes'
+p = re.compile( '(a.|b.)')
 
-###sub
+#by string:
 
-#same as sub(), but return a tuple (new_string, number_of_subs_made).
+assert p.sub( '0', 'a_b_abc' ) == '000c'
+
+#by callable:
+
+assert p.sub( lambda m: m.group(1)[1:], 'a_b-abc' ) == '_-bc'
+
+#count:
+
+assert p.sub( '0', 'a_b_abc', count=1 ) == '0b_abc'
+
+###subn
+
+#same as sub but also returns number of subs made:
+
+assert p.subn( '0', 'a_b_abc' ) == ( '000c', 3 )
 
 ###match
 

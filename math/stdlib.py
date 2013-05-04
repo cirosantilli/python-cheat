@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-this illustrates math operations supported by the stdlib
+cheat on math operations supported by the stdlib
 """
 
 assert abs(-1) == 1

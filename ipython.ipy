@@ -44,6 +44,8 @@ def f2(a,b):
 
 ##documentation
 
+#put docstring of f2 `less`:
+
 f2?
 
 ##magic
@@ -57,17 +59,31 @@ f2?
 /f2 1,2
 /f2 1 2
 
+#are the same as `f2(1,2)`
+
 #any space is converted to a comma:
+
     #/f2 1, 2
+
+#is the same as f2(1,,2)
 
 #also autoquote:
 
 ,f2 ab cd
+
+#same as `f2('ab','cd')`
+
 ,f2 12 34
+
+#same as `f2('12','34')`. They are not number anymore but strings!
 
 #autoquote as single argument:
 
 ;f a b
+
+#same as `f('a b')`
+
+#you can only have single argument functions in this mode
 
 #TODO how to get their return values?
 
@@ -84,7 +100,7 @@ f2?
 
 !echo *
 
-#TODO how to avoid running in a shell?
+#TODO how to avoid running in a shell? (python pipes for example)
 
 ###get stdout err
 
@@ -139,3 +155,31 @@ assert _exit_code == 1
 %rehashx
 
 #echo b
+
+##startup files
+
+#based on profiles
+
+#to create default profile:
+
+    #ipython profile create
+
+#to create a named profile:
+
+    #ipython profile create $name
+
+#to locate your profiles folder (does not exist before the first profile create):
+
+    #ipython locate
+
+#inside location dirs are organized as follows:
+
+    #profile_<name>/startup
+
+#anything under `startup` will be run at startup for the given profile
+
+#start ipython with an specific profile:
+
+    #ipython --profile $name
+
+#if ommitted `name=default`.
