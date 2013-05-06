@@ -13,6 +13,36 @@ but use the distro's package manager. On ubuntu:
 
    sudo aptitude install python-matplotlib
 
+#developping
+
+clone besides of being able to hack matplotlib,
+you also get of tons of example files with this!
+
+if you are on Ubuntu get the built dependencies:
+
+    sudo aptitude build-dep python-matplotlib
+
+then build c extensions and install with:
+
+    sudo python setup.py install
+
+##test hacks
+
+you cannot put the python files in your python path simply without installing,
+because the compiled dependencies won't go to the correct place without an install
+(crashes on `_path` not found).
+
+So, after you made changes do again:
+
+    sudo python setup.py install
+
+after you build the files c files, which is what takes the longest,
+you don't have to build them again, so after you hack just:
+
+the problem with this is that you cannot keep the distro default installed also.
+
+TODO how not to install after every change
+
 #architecture
 
 ##state machine

@@ -4,7 +4,7 @@
 contains stuff that is common to all plots of a project
 
 takes as input exactly one command line argument which is the
-path of a python file with a `plot` which has the same signature as `Plotter.plot`:func:
+path of a python file with a `plot` which has the same signature as `plot`:func:
 
 the goal of this design is to separte separate plots into different
 files so that:
@@ -34,31 +34,15 @@ class DefaultParameters:
     encapsulates all the default plot parameters
     """
 
-class Plotter:
-    def plot( plt, params ):
-        """plot on an empty plt object
+def plot( plt, params ):
+    """plot on an empty plt object
 
-        :param plt: a clean ``matplotlib.pyplot`` object
-        :type plt:  ``matplotlib.pyplot``
-        :param params: default plot params. Function may override those defaults.
-        :type params:  the class `DefaultParameters`:class: (not an instance)
-        """
-        raise NotImplementedError
-
-def save( name, path_head=out_dir, ext=out_ext ):
-    """helper to plot svgs
-    
-    :param name: basename without extension of the output
-    :type  name: string
-    :param path_head: path without basename of output
-    :type  path_head: string
+    :param plt: a clean ``matplotlib.pyplot`` object
+    :type plt:  ``matplotlib.pyplot``
+    :param params: default plot params. Function may override those defaults.
+    :type params:  the class `DefaultParameters`:class: (not an instance)
     """
-    plt.savefig( os.path.join( path_head, name + '.' + ext ) , format=ext, bbox_inches='tight' )
-
-def save_clear( name, path_head=out_dir, ext=out_ext ):
-    """same as `save_svg`:func: but also clears plot afterwards"""
-    save( name, path_head, ext )
-    plt.clf()
+    raise NotImplementedError
 
 if __name__ == '__main__':
     path = sys.argv[1]
@@ -71,4 +55,5 @@ if __name__ == '__main__':
         raise
     else:
         plotter.plot( plt, DefaultParameters )
-        save_clear( name )
+        plt.savefig( os.path.join( out_dir, name + '.' + out_ext ) , format=out_ext, bbox_inches='tight' )
+        plt.clf()
