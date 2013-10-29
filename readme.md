@@ -1,12 +1,32 @@
-cheats and information on python and libraries.
+Cheats and information on python and libraries.
 
-whenever possible, I make the cheat runnable and full of assertions!
+Whenever possible, I make the cheat runnable and full of assertions!
 
-whatch out for not naming a module with the same as in the stdlib,
+Watch out for not naming a module with the same as in the stdlib,
 or you will import the module from current dir instead!
 this is why some files are named *cheat.py.
 
-# pros of python
+#sources
+
+- <http://www.diveintopython.net/index.html>
+
+    good beginners tutorial
+
+#command line options
+
+- `-O`: optimize.
+
+    - `assert` is removed from `.pyc`
+
+    - `__debug__ == False`
+
+        You can write stuff like
+
+            if __debug__: print "debug"
+
+        and it will only show show is `-O` is off.
+
+#pros of python
 
 Python is great for small/medium projects:
 
@@ -22,7 +42,7 @@ Python is great for small/medium projects:
 
     good when writting smaller scripts because it means much less typing.
 
-# cons of python
+#cons of python
 
 - dinamically typing:
 
@@ -39,3 +59,43 @@ Python is great for small/medium projects:
 - package management is still not perfect.
 
 - autodocumentation tools are still not perfect (`Shpinx`)
+
+#how to hack python projects
+
+- create a dir: `$DEVPATH`
+
+- add it to the `PYTHONPATH` variable. This will insert it in the `sys.path` before distro's installation paths
+
+- symlink all the packages of the project into `$DEVPATH`
+
+- to turn off your dev version of matplotlib and fall back to the stable distro installed one,
+    just rename `matplotlib` as `matplotlib.off`
+
+- if the project contains c/c++ extensions, you can:
+
+        python setup.py build_ext --inplace
+
+    the first time, and whenever you modify a c/c++ extension.
+
+    This will place the compiled c/c++ outputs side by side with the python code in the repo,
+    exactly where they need to be, without touching anything outside the repo.
+
+#good python libraries
+
+##science
+
+- numpy
+- scipy
+- matplotlib
+
+##web
+
+- django
+
+    most used python web framework.
+
+- trac
+
+    top django bugtracker.
+
+    Not Django based.

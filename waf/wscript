@@ -1,0 +1,51 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+top = '.'
+out = 'build'
+
+def a(ctx):
+    print('a')
+
+def b(ctx):
+    print('b')
+
+def ctx(ctx):
+    """
+    properties of ctx
+    """
+    print('ctx')
+    print( 'ctx.path.abspath() ==' + ctx.path.abspath() )
+    print( 'id(ctx) == %d' % id(ctx) )
+
+def subwaf(ctx):
+    """
+    call another wscript
+
+    by default searchs for target named `subwaf`
+    """
+    print('subwaf')
+    ctx.recurse('d')
+
+def options(ctx):
+        ctx.add_option(
+            '--aa',
+            action='store',
+            default=False,
+            help='help'
+        )
+
+def configure(ctx):
+        print('configure')
+        ctx.env.AA = ctx.options.aa
+        #check if program exists:
+        #- if not say it
+        #- if yes, assign it to a variable containing its path
+        ctx.find_program('touch', var='TOUCH')
+        #ctx.find_program('idontexist', var='IDONTEXIST')
+
+def build(bld):
+        print('build')
+        print(ctx.env.TOUCH)
+        print(ctx.env.FOO)
+        bld(rule='${TOUCH} ${TGT}', target='foo.txt')
