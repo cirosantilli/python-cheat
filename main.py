@@ -94,38 +94,40 @@ if "##whitespace":
 
 if "#built-in types":
 
-    # <http://docs.python.org/3.3/reference/datamodel.html>
-    #
-    # Types which are already defined by the interpreter.
-    #
-    # They have special (non-class) syntaxes and literals.
-    #
-    # They are:
-    #
-    # - numerics:
-    #
-    #     - int
-    #     - float
-    #     - long
-    #     - complex
-    #
-    # - sequences:
-    #
-    #     - list
-    #     - string
-    #     - tuple
-    #
-    # - sets:
-    #
-    #     - set
-    #     - set
-    #
-    # - mappings:
-    #
-    #     - dict
+    '''
+    <http://docs.python.org/3.3/reference/datamodel.html>
 
-    # There are some differences between built-in types and user defined classes.
-    # TODO: understand differences: <http://www.python.org/download/releases/2.2.3/descrintro/>
+    Types which are already defined by the interpreter,
+    and do not need to be imported.
+
+    They may have special (non-class-like) literals.
+
+    The most important are:
+
+    - numerics:
+
+        - int
+        - float
+        - long
+        - complex
+
+    - sequences:
+
+        - list
+        - string
+        - tuple
+
+    - sets:
+
+        - set
+
+    - mappings:
+
+        - dict
+
+    There are some differences between built-in types and user defined classes.
+    TODO: understand differences: <http://www.python.org/download/releases/2.2.3/descrintro/>
+    '''
 
     assert(type(int())      == type(0))
     assert(type(float())    == type(0.0))
@@ -134,11 +136,10 @@ if "#built-in types":
 
 if "##numbers":
 
-    import numbers
+    # Defines an hierarchy on numbers. <http://docs.python.org/2/library/numbers.html>
 
-    # Defines an hierarchy on numbers.
-    #
-    # <http://docs.python.org/2/library/numbers.html>
+
+    import numbers
 
     assert isinstance(0, numbers.Integral)
     assert isinstance(0, numbers.Rational)
@@ -152,6 +153,12 @@ if "##complex":
     j = 2
     assert 1j * 1j == -1
     assert j * j   == 4
+
+    assert 1j * 1j == -1
+    assert (1 + 2j).real == 1
+    assert (1 + 2j).imag == 2
+    assert 1j.conjugate() == -1j
+
 
 if "##list":
 
@@ -265,6 +272,13 @@ if "##list":
             assert None == l.sort(reverse=True)
             assert l == [3, 2, 1]
 
+    if "##items are references, not copies":
+
+        l0 = range(3)
+        l1 = [l0]
+        l1[0][0] = 1
+        assert l0 == [1, 1, 2]
+
     if "##access":
 
         l = [0, 1, 2]
@@ -311,14 +325,10 @@ if "##list":
         else:
             assert False
 
-    if "##items are references":
-
-        l0 = range(3)
-        l1 = [l0]
-        l1[0][0] = 1
-        assert l0 == [1, 1, 2]
-
 if "##string":
+
+    # There are 2 commonly used classes: *str* and *unicode*
+    # *basestring* is their common ancestor
 
     import string
 
@@ -326,19 +336,19 @@ if "##string":
 
         print "string.whitespace = " + string.whitespace.encode('string-escape')
 
-    #2 classes: *str* and *unicode*
-    #*basestring* is their common ancestor
+    if "###single vs double quotes":
 
-    ###single vs double quotes
+        # There is no semantical difference:
 
-    #no difference:
+        assert "abc" == 'abc'
 
-    assert "abc" == 'abc'
+        # Except for excaping quotes themselves:
 
-    #except for excaping quotes themselves:
+        assert "'" == '\''
+        assert '"' == "\""
 
-    assert "'" == '\''
-    assert '"' == "\""
+        # By convention, `'` is more used for identifiers (say, map keys)
+        # while `"` is more used for messages: `print "Hello world!"`.
 
     if "##multiline strings":
 
@@ -387,93 +397,107 @@ b""" == "a\nb"
     assert "ab" "cd" == "abcd"
     assert "ab" * 3 == "ababab"
 
-    ##replace
-
-    #1 replace max
+    # replace: replaces at most once:
 
     assert "aabbcc".replace("b", "0")   == "aa00cc"
     assert "aabbcc".replace("bb", "0")  == "aa0cc"
     assert "aabbcc".replace("b", "0", 1) == "aa0bcc"
 
-    ##split
+    if "#split":
 
-    assert "0ab1ab2".split("ab") == ['0', '1', '2']
-    assert "0abab2".split("ab")  == ['0', '', '2']
+        # Split string into array of strings:
 
-    #if string not given, *splits at `string.whitespace*` regex*!:
-    #very confusing default that changes behaviour completely.
+        assert "0ab1ab2".split("ab") == ['0', '1', '2']
+        assert "0abab2".split("ab")  == ['0', '', '2']
 
-    assert "0 1\t \n2".split() == ['0', '1', '2']
+        # If string not given, splits at `string.whitespace*` **regex**!:
+        # Very confusing default that changes behaviour completely!
 
-    #split at ``[\n\r]+`` regex:
+        assert "0 1\t \n2".split() == ['0', '1', '2']
 
-    assert "0\n1\r2\r\n3".splitlines()  == ['0', '1', '2', '3']
+        # Split at ``[\n\r]+`` regex:
+
+        assert "0\n1\r2\r\n3".splitlines()  == ['0', '1', '2', '3']
 
     if "##strip":
 
-        """
+        '''
         strip chars either from either beginning or end, *not* middle!
 
         characters to strip are given on a string
 
         default argument: `string.whitespace`
-        """
+        '''
 
         assert "cbaba0a1b2ccba".strip("abc") == "0a1b2"
         assert "\t\n0 1 2\v \r".strip() == "0 1 2"
 
-    ##query
-
     assert "abc".startswith("ab") == True
     assert "abc".startswith("bc") == False
 
-    ##string to number
+    # String to number:
 
     assert int("123") == 123
     assert float("12.34e56") == 12.34e56
 
-    #char to int:
+    # Char to int:
 
     assert ord('a') == 97
 
-    ##encode
+    # Encode:
 
     assert '\n'.encode('string-escape') == '\\n'
 
-    ##unicode
+    if "#unicode":
 
-    #the second line of the file *must* be:
+        # The second line of the file *must* be:
 
-        # -*- coding: utf-8 -*-
+            # -*- coding: utf-8 -*-
 
-    #to be able to use utf8 directly in python source!!
+        # to be able to use utf8 directly in python source.
 
-    #*bad*:
+        # BAD:
 
-    s = "åäö"
-    print s
+        s = "åäö"
+        print s
 
-    #this works for for the terminal, where python recognizes the terminla encoding
-    #ALWAYS, I MEAN, ALWAYS encode unicdoe stuff that may be piped out and unicode!
+        # This works for for the terminal, where python recognizes the terminla encoding
+        # ALWAYS, I MEAN, ALWAYS encode unicdoe stuff that may be piped out and unicode!
 
-    #*good*:
+        # GOOD:
 
-    s = u"中文"
-    print s.encode('utf-8')
+        s = u"中文"
+        print s.encode('utf-8')
 
 if "##tuple":
 
+    # Immutable list of elements of any type
+
+    # Special constructor notation:
+
     t = (1, 2, 3)
-    t = tuple([1, 2, 3]) #from list
+
+    # Global factory method from list:
+
+    assert tuple([1, 2, 3]) == (1, 2, 3)
+
+    # Doest not exist:
+
+        #t = tuple(1, 2, 3)
+
     t2 = (4, 5, 6)
     t3 = (4, 5, 1)
     tb = (False, False, True)
     tm = (1, 1.1, True, "asdf")
 
+    # Index access:
+
     t = (1, 2, 3)
     assert t[0] == 1
     assert t[1] == 2
     assert t[2] == 3
+
+    # Unpack:
 
     a, b, c = (1, 2, 3)
     assert a == 1
@@ -490,76 +514,135 @@ if "##tuple":
         else:
             assert False
 
-    t = (0, 1)
-    t2 = (2, 3)
-    assert t + t2 == (0, 1, 2, 3)
+    # Concatenate:
+
+    assert (0, 1) + (2, 3) == (0, 1, 2, 3)
 
     t = (0, 1)
     assert t * 2  == (0, 1, 0, 1)
     assert 2 * t  == (0, 1, 0, 1)
 
-    print t < t2
-    print t < t3
+    # Compare: does alphabetical like compare from left to right.
 
-    print len(t)
-    print max(t)
-    print min(t)
-    print any(tb)
-    print all(tb)
-    print divmod(5, 2)
+    assert (0, 1)  == (0, 1)
+    assert (0, 1)  < (1, 2)
+    assert (0, 10) < (1, 1)
+    # TODO why:
+    #assert (0, 1)  > (1)
+
+    # The list global functions also work on tuples:
+
+    assert len((0,1)) == 2
+    assert max((0,1)) == 1
+    assert min((0,1)) == 0
+    assert any((True, False)) == True
+    assert all((True, False)) == False
+
+##map
+
+    # See dict.
 
 if "##dict":
 
-    d = {1:"a", "b":2, 1.1:2}
+    # Unordered map of keys and values of any type.
+
+    if "##create":
+
+        # Built-in constructor syntax:
+
+        d = {1: 'a', 'b': 2, 1.1: 2}
+
+        # Global factory function.
+
+        # From list of pairs:
+
+        assert dict([(0, 'zero'), (1, 'one')]) == {0: 'zero', 1: 'one'}
+
+        # From kwargs (keys can only be strings):
+
+        assert dict(zero=0, one=1) == {'zero': 0, 'one': 1}
+
+        # Dictionnary comprehention:
+
+        assert {key: value for (key, value) in [(1, 2), (3, 4)]} == {1: 2, 3: 4}
+
+    # To list of pairs:
+
+    d = {1: 'one', 2: 'two'}
+    assert set(d.items()) == set([(1, 'one'), (2, 'two')])
+
+    # Get list of keys (undefined order)
+
+    d = {1: 'one', 2: 'two'}
+    assert set(d.keys()) == set([1, 2])
+
+    # To string:
+
+    print "dict str() = "
     print d
-    print d[1] #order is undefied!
-    print d["b"]
 
-    # print d["c"] #exception!
+    # Undefined output because undefined key order.
 
-    print d.get("c", "default value")
+    # Get value of key:
 
-    # List of keys with undefined order:
+    d = {1: 'one', 2: 'two'}
+    assert d[1] == 'one'
 
-    print "keys() = "
-    print d.keys()
+    # If not in dict, `KeyError` exception:
 
-    # Modify value
+    d = {}
+    try:
+        d['not-a-key']
+    except KeyError:
+        pass
+    else:
+        assert False
 
-    d["b"] = 3
-    print d
+    # Check if key is in dict:
+
+    d = {1: 2}
+
+    if 1 in d:
+        pass
+    else:
+        assert False
+
+    if 2 in d:
+        assert False
+
+    # Get default value if not present:
+
+    assert d.get('not-a-key', 'default value') == 'default value'
 
     # Add new pair:
 
-    d["c"] = 4
-    print d
+    d= {}
+    d[0] = 'zero'
+    assert d == {0: 'zero'}
 
     # Remove pair:
 
-    del d["b"]
-    print d
+    d= {0: 'zero'}
+    del d[0]
+
+    # If key not present, KeyError:
+
+    try:
+        del d[0]
+    except KeyError:
+        pass
+    else:
+        assert False
 
     # Add new pair if key not present:
 
-    d = {1:2}
-    assert d.setdefault(1,3) == 2
-    assert d == {1:2}
+    d = {1: 2}
+    assert d.setdefault(1, 3) == 2
+    assert d == {1: 2}
 
     d = {}
-    assert d.setdefault(1,3) == 3
-    assert d == {1:3}
-
-    # Dict from list of pairs
-
-    d  = dict([('sape', 4139), ('guido', 4127), ('jack', 4098)])
-
-    # Dict from kwargs:
-
-    d = dict(sape=4139, guido=4127, jack=4098)
-
-    # Dict to list of pairs:
-
-    print d.items()
+    assert d.setdefault(1, 3) == 3
+    assert d == {1: 3}
 
     # Add update all keys on d0 with those of d1:
 
@@ -576,45 +659,29 @@ if "##dict":
     d01.update(d1)
     assert d01 == {0: 'zero2', 1: 'one', 2: 'two'}
 
-    # Dictionnary comprehention:
-
-    assert {key: value for (key, value) in [(1, 2), (3, 4)]} == {1: 2, 3: 4}
-
-    # Check if key is in dict:
-
-    d = {1:2}
-
-    if 1 in d:
-        pass
-    else:
-        assert False
-
-    if 2 in d:
-        assert False
-
 if "##set":
 
-    #uses hashmap data, so ultra cheap find/insert ($O(1)$)!
+    # Unordered set of unique elements.
 
-    #- len(s) 	  	                    cardinality of set s
-    #- x in s 	  	                    test x for membership in s
-    #- x not in s 	  	                test x for non-membership in s
-    #- s.issubset(t) 	                s <= t 	test whether every element in s is in t
-    #- s.issuperset(t) 	                s >= t 	test whether every element in t is in s
-    #- s.union(t) 	                    s | t 	new set with elements from both s and t
-    #- s.intersection(t) 	            s & t 	new set with elements common to s and t
-    #- s.difference(t) 	                s - t 	new set with elements in s but not in t
-    #- s.symmetric_difference(t) 	    s ^ t 	new set with elements in either s or t but not both
-    #- s.copy() 	  	                new set with a shallow copy of s
-    #- s.update(t) 	                    s |= t 	return set s with elements added from t
-    #- s.intersection_update(t) 	    s &= t 	return set s keeping only elements also found in t
-    #- s.difference_update(t) 	        s -= t 	return set s after removing elements found in t
-    #- s.symmetric_difference_update(t)	s ^= t 	return set s with elements from s or t but not both
-    #- s.add(x) 	  	                add element x to set s
-    #- s.remove(x) 	  	                remove x from set s; raises KeyError if not present
-    #- s.discard(x) 	  	            removes x from set s if present
-    #- s.pop() 	  	                    remove and return an arbitrary element from s; raises KeyError if empty
-    #- s.clear() 	  	                remove all elements from set s
+    # - len(s) 	  	                    cardinality of set s
+    # - x in s 	  	                    test x for membership in s
+    # - x not in s 	  	                test x for non-membership in s
+    # - s.issubset(t) 	                s <= t 	test whether every element in s is in t
+    # - s.issuperset(t) 	                s >= t 	test whether every element in t is in s
+    # - s.union(t) 	                    s | t 	new set with elements from both s and t
+    # - s.intersection(t) 	            s & t 	new set with elements common to s and t
+    # - s.difference(t) 	                s - t 	new set with elements in s but not in t
+    # - s.symmetric_difference(t) 	    s ^ t 	new set with elements in either s or t but not both
+    # - s.copy() 	  	                new set with a shallow copy of s
+    # - s.update(t) 	                    s |= t 	return set s with elements added from t
+    # - s.intersection_update(t) 	    s &= t 	return set s keeping only elements also found in t
+    # - s.difference_update(t) 	        s -= t 	return set s after removing elements found in t
+    # - s.symmetric_difference_update(t)	s ^= t 	return set s with elements from s or t but not both
+    # - s.add(x) 	  	                add element x to set s
+    # - s.remove(x) 	  	                remove x from set s; raises KeyError if not present
+    # - s.discard(x) 	  	            removes x from set s if present
+    # - s.pop() 	  	                    remove and return an arbitrary element from s; raises KeyError if empty
+    # - s.clear() 	  	                remove all elements from set s
 
     # List *without* order of unique elements:
 
@@ -650,118 +717,29 @@ if "##set":
 
 if "##operator":
 
-    if "##assignment ##=":
-
-        """
-        Assignment operator replaces old reference with a new one:
-        it does not copy the data that the reference points to!
-
-        There are some types which are immutable.
-        Only for those types can you be sure that the reference you passed will not be changed.
-        """
-
-        #lists:
-
-        a = [0]
-        b = a
-        b[0] = 1
-        assert a == [1]
-        assert b == [1]
-
-        #dicts:
-
-        a = {0:1}
-        b = a
-        b[0] = 2
-        assert a == {0:2}
-        assert b == {0:2}
-
-        #objects:
-
-        class A(object):
-            def __init__(self, i):
-                self.i = i
-
-        a = A(0)
-        b = A(1)
-
-        #objects are mutable, so assignment throws old object away,
-        #and a is a reference to b now!
-        a = b
-        assert a.i == 1
-        assert a == b
-        a.i = 2
-        assert b.i == 2
-
-        #ints are immutable:
-
-        a = 0
-        b = a
-        #how to change b without another `b = 1`? impossible becaues ints are immutable!
-        #but if you do `b = 1`, b now points to yet another int object, different from that of a,
-        #so a wont be changed.
-        b = 1
-        assert a == 0
-
-        #strings are immutable:
-
-        a = 0
-        b = a
-        #how to change b without another `b = 1`? impossible becaues ints are immutable!
-        #strings:
-
-        a = "a"
-        b = a
-
-
-        if "##copy":
-            """
-            makes copies and deepcopies of objects
-            """
-
-            import copy
-
-            class A(object):
-                def __init__(self, i):
-                    self.i = i
-
-            b = A(1)
-            a = copy.copy(b)
-            assert a.i == 1
-            assert not a == b
-            a.i = 2
-            assert b.i == 1
-
     assert 0 == 0
-    assert not 0 == 1
 
     assert 2 * 3 == 6
 
-    assert 1 / 2 == 0
-    assert 1 / 2 == 0
-    assert 1 / 2. == .5
+    # C like division arithmetic:
 
-    assert 1 / float(2) == .5   #`typecast`
+    assert 1 / 2        == 0
+    assert 1 / 2.0      == 0.5
+    assert 1 / float(2) == 0.5
 
-    assert 5 % 3            #mod == 2
+    # Floor division:
 
-    assert 2 ** 3           #pow == 8
+    assert 9.0 // 2.0 == 4
 
-    assert 9 // 2           #floor division == 4
-    assert 1.1 // 1.0 == 1.0
+    # pow:
 
-    ####complex
+    assert 2 ** 3
 
-    assert 1j*1j == -1
-    assert (1+2j).real == 1
-    assert (1+2j).imag == 2
-    assert 1j.conjugate() == -1j
+    if "##boolean operator":
 
-    ###boolean operator
-
-    assert not True         == False
-    assert True and False   == False
-    assert True or  False   == True
+        assert not True         == False
+        assert True and False   == False
+        assert True or  False   == True
 
 if "##branching":
 
@@ -924,50 +902,73 @@ if "##function":
 
         assert f(1, 2, 3)                       == (1, 2, [3],      {}              )
         assert f(1, 2, 3, 4)                    == (1, 2, [3, 4],   {}              )
-        assert f(1, 2, *[3, 4])                 == (1, 2, [3, 4],   {}              )
 
         assert f(1, 2, 3, 4,    c=5, d=6)       == (1, 2, [3, 4],   {'c':5, 'd':6}  )
-        assert f(1, 2, *[3, 4], c=5, d=6)       == (1, 2, [3, 4],   {'c':5, 'd':6}  )
         assert f(1, 2,          c=5, d=6)       == (1, 2, [],       {'c':5, 'd':6}  )
-        assert f(1, 2, 3, 4, **{'c':5, 'd':6})  == (1, 2, [3, 4],   {'c':5, 'd':6}  )
-        assert f(1, 2,    **{'c':5, 'd':6})     == (1, 2, [],       {'c':5, 'd':6}  )
 
-        #note how a removed from the kwargs:
+        # If a named parameter exists already, it does not go into kwargs:
 
-        assert f(a = 1)         == (1, 0, [], {} )
-        assert f(a = 1, b = 2)     == (1, 2, [], {} )
-        assert f(b = 2, a = 1)     == (1, 2, [], {} )
-        assert f(a = 1, b = 2, c = 5) == (1, 2, [], {'c':5} )
+        assert f(a = 1)                 == (1, 0, [], {} )
+        assert f(a = 1, b = 2)          == (1, 2, [], {} )
+        assert f(b = 2, a = 1)          == (1, 2, [], {} )
+        assert f(a = 1, b = 2, c = 5)   == (1, 2, [], {'c':5} )
 
-        #ERROR:
+        if "##unpack argument lists":
+
+            # Transform list or dictionnaries into function arguments.
+
+            assert f(*[0, 1]) == (0, 1, [], {})
+            assert f(0, 1, *[2, 3]) == (0, 1, [2, 3], {})
+
+            # Part of them may be named arguments, part may be *args.
+
+            assert f(0, *[1, 2, 3]) == (0, 1, [2, 3], {})
+
+            # ERROR: only named arguments may follow unpacked list
+
+            assert f(0, 1, *[2, 3], c=4) == (0, 1, [2, 3], {'c':4})
+            #assert f(0, 1, *[2, 3], 4) == (0, 1, [2, 3, 4], {})
+
+            # Also possible with dictionnaries:
+
+            assert f(1, 2, 3, 4, **{'c': 5, 'd': 6})    == (1, 2, [3, 4],   {'c': 5, 'd': 6}  )
+            assert f(1, 2,       **{'c': 5, 'd': 6})    == (1, 2, [],       {'c': 5, 'd': 6}  )
+
+            # Can combine dict unpack with named arguments:
+
+            assert f(1, 2,       d=6, **{'c': 5}   )    == (1, 2, [],       {'c': 5, 'd': 6}  )
+
+            # ERROR: dict unpack must be the last thing:
+
+                #assert f(1, 2,       **{'c': 5}, d=6   )    == (1, 2, [],       {'c': 5, 'd': 6}  )
+
+            # Can use list unpack with dict unpack:
+
+            assert f(1, *[2, 3, 4], d=6, **{'c': 5}) == (1, 2, [3, 4],   {'c': 5, 'd': 6}  )
+
+        # ERROR: multiple values for `a`:
 
             #f(1, a = 1)
 
-        #multiple values for value a
+        # ERROR: can only pass dictionnaries if there is a kwargs
 
-        #this only works because we have a **kwargs:
+        #def g(a): pass
+        #g(a = 1)
 
-        #ERROR:
+        # OK: we have kwargs:
 
-            #def g(a):
-                #None
-            #g(a = 1)
+        def g(a, **kwargs): pass
+        g(a = 1)
 
-        #does not work because there are no kwargs!
+        # ERROR: cannot change the order of normal args, *args and **kwargs:
 
-        ###cannot change order
+        #def f(*args, a): pass
+        #def f(**kwargs, a): pass
+        #def f(**kwargs, *args): pass
 
-        #cannot change the order of normal args, *args and **kwargs:
+        # ERROR: cannot use integer (5) as keyword for kwargs: must use strings
 
-        #ERRORS:
-
-            #def f(*args, a):
-            #def f(**kwargs, a):
-            #def f(**kwargs, *args):
-
-        #ERROR:
-        #f(1, 2, *[3, 4], **{5:6})
-        #cannot use integer (5) as keword for kwargs: must use strings
+            #f(1, 2, *[3, 4], **{5:6})
 
         if "##overload":
 
@@ -986,38 +987,35 @@ if "##function":
 
             #f(1, 2, 3)
 
-        ###default values for lots of kwargs
+        if "default values for lots of kwargs":
 
-        #if you have default values to a large number of them kwargs
-        #this is a good way, which saves you from writting lots of ``gets``
+            # If you have default values to a large number of them kwargs
+            # this is a good way, which saves you from writting lots of ``gets``
 
-        def f( **non_default_kwargs ):
+            def f( **non_default_kwargs ):
 
-            kwargs = {
-                'a':1,
-                'b':2,
-            }
-            kwargs.update( non_default_kwargs )
+                kwargs = {
+                    'a':1,
+                    'b':2,
+                }
+                kwargs.update( non_default_kwargs )
 
-            f2( **kwargs )
+                f2( **kwargs )
 
-        ##variables can contain functions
+        if "variables can contain functions":
 
-        def f(x):
-            return x + 1
-        g = f
-        assert g(0) == 1
+            def f(x):
+                return x + 1
+            g = f
+            assert g(0) == 1
 
         if "##pass by value ##pass by reference":
 
             """
-            Firethrower battle: <stackoverflow.com/questions/986006/python-how-do-i-pass-a-variable-by-reference>
+            Flamethrower battle: <stackoverflow.com/questions/986006/python-how-do-i-pass-a-variable-by-reference>
 
-            The bottom line is:
-
-            - when you do `a = b` in python,
-            you do not change the object a contained, you assign a to a new object in current scope,
-            and you lose what you had on that scope.
+            The bottom line is: when you do `a = b` in python, you do not change the object a contained,
+            you assign a to a new object in current scope, and you lose what you had on that scope.
 
             Some objects have modification methods. Calling those methods modifies the object.
 
@@ -1030,7 +1028,8 @@ if "##function":
             def f(a, b):
                 a = a + b
 
-            #integer: immutable
+            # integer: immutable
+
             a = 0
             f(a, 1)
             assert a == 0
@@ -1041,7 +1040,7 @@ if "##function":
             a = g(a)
             assert a == 1
 
-            #string: immutable
+            # string: immutable
             a = "a"
             f(a, "b")
             assert a == "a"
@@ -1052,7 +1051,7 @@ if "##function":
             a = g(a)
             assert a == "ab"
 
-            #list: mutable
+            # list: mutable
             a = [0]
             f(a, [1])
             assert a == [0]
@@ -1062,6 +1061,23 @@ if "##function":
             a = [0]
             g(a)
             assert a == [0, 1]
+
+        if "##immutable types":
+
+            """
+            Immutable types include:
+
+            - integers
+            - strings
+            - tuples
+
+            Mutable types include:
+
+            - lists
+            - dictionnaries
+            """
+
+            #TODO examples. Understand better.
 
     if "#return value":
 
@@ -1102,9 +1118,7 @@ if "##function":
 
     if "##redefine":
 
-        """
-        like any python object, you can redfine functions whenever you want
-        """
+        # Like any python object, you can redfine functions whenever you want.
 
         def f():
             return 0
@@ -1119,9 +1133,7 @@ if "##function":
 
     if "##functions can have attributes":
 
-        """
-        Function attributes have no relation to local variables.
-        """
+        # Function attributes have no relation to local variables.
 
         def f():
             c = 1
@@ -1132,12 +1144,14 @@ if "##function":
 
     if "##lambda":
 
-        #Lambda is function without name
+        '''
+        Lambda is a function without name
 
-        #Lambda functions can only contain a single expression.
+        Lambda functions can only contain a single expression.
 
-        #This means in particular that they cannot contain assigments,
-        #so they are very limited.
+        This means in particular that they cannot contain assigments,
+        so they are very limited.
+        '''
 
         f = lambda x: x + 1
         assert f(0) == 1
@@ -1145,10 +1159,10 @@ if "##function":
 
     if "##scope":
 
-        """
+        '''
         If the value of a variable was not defined inside the function,
         the value in the currently executing scope is taken.
-        """
+        '''
 
         def f(b):
             return a == b
@@ -1174,13 +1188,13 @@ if "##function":
             global_inc_a()
             assert a == 2
 
-            #if the variable was not yet defined on global scope,
-            #it then gets defined once the function is called
-            #and the assignement occurs:
+            # If the variable was not yet defined on global scope,
+            # it then gets defined once the function is called
+            # and the assignement occurs:
 
             def global_def():
                 global defined_in_global_def
-                #this will define the variable on global scope:
+                #This will define the variable on global scope:
                 defined_in_global_def = 1
 
             try:
@@ -1194,32 +1208,32 @@ if "##function":
 
             print defined_in_global_def
 
-            #global means *global*, and *not* inside another function:
+            # Global means *global*, and *not* inside another function:
 
             def outer():
                 x = 1
                 def inner():
 
-                    #this x is not the same as the first one,
+                    #This x is not the same as the first one,
                     #but one on a global scope
                     global x
 
                     x = 2
 
-                #here we do not see the global x,
+                #Here we do not see the global x,
                 #but the one inside outer:
                 inner()
                 assert x == 1
 
-            #here we see the global x defined inside inner:
+            #Here we see the global x defined inside inner:
             outer()
             assert x == 2
 
-            #compare this to what happens with nonlocal
+            # Compare this to what happens with nonlocal in Python 3.
 
     if "##nested functions":
 
-        #this is the way to go:
+        # This is the way to go:
 
         def ex8():
             ex8.var = 'foo'
@@ -1785,6 +1799,23 @@ if "##class":
         a.i = 2
         assert b.i == 2
 
+    if "##copy":
+
+        # Makes copies and deepcopies of objects.
+
+        import copy
+
+        class A(object):
+            def __init__(self, i):
+                self.i = i
+
+        b = A(1)
+        a = copy.copy(b)
+        assert a.i == 1
+        assert not a == b
+        a.i = 2
+        assert b.i == 1
+
     if "##__dict__":
 
         #readonly dict of attribute value pairs.
@@ -1969,10 +2000,14 @@ if "##exceptions":
 
         # For more info on current exception:
 
+        print "sys.exc_info() = "
         print sys.exc_info()
+        print "sys.exc_type() = "
         print sys.exc_type
+        print "sys.exc_value() = "
         print sys.exc_value
-        print sys.exc_traceback
+        print "sys.exc_traceback() = "
+        print sys.exc_value
 
         # The following forms keep the traceback:
 
