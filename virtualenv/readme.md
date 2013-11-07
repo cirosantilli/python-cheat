@@ -1,12 +1,16 @@
-Allows you to run programs in a controlled virtual environment.
+Allows you to run programs in an environment where Python aspects are controlled
 This includes the possibility to control:
 
 - python interpreter version
 - version of each installed python module
 
-This allows to control environments so that program behaviour is reproducible.
+This allows to control environments so that program behavior is reproducible.
 This is fundamental for example for Paas services, where you want to be sure
 that your local tests reflect what happens on the server.
+
+virtualenv can only control Python aspects. If you need even more control over the system,
+the only way is to use a fully blown virtual machine like VirtualBox.
+virtualenv is faster and more convenient if you only need to control Python characteristics.
 
 Install virtualenv with pip:
 
@@ -88,7 +92,7 @@ Now lets switch to the other env, but this time we install termcolor 1.1.0:
     . venv3.3/bin/activate
     pip install termcolor==1.1.0
 
-And just like magic, if we run the same `main.py` we see that the python version
+And just like magic, if we run the same `python main.py` we see that the python version
 and termcolor versions both changed! How cool is that?!
 
 Do open up `venv3.3` just to see that everything is in there once again:
@@ -98,7 +102,7 @@ Once you've have enough fun, just do:
 
     deactivate
 
-And we are back to normal.
+And we are back to the normal world.
 
 # sources
 

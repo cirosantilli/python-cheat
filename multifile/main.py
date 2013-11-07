@@ -53,10 +53,26 @@ if "##module search path":
 
         if "##sys.path":
 
-            #you can do this on a per program basis:
+            # Set search path on a per program basis:
 
             sys.path.append( '/the/new/path' )
             sys.path.insert( 0, '/the/new/path' )
+
+            # Doing this will also change the system path on modules
+            # imported by this module:
+
+            import a
+            assert a.syspath == sys.path
+
+            # Remember that doing:
+
+            #sys.path = ['.']
+
+            # Only changes what the symbol sys.path means on this module,
+            # byt does not change the actual object, so doing this would
+            # *not* change what `a` sees.
+
+            # The same goes for anything you define:
 
 if "##__init__":
 

@@ -1,108 +1,108 @@
 #!/usr/bin/env python
 
-## about
+"""
+WSGI is a Python standrad interface for server communication.
 
-#wsgi python interface for server communication
+It is much like CGI, but Python specific.
 
-#standard wsgi server reference implementation
+The stdlib funishes a WSGI reference implementation.
 
-#much like cgi, but python specific
+There are however other important implementations:
 
-#can have many implementations
+- Apache mod_wsgi
+- gunicorn
 
-#on apache, is commonly implemented with mod_wsgi
-
-##thanks to
-
-#<http://webpython.codepoint.net/wsgi_environment_dictionary>
+The advantage of WSGI is that a single python web script can be run on several
+different implementations with same results.
+"""
 
 def application(environ, start_response):
     """
-    this function must have this signature:
+    This function is the central piece that implements WSGI.
 
-    inputs:
-        take environ dict
-        start_response function of string and list of string pairs
+    Inputs:
 
-    return:
-        response_body
+    - `environ` string to string dict.
 
-    the function name is optional for the wsgiref server,
+        Contains key information about the query that allows our server to generate the correct response.
+
+        For example:
+
+            REQUEST_METHOD: GET
+            PATH_INFO: /a/b
+            QUERY_STRING: c=d
+            RAW_URI: /a/b?c=d
+
+        This may or may not contain `os.environ`.
+
+    - `start_response`: TODO function of string and list of string pairs
+
+    Return value
+
+    - response_body string.
+
+    The function name is optional for the wsgiref server,
     but is very coventional may be obligatory for apache's mod_wsgi,
     so always use it.
     """
-
-    response_body = [
+    env = [
         '%s: %s' % (key, value)
         for key, value in sorted(environ.items())
     ]
-    response_body = '\n'.join(response_body)
-
+    response_body = 'WSGI Test\n\n'
+    response_body += '\n'.join(env)
     status = '200 OK'
-
     response_headers = [
         ('Content-Type', 'text/plain'),
         ('Content-Length', str(len(response_body)))
     ]
     start_response(status, response_headers)
-
     return [response_body]
 
-## test
+if __name__ == '__main__':
 
-### test server
+    ##wsgiref
 
-#### set server params
+    # Set server params:
 
-from wsgiref.simple_server import make_server
+    from wsgiref.simple_server import make_server
 
-httpd = make_server(
-    'localhost', #hostname
-    8051, #port
-    application #the function with the given specifications
-)
+    httpd = make_server(
+        'localhost', # hostname
+        8051,        # port
+        application  # the function with the given WSGI specifications
+    )
 
-#### run server
+    # Handle single request and quit:
 
-#handle single request:
+    #`httpd.handle_request()`
 
-#``httpd.handle_request()``
+    # Handle requests forever:
 
-#handle infinite requests:
+    httpd.serve_forever()
 
-httpd.serve_forever()
+    ##apache mod_wsgi
 
-### apache
+    # First install and load mod_wsgi:
 
-#use mod_wsgi
+    #``` {.bash}
+    #sudo aptitude install -y libapache2-mod-wsgi
+    #```
 
-#first install and load mod_wsgi:
+    # Exceptions are now logged to the server log file.
 
-#``` {.bash}
-#sudo aptitude install -y libapache2-mod-wsgi
-#```
-
-#exceptions are now logged to the server log file
-
-#put this in you apache.conf:
+    # Put this in your `apache.conf`:
 
     #WSGIScriptAlias /the/url /var/www/path/to/wsgi.py
 
-#works just like ``ScriptAlias``
+    # Works just like a `ScriptAlias`
 
-#### optional configurations
+    # Append dir to the *end* of the python search path:
 
-#append dir to the *end* of the python search path:
+        #WSGIPythonPath /path/to/dir1:/path/to/dir2
 
-    #WSGIPythonPath /path/to/dir1:/path/to/dir2
+    ##gunicorn
 
-## try server out
+    #DO:
 
-    #firefox localhost:8051
-
-# with a path:
-
-    #firefox localhost:8051/some/path/to/html.html
-
-#it contains /some/path/to/html.html
-#this allows you to serve what you want for that path.
+        #gunicorn main:application

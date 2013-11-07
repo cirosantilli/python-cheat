@@ -40,3 +40,6 @@ else:
 
 def __call__():
     return "a.__call__()"
+
+import sys
+syspath = sys.path

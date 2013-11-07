@@ -394,6 +394,7 @@ b""" == "a\nb"
     assert "ab" + "cd" == "abcd"
 
     #implicit: only works for strings
+
     assert "ab" "cd" == "abcd"
     assert "ab" * 3 == "ababab"
 
@@ -1009,20 +1010,95 @@ if "##function":
             g = f
             assert g(0) == 1
 
+        if "##immutable types #mutable types":
+
+            """
+            Literals like `1` and `1.1` are objects.
+
+            Immutable type: there is no way (function, member, etc.) to modify the object itself.
+            It is only possible to point to a different object of the same type.
+
+            For all standard types, doing `a = b` always makes a point to a different thing,
+            and does not change what `a` was pointing to.
+
+            For other operators this may vary: `a += 1` may change what `a` points to, or the object pointed to
+            depending on the type.
+
+            Immutable types include:
+
+            - numeric types like integers and floats
+            - strings
+            - tuples
+
+            Mutable types include:
+
+            - lists
+            - dictionnaries
+            """
+
+            if "immutable:":
+
+                x = 1
+                assert id(x) == id(1)
+
+                y = x
+                assert id(x) == id(y)
+
+                y = 2
+                assert x == 1
+                assert id(y) == id(2)
+
+                # Unlike `=`, for immutable types `x += 1` makes `x` point to another address.
+                x = 1
+                x += 1
+                assert id(x) == id(2)
+
+                def f(y):
+                    # Same as y = x
+                    y += 1
+                x = 1
+                f(x)
+                assert x == 1
+
+            if "mutable:":
+
+                x = [1]
+                assert id(x) != id([1])
+                assert x == [1]
+
+                x = [1]
+                y = x
+                assert id(y) == id(x)
+
+                x = [1]
+                y = x
+                assert id(y) == id(x)
+
+                y[0] = 2
+                assert x == [2]
+                assert id(x) == id(y)
+
+                # For mutable types, `+=` may change the actuabl object, not just the address to which `y` points to.
+                y += [3]
+                assert id(x) == id(y)
+                assert x == [2, 3]
+
+                # Doing `y = ` however does change the address pointed to.
+                y = [0]
+                assert id(x) != id(y)
+
+                def f(y):
+                    y[0] = 2
+                x = [1]
+                f(x)
+                assert x == [2]
+
         if "##pass by value ##pass by reference":
 
             """
             Flamethrower battle: <stackoverflow.com/questions/986006/python-how-do-i-pass-a-variable-by-reference>
 
-            The bottom line is: when you do `a = b` in python, you do not change the object a contained,
-            you assign a to a new object in current scope, and you lose what you had on that scope.
-
-            Some objects have modification methods. Calling those methods modifies the object.
-
-            Some objects have no modification methods (integers, strings).
-            Because of that, those objects are called *immutable*.
-            Such objects cannot be modified passing by arg.
-            The only solution there is to return the value and reassign.
+            Only modifications on mutable objects inside a function have effect outside it.
             """
 
             def f(a, b):
@@ -1061,23 +1137,6 @@ if "##function":
             a = [0]
             g(a)
             assert a == [0, 1]
-
-        if "##immutable types":
-
-            """
-            Immutable types include:
-
-            - integers
-            - strings
-            - tuples
-
-            Mutable types include:
-
-            - lists
-            - dictionnaries
-            """
-
-            #TODO examples. Understand better.
 
     if "#return value":
 
@@ -1436,11 +1495,12 @@ if "##class":
         """
 
         a = A()
-        #BAD: adds a new "field" to a!
+        # BAD: adds a new "field" to a!
         a.not_a_member = 0
         assert a.not_a_member == 0
 
-        #if it does not exist however, access throws exception
+        # This new `field` only exists for that particular instance:
+        # it is not created for every instance: this should be done on the `__init__` method.
         a = A()
         try:
             a.not_a_member
