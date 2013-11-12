@@ -10,7 +10,11 @@ this is why some files are named *cheat.py.
 
 - <http://www.diveintopython.net/index.html>
 
-    good beginners tutorial
+    Good beginners tutorial.
+
+- <http://www.cafepy.com/article/python_types_and_objects/python_types_and_objects.html>
+
+    Explains Python types in detail.
 
 #command line options
 

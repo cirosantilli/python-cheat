@@ -18,15 +18,16 @@ so just *always* use `Popen` which is more versatile and less confugins.
 
 ##commands
 
-are automatically escaped for you for the target shell!
+Are automatically escaped for you for the target shell!
 
-for example, note how 'arg 1' is converted to 'arg\ 1' on linux.
+For example, note how 'arg 1' is converted to 'arg\ 1' on Linux.
 
 ##shell
 
-if true, is exactly the same as pasting the command on a shell
+If true, is exactly the same as pasting the command on a shell
 
 never use this beucause:
+
 - it is highly system dependant
 - makes escaping ``insane a la shell''
 
@@ -66,7 +67,7 @@ TODO example
 
 import subprocess
 
-commands = [ 'python', 'a.py', 'arg 1', 'arg 2' ] 
+commands = ['python', 'a.py', 'arg 1', 'arg 2']
 
 try:
 
@@ -81,10 +82,10 @@ try:
 
 except OSError:
     #typically gets here if the executable is not found
-    sys.stderr.write( ' '.join(commands) + '\nfailed' )
+    sys.stderr.write(' '.join(commands) + '\nfailed')
 
 stdin = "stdin1\nstdin2"
-stdout, stderr = process.communicate( stdin )
+stdout, stderr = process.communicate(stdin)
 assert stdout == 'stdout:\nstdin1\nstdin2\n'
 assert stderr == 'stderr:\narg 1\narg 2\n'
 

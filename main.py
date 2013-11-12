@@ -1699,10 +1699,18 @@ if "##function":
 
         def f():
             c = 1
-
+            return c
         f.c = 2
-
+        assert f() == 1
         assert f.c == 2
+
+        # View all the function attributes:
+
+        print 'dir(f) = ' + str(dir(f))
+
+        # The most important attribute is `__call__` which allows us to call the function:
+
+        assert f.__call__() == 1
 
     if "##lambda":
 
@@ -1808,30 +1816,37 @@ if "##function":
 
 if "##class":
 
-    """
-    Python classes.
+    if "#old style #new style #classic classes":
 
-    Classes in Python are very flexible: they are basically namespaces.
+        '''
+        In Python 2 there are 2 types of classes:
 
-    Classes in Python are somewhat messy (late addition?):
+        - classic classes. The only type that existed up to `2.1`.
+            They are deprecated.
 
-    - pass `self` around on all methods
+        - new-style classes. Appeared in 2.1. To create a new-style class
+            it must derive from `object`.
 
-    Unlike Java not all of the standard library is based on class hierarchy:
-    there are many horrible global methods like `len()`
+        Always use new style classes for new code.
 
-    #old vs new classes
-
-        Always use new.
-
-        Old will disappear from 3.0 onwards.
-
-        New inherints from `object` or derived classes.
+        In Python 3 classic classes disappear, and it is not necessary
+        to derive from `object` anymore.
 
         <http://stackoverflow.com/questions/2399307/python-invoke-super-constructor>
-    """
 
-    ##fields
+        Behaviours that have changed between old and new style classes:
+
+        - mro
+        '''
+
+        class Old:
+            pass
+
+        class New(object):
+            pass
+
+        class New2(New):
+            pass
 
     class A(object):
         """
@@ -1904,7 +1919,7 @@ if "##class":
 
         if "##classmethod and ##staticmethod":
 
-            """
+            '''
             The only difference between classmethod and staticmethod is that classmethod
             also gets a reference to the class as argument.
 
@@ -1916,18 +1931,13 @@ if "##class":
                 since using it serves as self documentation of that fact.
 
             <http://stackoverflow.com/questions/136097/what-is-the-difference-between-staticmethod-and-classmethod-in-python>
-            """
+            '''
 
             a = A()
             assert a.class_method(0) == (a.__class__, 0)
             assert A.class_method(0) == (A, 0)
             assert a.static_method(0) == 0
             assert A.static_method(0) == 0
-
-        if "##__class__":
-
-            a = A()
-            assert a.__class__ == A
 
         if "##never access static variables directly via objects":
 
@@ -1954,11 +1964,11 @@ if "##class":
             assert a.static == 2
             assert b.static == 3
 
-            """
+            '''
             You could however achieve that using `__class__`.
 
             This could be useful if you don't want to fix the class name.
-            """
+            '''
 
             a = A()
             b = A()
@@ -1985,7 +1995,7 @@ if "##class":
 
     if "##namespace":
 
-        """
+        '''
         Python classes are just namespaces.
 
         This means for example that the notion of members is just a convention:
@@ -1995,7 +2005,7 @@ if "##class":
         with the same name, code breaks.
 
         Use inheritance like in C++ or Java other languages to achieve that.
-        """
+        '''
 
         a = A()
         # BAD: adds a new "field" to a!
@@ -2108,6 +2118,64 @@ if "##class":
             class A:
                 def f():
                     raise NotImplementedError
+
+        if "##__bases__":
+
+            '''
+            Tuple of direct base classes.
+            '''
+
+            class C00(object): pass
+            class C01(object): pass
+            class C02(object): pass
+            class C1(C01, C00, C02): pass
+            assert C1.__bases__ == (C01, C00, C02)
+
+        if "##MRO ##method resolution order ":
+
+            '''
+            Order in which methods are searched for on its base classes.
+
+            This has changed from old style classes to new style classes:
+
+            - old style classes: search from left to right depth first. Stop at first match.
+            - new style classes: [C3 linearization](http://en.wikipedia.org/wiki/C3_linearization)
+
+                TODO how does this method search instead?
+
+            C3 is also used on Perl 6.
+
+            ##__mro__
+
+                The `__mro__` attribute is a tuple of class objects that contains the
+                MRO order for the class.
+
+                It only exists for new style classes.
+            '''
+
+            class Old: i = 0
+            class Old1(Old): pass
+            class Old2(Old): i = 2
+            class Old12(Old1, Old2): pass
+            class Old21(Old2, Old1): pass
+
+            try:
+                Old12.__mro__
+            except AttributeError:
+                pass
+            else:
+                assert False
+            assert Old12().i == 0
+            assert Old21().i == 2
+
+            class New(object): i = 0
+            class New1(New): pass
+            class New2(New): i = 2
+            class New12(New1, New2): pass
+            class New21(New2, New1): pass
+
+            assert New12.__mro__ == (New12, New1, New2, New, object)
+            assert New21.__mro__ == (New21, New2, New1, New, object)
 
     if "##special methods":
 
@@ -2232,59 +2300,16 @@ if "##class":
 
             def __call__(self, n):
                 """
+                Allows object to be callable as:
+
                 >>> a = A()
                 >>> a(1) == 2
+                >>> a.__call__(1) == 2
                 """
                 return n + 1
 
         a = A()
         assert a.__class__.__name__ == 'A'
-
-        if "##operators that cannot be overloaded":
-
-            """
-            <http://stackoverflow.com/questions/3993239/python-class-override-is-behavior>
-
-            - is: always implements id compairison.
-            - not, and and or: only depend on the truth value assignment of objects,
-                which depends on `__notzero__` and `__len__` in Python 2.
-            """
-
-            class A(object):
-
-                def __is__(self):
-                    return True
-
-                def __not__(self):
-                    return True
-
-                def __and__(self, other):
-                    return True
-
-                def __or__(self, other):
-                    return True
-
-            #assert not A()
-            #assert A() and A()
-            #assert A() or A()
-
-        if "##automaticaly print all members of objects":
-
-            class C:
-
-                def __init__(self, i=0, j=1):
-                    self.i = i
-                    self.j = j
-
-                def __str__(self):
-                    out = '\n' + 30 * '-' + '\n'
-                    for k in self.__dict__.keys():
-                        out += k + ':\n'
-                        out += str(self.__dict__[k]) + '\n\n'
-                    return out
-
-            print C()
-            print C(1,2)
 
         if "##__eq__":
 
@@ -2342,13 +2367,87 @@ if "##class":
                 assert not a is None
                 assert a == None
 
+        if "##descriptors ##__get__ ##__set__ ##__delete__":
+
+            class Desc(object):
+
+                def __get__(self, obj, cls=None): 1
+                    pass
+
+                def __set__(self, obj, val): 2
+                    pass
+
+                def __delete__(self, obj): 3
+                    pass
+
+            class C(object):
+                d = Desc()
+
+            cobj = C()
+
+            x = cobj.d
+            cobj.d = "setting a value"
+            cobj.__dict__['d'] = "try to force a value"
+            x = cobj.d
+            del cobj.d
+
+            x = C.d
+            C.d = "setting a value on class"
+
+        if "##operators that cannot be overloaded":
+
+            """
+            <http://stackoverflow.com/questions/3993239/python-class-override-is-behavior>
+
+            - is: always implements id compairison.
+            - not, and and or: only depend on the truth value assignment of objects,
+                which depends on `__notzero__` and `__len__` in Python 2.
+            - assignment: makes no sense since assignment always replaces one object for another.
+            """
+
+            class A(object):
+
+                def __is__(self):
+                    return True
+
+                def __not__(self):
+                    return True
+
+                def __and__(self, other):
+                    return True
+
+                def __or__(self, other):
+                    return True
+
+            #assert not A()
+            #assert A() and A()
+            #assert A() or A()
+
+        if "##automaticaly print all members of objects":
+
+            class C:
+
+                def __init__(self, i=0, j=1):
+                    self.i = i
+                    self.j = j
+
+                def __str__(self):
+                    out = '\n' + 30 * '-' + '\n'
+                    for k in self.__dict__.keys():
+                        out += k + ':\n'
+                        out += str(self.__dict__[k]) + '\n\n'
+                    return out
+
+            print C()
+            print C(1,2)
+
     if "##assignment operator for classes":
 
         """
-        objects are mutable, so assignment throws old object away,
+        Objects are mutable, so assignment throws old object away,
         and a is a reference to b now!
 
-        to get around this you can use the copy package.
+        To get around this you can use the copy package.
         """
 
         class A(object):
@@ -2381,46 +2480,6 @@ if "##class":
         a.i = 2
         assert b.i == 1
 
-    if "##__dict__":
-
-        #readonly dict of attribute value pairs.
-
-        ##function
-
-        def f():
-            """doc"""
-            a = 1
-
-        assert f.__dict__ == {}
-
-        f.a = 1
-        assert f.__dict__ == { 'a' : 1 }
-
-        ##object
-
-        class B(object):
-            def __init__(self):
-                self.b = 1
-
-        class C(B):
-            def __init__(self):
-                self.c = 2
-                super(C, self).__init__()
-
-        #TODO
-        #assert C().__dict__ == { 'a':1, 'b':"abc" }
-
-        class C:
-            """doc"""
-            a = 1
-            def f():
-                b = 2
-
-        print C.__dict__
-
-        #sample output:
-
-            #{'a': 1, '__module__': '__main__', '__doc__': 'doc', 'f': <function f at 0x9cb82cc>}
 
     if "##classes can be made inside functions":
 
@@ -2463,19 +2522,6 @@ if "##class":
         c = C('the my object')
         c.print_attrs()
 
-    if "##type":
-
-        pass
-
-        #TODO
-
-    #TODO get asserts working
-
-    #assert set( C.__dict__.keys() ) == set( ['a', 'f', '__module__', '__doc__'] )
-    #assert C.__dict__['a'] == 1
-    #assert C.__dict__['__module__'] == '__main__'
-    #assert C.__dict__['__doc__'] == 'doc'
-
     if "##metaclass":
 
         '''
@@ -2485,8 +2531,347 @@ if "##class":
     if "##mixin":
 
         '''
-        TODO
+        Concept can only exist in multiple inheritance languages.
         '''
+
+        class HasMethod1(object):
+            def method(self):
+                return 1
+
+        class HasMethod2(object):
+            def method(self):
+                return 2
+
+        class UsesMethod10(object):
+            def usesMethod(self):
+                return self.method() + 10
+
+        class UsesMethod20(object):
+            def usesMethod(self):
+                return self.method() + 20
+
+        class Mixin1_10(HasMethod1, UsesMethod10): pass
+        class Mixin1_20(HasMethod1, UsesMethod20): pass
+        class Mixin2_10(HasMethod2, UsesMethod10): pass
+        class Mixin2_20(HasMethod2, UsesMethod20): pass
+
+        assert Mixin1_10().usesMethod() == 11
+        assert Mixin1_20().usesMethod() == 21
+        assert Mixin2_10().usesMethod() == 12
+        assert Mixin2_20().usesMethod() == 22
+
+    if "everything is an object":
+
+        # All built-in types like `int`, `string` and `list`:
+
+        assert (1).__class__ == int
+        assert "ab".__class__ == str
+        assert [1, 2].__class__ == list
+
+        # Functions:
+
+        def f(): pass
+        print f.__class__
+
+        # Classes:
+
+        class C(object): pass
+        assert C.__class__ == type
+        assert C().__class__ == C
+
+        # Modules:
+
+        import os
+        print os.__class__
+
+    if "##object":
+
+        '''
+        Base type of all Python built-in types.
+
+        In Python 2, it is possible for a user defined object not to
+        inherit from `object` (old style class).
+
+        In Python 3, user defined classes automatically inherit from it,
+        so every type derives from `object`.
+        '''
+
+        assert isinstance(1, object)
+        assert isinstance("ab", object)
+
+        def f(): pass
+        assert isinstance(f, object)
+
+        class C(object): pass
+        assert isinstance(C, object)
+        assert isinstance(C(), object)
+
+        import os
+        assert isinstance(os, object)
+
+        # This is everything objects give to classes:
+        print 'dir(object) = ' + str(dir(object))
+        print 'dir(object()) = ' + str(dir(object()))
+
+    if "##type":
+
+        '''
+        Built-in function type does two things:
+
+        - determine the type of an object
+        - dynamically create classes from strings
+
+        Important rules:
+
+        - the type of any type (built-in or user defined) is `type`.
+        - the type of any object is its type,
+            also known as class for user defined types.
+        '''
+
+        if "determine type of value":
+
+            '''
+            Note how the `type` object is at the base of all the hierarchy.
+            '''
+
+            assert type(type)   == type
+            assert type(object) == type
+            assert type(1)      == int
+            assert type(1.0)    == float
+            assert type("abc")  == str
+            assert type(u"s")   == unicode
+            assert type([])     == list
+            assert type({})     == dict
+
+            print type(lambda:1)
+            #<type 'function'>
+
+            class C(object): pass
+            assert type(C) == type
+            assert type(C()) == C
+
+            import os
+            print type(os)
+            #<type 'module'>
+
+        if "make classes dynamically":
+
+            class B(object): pass
+
+            class C(B):
+                a = 1
+
+            # Same as above.
+
+            C = type('C', (B,), {'a': 1})
+            assert C.a == 1
+
+    if "##__class__":
+
+        '''
+        Corresponding class object of a object.
+
+        The only difference from `type()` seems to be for old style classes:
+        <http://stackoverflow.com/questions/1060499/difference-between-typeobj-and-obj-class>
+
+        Therefore, there is no difference in Python 3.
+        '''
+
+        assert object.__class__ == type
+        assert (1).__class__    == int
+
+        '''
+        `__class__` can be set to something else however.
+
+        This has no special effect.
+        '''
+
+        class D(object): pass
+
+        class C(object):
+            __class__ = D
+
+        assert type(C()) == C
+        assert C().__class__ == D
+
+    if "##isinstance":
+
+        '''
+        TODO: like type but also considers base types?
+        '''
+
+        assert isinstance(object, type)
+        assert isinstance(1, int)
+        class C0(object): pass
+        class C1(C0): pass
+        assert isinstance(C1(), C1)
+        assert isinstance(C1(), C0)
+
+    if "##attributes":
+
+        '''
+        Anything you can get from an object via a dot `.`, including methods and memebers.
+
+        Good tutorial: <http://www.cafepy.com/article/python_attributes_and_methods/contents.html>
+
+        How the dot searches for attributes on `obj.attr`:
+
+        1) `obj.__dict__` itself
+        2) `obj.__class__.__dict__`
+        3) same for all base classes via MRO.
+        '''
+
+    if "##__dict__":
+
+        '''
+        Contains attributes but not all TODO which.
+        '''
+
+        '''
+        Built-in functions and types don't have a dict.
+
+        It is not possible to set their attributes.
+        '''
+
+        try:
+            (1).__dict__
+        except AttributeError:
+            pass
+        else:
+            assert False
+
+        try:
+            (1).a = 2
+        except AttributeError:
+            pass
+        else:
+            assert False
+
+        try:
+            (len).a = 2
+        except AttributeError:
+            pass
+        else:
+            assert False
+
+        # Functions:
+
+        def f():
+            """doc"""
+            a = 1
+        assert f.__dict__ == {}
+
+        f.a = 1
+        assert f.__dict__['a'] == 1
+
+        f.__dict__['b'] = 2
+        assert f.b == 2
+
+        print 'f.__dict__ = ' + str(f.__dict__)
+
+        # Objects
+
+        class B(object):
+            a = 1
+            def __init__(self):
+                self.b = 1
+
+        class C(B):
+            c = 2
+            def __init__(self):
+                self.d = 2
+                super(C, self).__init__()
+
+        print 'C.__dict__ = ' + str(C.__dict__)
+        print 'C().__dict__ = ' + str(C().__dict__)
+
+        #sample output:
+
+            #{'a': 1, '__module__': '__main__', '__doc__': 'doc', 'f': <function f at 0x9cb82cc>}
+
+    if "##dir":
+
+        '''
+        Returns a list of all attributes of an object.
+
+        Includes attributes available through `__class__` and base classes.
+        '''
+
+        print 'dir(1) = ' + str(dir(1))
+        class C(object): pass
+        print 'dir(C) = ' + str(dir(C))
+        print 'dir(C()) = ' + str(dir(C()))
+        import os
+        print 'dir(os) = ' + str(dir(os))
+
+    if "##inspect":
+
+        '''
+        Module that can do many introspective things on Python objects.
+        '''
+
+    if "##vars":
+
+        #list all available names in current scope and their string values:
+
+        vars()
+
+    if "##hasattr":
+
+        class A:
+            a = 1
+            def f():
+                pass
+
+        assert hasattr(A, 'a')
+        assert hasattr(A, 'f')
+        assert not hasattr(A, 'b')
+
+        assert hasattr(A(), 'a')
+        assert hasattr(A(), 'f')
+        assert not hasattr(A(), 'b')
+
+    if "##geattr":
+
+        class C:
+            def __init__(self, i):
+                self.attribute = i
+        c = C(1)
+        c.attribute2 = 2
+        assert getattr(c, "attribute") == 1
+        assert getattr(c, "attribute2") == 2
+        assert getattr(c, "notanattribute", "default") == "default"
+
+    if "##setattr":
+
+        class A: pass
+
+        setattr(A, 'name', 'value')
+        assert A.name == 'value'
+
+        ###any expression goes
+
+        hasa = True
+        class A:
+            if hasa:
+                a = 1
+            else:
+                a = 0
+
+        assert A.a == 1
+
+if "##docstring":
+
+    '''
+    It is possible to access them at runtime.
+
+    This can be used by documentation generators.
+    '''
+
+    def f():
+        """doc0"""
+
+    assert f.__doc__ == 'doc0'
 
 if "##exceptions":
 
@@ -2879,95 +3264,6 @@ if "##decorator":
 
     __builtins__.dir()
 
-if "##docstrings":
-
-    '''
-    It is possible to access them at runtime.
-
-    This can be used by documentation generators.
-    '''
-
-    def f():
-        """doc0"""
-
-    assert f.__doc__ == 'doc0'
-
-if "##hasattr":
-
-    class A:
-        a = 1
-        def f():
-            pass
-
-    assert hasattr(A, 'a')
-    assert hasattr(A, 'f')
-    assert not hasattr(A, 'b')
-
-    assert hasattr(A(), 'a')
-    assert hasattr(A(), 'f')
-    assert not hasattr(A(), 'b')
-
-if "##geattr":
-
-    class C:
-        def __init__(self, i):
-            self.attribute = i
-    c = C(1)
-    c.attribute2 = 2
-    assert getattr(c, "attribute") == 1
-    assert getattr(c, "attribute2") == 2
-    assert getattr(c, "notanattribute", "default") == "default"
-
-if "##setattr":
-
-    class A: pass
-
-    setattr(A, 'name', 'value')
-    assert A.name == 'value'
-
-    ###any expression goes
-
-    hasa = True
-    class A:
-        if hasa:
-            a = 1
-        else:
-            a = 0
-
-    assert A.a == 1
-
-if "##dir":
-
-    # List all available names in current scope.
-    # Does not include functions.
-
-    dir()
-
-    #list all attributes of name (module, class, function):
-
-    import os
-    dir(os)
-
-    #see how many there are by default:
-
-    def f():
-        pass
-    dir(f)
-    f.__call__()
-
-    #most important is __call__, which calls the function!
-
-    #add a new one:
-
-    f.a = 'b'
-    dir(f)
-
-if "##vars":
-
-    #list all available names in current scope and their string values:
-
-    vars()
-
 if "##exec":
 
     # Interpret a string at given point.
@@ -2975,64 +3271,6 @@ if "##exec":
     a = 0
     exec('a = 1')
     assert a == 1
-
-if "##type":
-
-    #determine type of value
-
-    print type(1)
-    #<type 'int'>
-
-    print type(1.0)
-    #<type 'float'>
-
-    print type("s")
-    #<type 'str'>
-
-    print type(u"s")
-    #<type 'unicode'>
-
-    print type([])
-    #<type 'list'>
-
-    print type({})
-    #<type 'dict'>
-
-    print type(set())
-    #<type 'set'>
-
-    print type(())
-    #<type 'tuple'>
-
-    print type(lambda:1)
-    #<type 'function'>
-
-    class C: pass
-
-    print type(C)
-    #<type 'cobject'>
-
-    #does not return string:
-
-    assert type(1) != "<type 'int'>"
-    print type(type(a))
-    #<type 'type'>
-
-    #can be used to compare
-
-    assert type(1) == type(2)
-    assert type(1) != type(1.0)
-
-    #####make classes dynamically
-
-    class C(B):
-        a = 1
-    print C.a
-
-    #same as
-
-    D = type('D', (B,), dict(a = 1))
-    print C.a
 
 if "##file io ##streams":
 
@@ -3190,10 +3428,17 @@ if "##file io ##streams":
 
 if "##time":
 
-    #seconds after 1970
-
     import time
-    print time.time()
+
+    # Get number of seconds since 1970:
+
+    print 'time.time() = ' + str(time.time())
+
+    if "##sleep":
+
+        '''Sleep for the given number of seconds'''
+
+        #time.sleep(3)
 
 if "##datetime":
 
