@@ -2,4 +2,4 @@
 
 *very* useful.
 
-run `./main.py` for the tests.
+Run `./main.py` for the tests.

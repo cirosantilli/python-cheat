@@ -9,6 +9,15 @@
 
 <http://stackoverflow.com/questions/377017/test-if-executable-exists-in-python>
 
+#alternatives
+
+Using the subprocess module is the best option.
+
+##system ##os.system
+
+The only alternative is `os.system`, which is less flexible (cannot get stdout),
+and intelligent (does not do smart quoting for you)
+
 #Popen
 
 the main class of the module.
@@ -70,7 +79,6 @@ import subprocess
 commands = ['python', 'a.py', 'arg 1', 'arg 2']
 
 try:
-
     process = subprocess.Popen(
         commands,
         shell  = False,
@@ -79,7 +87,6 @@ try:
         stderr = subprocess.PIPE,
         universal_newlines = True
     )
-
 except OSError:
     #typically gets here if the executable is not found
     sys.stderr.write(' '.join(commands) + '\nfailed')

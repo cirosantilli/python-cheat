@@ -263,23 +263,6 @@ if "##built-in types":
 
             '%d' % 1
 
-            if "#format":
-
-                '''
-                The percent format operator becomes deprecated in Python 3.1.
-
-                It is replaced by a regular method called `format`.
-                That is sane.
-
-                C printf strings are gone. That is insane. Yet another string format to learn.
-
-                http://www.python.org/dev/peps/pep-3101/
-
-                Only operators `[]` and `.` are supported.
-                '''
-
-                assert '{1} {0} {1} {2[0]} {a} {{}}'.format(0, 1, [0, 1], a=2 ) == '1 0 1 0 2 {}'
-
         if "##range ##xrange":
 
             '''

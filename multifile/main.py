@@ -55,8 +55,8 @@ if "##module search path":
 
             # Set search path on a per program basis:
 
-            sys.path.append( '/the/new/path' )
-            sys.path.insert( 0, '/the/new/path' )
+            sys.path.append('/the/new/path')
+            sys.path.insert(0, '/the/new/path')
 
             # Doing this will also change the system path on modules
             # imported by this module:
@@ -68,11 +68,11 @@ if "##module search path":
 
             #sys.path = ['.']
 
-            # Only changes what the symbol sys.path means on this module,
-            # byt does not change the actual object, so doing this would
-            # *not* change what `a` sees.
+            # TODO: how does that work for sys.path? It does not work for other lists.
 
-            # The same goes for anything you define:
+            import contains_list
+            contains_list.l[0] = 2
+            import a
 
 if "##__init__":
 

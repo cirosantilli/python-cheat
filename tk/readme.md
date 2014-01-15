@@ -1,7 +1,9 @@
-gui toolkit.
+GUI toolkit.
 
-part of the stdlib.
+The interface is Part of the stdlib, however Tk is not.
+Ubuntu 12.04 interpreted this as Tk is optional, and it not installed by default.
+So you should not rely on it being there everywhere...
 
-not sure how it compares to gtk/qt bindings, but seems fine for simple guis.
+Tk seems less advanced than GTK/QT, but could be fine for one page GUIs.
 
-the idle editor is written on it, and is part of the stdlib too.
+The IDLE editor is written on it, and is part of the stdlib too.

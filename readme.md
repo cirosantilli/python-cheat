@@ -6,6 +6,20 @@ Watch out for not naming a module with the same as in the stdlib,
 or you will import the module from current dir instead!
 this is why some files are named *cheat.py.
 
+#implementations
+
+Python specifies the language and stdlib interfaces, not the implementation.
+
+The main interpreter implementations are:
+
+- [CPython](http://www.python.org/getit/source/).
+
+    Reference implementation.
+
+- PyPy
+- JPython. Compiles to Java Object Code.
+- IronPython. Compiles to `.NET` object code.
+
 #sources
 
 - <http://www.diveintopython.net/index.html>

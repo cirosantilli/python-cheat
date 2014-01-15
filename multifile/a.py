@@ -36,10 +36,13 @@ except NameError:
 else:
     assert False
 
-#this does not work:
+# This does not work:
 
 def __call__():
     return "a.__call__()"
 
 import sys
 syspath = sys.path
+import contains_list
+print 'contains_list.l = ' + str(contains_list.l)
+assert contains_list.l == [2]
