@@ -35,9 +35,11 @@ The main interpreter implementations are:
 
         and it will only show show is `-O` is off.
 
-#Pros of Python
+#Advantages of Python
 
-Python is great for small/medium projects:
+Python is part of the [LSB](http://refspecs.linux-foundation.org/LSB_4.1.0/LSB-Languages/LSB-Languages/python.html), so any Linux distribution must have it. Perl is too, but Java and Ruby are not.
+
+Python is great for small / medium projects:
 
 - built-in lists and dictionary literals `[]` `{}`. Really helpful to type less for shorter scripts.
 
@@ -48,7 +50,7 @@ Python is great for small/medium projects:
 
     Good when writing smaller scripts because it means much less typing.
 
-#Cons of Python
+#Disadvantages of Python
 
 - dynamic typing:
 
