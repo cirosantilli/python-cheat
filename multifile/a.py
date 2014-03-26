@@ -45,4 +45,4 @@ import sys
 syspath = sys.path
 import contains_list
 print 'contains_list.l = ' + str(contains_list.l)
-assert contains_list.l == [2]
+assert contains_list.l == [1]

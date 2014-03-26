@@ -166,6 +166,18 @@ if "##built-in functions":
             """doc"""
         #help(f)
 
+    if "##locals":
+
+        # TODO
+
+        pass
+
+    if "##globals":
+
+        # TODO
+
+        pass
+
 if "##built-in types":
 
     '''
@@ -348,6 +360,10 @@ if "##list":
 
             assert [i for i in xrange(4) if i != 2] == [0, 1, 3]
 
+            # Multilevel / nested: TODO parenthise this to understand it better.
+
+            assert [i for j in [1, 2] for i in [j,-j]] == [1, -1, 2, -2]
+
         if "##map method":
 
             assert map(lambda i: 2 * i, xrange(3)) == [0, 2, 4]
@@ -417,6 +433,24 @@ if "##list":
             assert l.pop() == 2
             assert l == [0, 1]
 
+        if "##remove":
+
+            # Remove first occurence of value.
+
+            l = [0, 1, 0]
+            assert l.remove(0) == None
+            assert l == [1, 0]
+
+            # If not present, exception:
+
+            l = [0, 1]
+            try:
+                l.remove(2)
+            except ValueError:
+                pass
+            else:
+                assert False
+
         if "##del":
 
             '''
@@ -432,9 +466,9 @@ if "##list":
             I'd rather use `pop(i)`.
             '''
 
-        l = range(3)
-        del l[1]
-        assert l == [0, 2]
+            l = range(3)
+            del l[1]
+            assert l == [0, 2]
 
         if "##sort":
 
@@ -463,6 +497,7 @@ if "##list":
 
         if "##out of bounds":
 
+            l = [0, 1]
             try:
                 l[3]
             except IndexError:
@@ -478,15 +513,19 @@ if "##list":
             i = 3
             assert l[i] if i < len(l) else "default" == "default"
 
+    if "##concatenate ##cat":
+
+        assert [0, 2] + [1, 3] == [0, 2, 1, 3]
+
     if "##find item":
 
         # First match for criteria with generator expression:
 
-        assert next(pair for pair in [(1, 1), (2, 1), (2, 1)] if pair[0] == 2) == (2, 1)
+        assert next(pair for pair in [(1, 1), (2, 1), (2, 2)] if pair[0] == 2) == (2, 1)
 
         # Uses the given default if not found:
 
-        assert next((pair for pair in [(1, 1), (2, 1), (2, 1)] if pair[0] == 3), None) == None
+        assert next((pair for pair in [(1, 1), (2, 1), (2, 2)] if pair[0] == 3), None) == None
 
         # If no default, exception:
 
@@ -497,7 +536,180 @@ if "##list":
         else:
             assert False
 
-if "##string ##str ##unicode":
+    if "##filter":
+
+        # Leave only elements for which a function is True.
+
+        l = range(4)
+        assert filter(lambda x: x % 2 == 1, l) == [1, 3]
+        assert l == range(4)
+
+if "##iterators ##yield":
+
+    '''
+    Iterators are more memory efficent for iterations than lists
+    since there is no need to store the entire sequence!
+
+    However, if you must calculate each new item, so more time expensive if
+    you are going to use it more than once
+
+    It is a classic space/time tradeoff.
+    '''
+
+    if "##create":
+
+        # An iterator is just a function with a `yield` method:
+
+        def count():
+            """this is already built-in"""
+            i = 0
+            yield i
+            i = i+1
+
+        # Raise exception when over:
+
+            def myxrange(n):
+                i = 0
+                yield i
+                i = i+1
+                if i > n:
+                    raise StopIteration
+
+        if "##generator expressions":
+
+            # Shorthand way to create iterators
+
+            it = (i for i in xrange(10))
+            for i in it:
+                print i
+
+            # Parenthesis can be ommited for single argument func call:
+
+            def mysum(vals):
+                total = 0
+                for val in vals:
+                    total += val
+                return total
+
+            assert mysum(i for i in [0, 2, 5]) == 7
+
+        if "##iter":
+
+            # Converts various types to iterators.
+
+            iter("abc")
+            iter([1, 2, 3])
+
+    if "##next":
+
+        # Will not work with `xrange`! <http://late.am/post/2012/06/18/what-the-heck-is-an-xrange>
+
+        #next(xrange(1))
+
+        i = iter(xrange(2))
+        assert next(i) == 0
+        assert i.next() == 1
+        try:
+            next(i)
+        except StopIteration:
+            pass
+        else:
+            assert False
+
+        # Use default value if over:
+
+        it = iter(xrange(1))
+        assert next(it) == 0
+        assert next(it, 3) == 3
+        assert next(it, 3) == 3
+
+        # There is no has_next method.
+        # The only way is to catch the `StopIteration` exception:
+        # <http://stackoverflow.com/questions/1966591/hasnext-in-python-iterators>
+
+    if "##iterators can't be rewinded":
+
+        # Either store a list on memory or recalculate.
+
+        # Recalculate:
+
+        it = iter("asdf")
+        for i in it:
+            print "first"
+            print i
+        it = iter("asdf")
+        for i in it:
+            print "second"
+            print i
+
+        # Store on memory:
+
+        it = list(iter("asdf"))
+        for i in it:
+            print "first"
+            print i
+        for i in it:
+            print "second"
+            print i
+
+    if "built-in iterator functions":
+
+        if "##enumerate":
+
+            assert list(enumerate(['a', 'c', 'b']) ) == [(0, 'a'), (1, 'c'), (2, 'b'), ]
+
+        if "##reduce":
+
+            '''
+            - take two leftmost, apply func
+            - replace the two leftmost by the result
+            - loop
+
+            On the example below:
+
+            - 2*3 - 1 = 5
+            - 2*5 - 3 = 8
+            '''
+
+            assert reduce(lambda x, y: 2*x - y, [3, 1, 2]) == 8
+
+    if "###itertools":
+
+        import itertools
+
+        '''
+        Hardcore iterator patterns.
+        <http://docs.python.org/2/library/itertools.html#recipes>
+
+        Most important ones:
+
+        - imap: map for iterators
+        - izip: count to infinity
+        - count: count to infinity
+        '''
+
+        # Cartesian product:
+
+        for i, j in itertools.product(xrange(3), xrange(3)):
+            print i, j
+
+        # Join two iterators:
+
+        assert [i for i in itertools.chain(xrange(2), xrange(2))] == [0, 1, 0, 1]
+
+    if "##iterable combos":
+
+        if "Merge two lists of same length odd / even elements":
+
+            # http://stackoverflow.com/questions/18041840/python-merge-two-lists-even-odd-elements
+
+            # Same length:
+
+            x = [0, 1]
+            y = [2, 3]
+            assert [ x for t in zip(x,y) for x in t ] == [0, 2, 1, 3]
+
+if "##string ##str":
 
     '''
     There are 2 commonly used classes which are informaly called *strings* in python:
@@ -526,17 +738,28 @@ if "##string ##str ##unicode":
             # By convention, `'` is more used for identifiers (say, map keys)
             # while `"` is more used for messages: `print "Hello world!"`.
 
-        if "##multiline strings":
+        if "##multiline strings ##triple quotes":
+
+            # Like in C, whitespace separated strings are glued together:
+
+            assert "ab" "cd" == "abcd"
+
+            # This means that backslash continuation joins strings without newlines:
 
             assert \
                 'ab' \
                 'cd' == 'abcd'
 
-            """a
+            assert """a
 b""" == "a\nb"
 
-            '''a
+            assert '''a
 b''' == "a\nb"
+
+            # Spaces are kept:
+
+            assert '''a
+ b''' == "a\n b"
 
             def f():
                 assert """a
@@ -569,7 +792,7 @@ b""" == "a\nb"
             which often contain many literal backslashes.
             '''
 
-    if "##format strings":
+    if "##format strings ##precision ##decimal places":
 
         '''
         Mostly like C printf.
@@ -600,7 +823,7 @@ b""" == "a\nb"
 
         assert "%(v1)s %(#)03d %(v1)s %(#)03d" % {'v1':"asdf", "#":2} == 'asdf 002 asdf 002'
 
-        if "#python3":
+        if "##python3 format":
 
             '''
             The percent format operator becomes deprecated in Python 3.1,
@@ -617,7 +840,77 @@ b""" == "a\nb"
             Only operators `[]` and `.` are supported inside the formats.
             '''
 
-            assert '{1} {0} {1} {2[0]} {a} {{}}'.format(0, 1, [0, 1], a=2 ) == '1 0 1 0 2 {}'
+            assert '{1} {0} {1} {2[0]} {a}'.format(0, 1, [0, 1], a=2 ) == '1 0 1 0 2'
+
+            # Escape, literals:
+
+            assert '{{}}{{a}}'.format(0) == '{}{a}'
+
+            assert '{} {}'.format(0, 1) == '0 1'
+
+            # Cannot use both automatic numbering and numbered references:
+
+            try:
+                '{} {0}'.format(0)
+            except ValueError:
+                pass
+            else:
+                assert False
+
+            # Does not work like in Ruby where strings are magic: only the format method interprets anything.
+
+            a = 2
+            assert "{a}" != "2"
+
+            # Format is of the form:
+
+            #{<id>:<format-string>}
+
+            # It is C printf like, but **NOT** the same!
+
+            # Fill:
+
+            assert '{:2d}'.format(1)    == " 1"
+            assert '{:02d}'.format(1)   == "01"
+
+            # Align left:
+
+            assert '{:<2d}'.format(1)   == "1 "
+
+            # Decimal places:
+
+            assert '{:.2f}'.format(1.0)    == "1.00"
+            assert '{0:.2f}'.format(1.0)   == "1.00"
+            assert '{x:.2f}'.format(x=1.0) == "1.00"
+
+            # Format via an argument combo:
+
+            assert '{0:.{1}f}'.format(1.23456, 4) == "1.2346"
+            assert '{number:.{digits}f}'.format(number=1.23456, digits=4) == "1.2346"
+
+            if "##table printing":
+
+                # There seems to be no built-in one liner.
+
+                # Two rows built-in solution:
+
+                print "Label value table combo:"
+                labels = ["label 0", "very long label 1", "l 2"]
+                values = [0, 1, 2]
+                sys.stdout.write("{:<{l}}{}\n{:<{l}}{}\n{:<{l}}{}\n".format(
+                    *[x for t in zip(labels,values) for x in t],
+                    l=len(max(labels, key=len)) + 2
+                ))
+
+                # Output:
+
+                #label 0            0
+                #very long label 1  1
+                #l 2                2
+
+                # Many solutions with external libraries since Python is so scientific based:
+                # - http://stackoverflow.com/questions/9535954/python-printing-lists-as-tabular-data
+                # - http://stackoverflow.com/questions/17279059/print-list-in-table-format-in-python
 
     # Character access is like for a list:
 
@@ -676,18 +969,25 @@ b""" == "a\nb"
     if "##strip":
 
         '''
-        strip chars either from either beginning or end, *not* middle!
+        Strip chars either from either beginning or end, *not* middle!
 
-        characters to strip are given on a string
+        Characters to strip are given on a string.
 
-        default argument: `string.whitespace`
+        Default argument: `string.whitespace`
         '''
 
         assert "cbaba0a1b2ccba".strip("abc") == "0a1b2"
         assert "\t\n0 1 2\v \r".strip() == "0 1 2"
 
-    assert "abc".startswith("ab") == True
-    assert "abc".startswith("bc") == False
+    if "##startswith":
+
+        assert "abc".startswith("ab") == True
+        assert "abc".startswith("bc") == False
+
+        # Remove prefix: http://stackoverflow.com/questions/599953/python-how-to-remove-the-left-part-of-a-string
+
+        prefix="ab"
+        assert "abcd"[len(prefix):] == "cd"
 
     # String to number:
 
@@ -702,7 +1002,7 @@ b""" == "a\nb"
 
     assert '\n'.encode('string-escape') == '\\n'
 
-    if "##str vs unicode":
+    if "##unicode ##encodings":
 
         '''
         Before reading this you should understand what is ASCII, Unicode,
@@ -737,91 +1037,102 @@ b""" == "a\nb"
 
         Otherwise, you must use escape characters.
 
-        This changes in Python 3 where UTF-8 becomes the default encoding.
+        This changes in Python 3 where utf-8 becomes the default encoding.
         '''
 
-        '''
-        Each escape character represents exactly one Unicode character,
-        however some escapes cannot represent all characters.
-        The possile escapes are:
+        if "##u backslash escapes ##unicode literals":
 
-        - `\xAA` represents one character of up to one byte.
+            '''
+            Unicode literals are just like string literals, but they start with `u`.
 
-            This is not very useful with Unicode, since most of those characters
-            have a printable and therefore more readable ASCII char to represent them.
+            The string below has 2 characters. Characters are treated differently depending on
+            if strings are str or unicode.
+            '''
 
-            Characters with more than 1 byte cannot be represented with a `\xAA` escape.
+            u = u'\u4E2D\u6587'
+            assert u[0] == u'\u4E2D'
+            assert u[1] == u'\u6587'
 
-        - `\uAAAA`: 2 bytes.
+            '''
+            Each escape character represents exactly one Unicode character,
+            however some escapes cannot represent all characters.
+            The possile escapes are:
 
-            This is the most useful escape, as the most common unicode code points are
-            use either one or 2 bytes.
+            - `\xAA` represents one character of up to one byte.
 
-         - `\UAAAAAAAA`: 4 bytes
+                This is not very useful with Unicode, since most of those characters
+                have a printable and therefore more readable ASCII char to represent them.
 
-            It is very rare to have to use `\UAAAAAAAA`, since characters in that region
-            map mostly to languages with very small number of speakers (or none for ancient languages)<
-            and most computers don't even have fonts to render those characters.
+                Characters with more than 1 byte cannot be represented with a `\xAA` escape.
 
-        Remember: `\` escapes are interpreted inside multiline comment strings.
-        Therefore, if you write an invalid escape like `\\xYY`, your code will not run!
-        '''
+            - `\uAAAA`: 2 bytes.
 
-        assert u'\u4E2D\u6587' == u'中文'
-        assert u'\U00010000' == u'𐀀'
+                This is the most useful escape, as the most common unicode code points are
+                use either one or 2 bytes.
 
-        '''
-        A is done to confirm that a byte is a known unicode character.
-        For example `\UAAAAAAAA` does not currently represent any Unicode character,
-        so you cannot use it.
-        '''
+            - `\UAAAAAAAA`: 4 bytes
 
-        #u'\UAAAAAAAA'
+                It is very rare to have to use `\UAAAAAAAA`, since characters in that region
+                map mostly to languages with very small number of speakers (or none for ancient languages)<
+                and most computers don't even have fonts to render those characters.
 
-        '''
-        Unicode literals are just like string literals, but they start with `u`.
+            Remember: `\` escapes are interpreted inside multiline comment strings.
+            Therefore, if you write an invalid escape like `\\xYY`, your code will not run!
+            '''
 
-        The string below has 2 characters. Characters are treated differently depending on
-        if strings are str or unicode.
-        '''
+            assert u'\u4E2D\u6587' == u'中文'
+            assert u'\U00010000' == u'𐀀'
 
-        u = u'\u4E2D\u6587'
-        assert u[0] == u'\u4E2D'
-        assert u[1] == u'\u6587'
+            '''
+            A is done to confirm that a byte is a known unicode character.
+            For example `\UAAAAAAAA` does not currently represent any Unicode character,
+            so you cannot use it.
+            '''
 
-        '''
-        Unicode \u escapes are only interpreted inside unicode string literals.
-        '''
+            #u'\UAAAAAAAA'
 
-        s = '\u4E2D\u6587'
-        assert s[0] == '\\'
-        assert s[1] == 'u'
-        assert s[2] == '4'
+            #Unicode \u escapes are only interpreted inside unicode string literals.
+
+            s = '\u4E2D\u6587'
+            assert s[0] == '\\'
+            assert s[1] == 'u'
+            assert s[2] == '4'
 
         '''
         ##encode ##decode
 
-            encode transforms an `unicode` string to a byte string `str`.
+            Encode transforms an `unicode` string to a byte string `str`.
 
-            decode transforms a byte string `str` to an `unicode` string.
+            Decode transforms a byte string `str` to an `unicode` string.
         '''
 
-        assert u'中'.encode('UTF-8') == '\xE4\xB8\xAD'
-        assert u'中' == '\xE4\xB8\xAD'.decode('UTF-8')
+        assert u'中'.encode('utf-8') == '\xE4\xB8\xAD'
+        assert u'中' == '\xE4\xB8\xAD'.decode('utf-8')
 
-        '''
-        Most escapes in str literals strings are also interpreted inside unicode strings.
-        '''
+        # Most escapes in str literals strings are also interpreted inside unicode strings.
 
         assert u'\n'.encode('ASCII') == '\n'
 
-        '''
-        It is possible to compare unicode and non-unicode strings.
+        # When mixing encodings implicily, ASCII is assumed by default, so things break only if there are non-ASCII chars.
+        # Don't do any of the following:
 
-        The unicode string is first encoded via TODO
-        '''
-
-        assert u'a' == 'a'
+        assert u"a" == "a"
+        assert u"\u20AC" != "\x20\xAC"
+        assert u"\u20AC" + "a" == u"\u20ACa"
+        try:
+            str(u"\u20AC")
+        except UnicodeEncodeError:
+            #'ascii' codec can't encode character u'\u20ac' in position 0: ordinal not in range(128)
+            pass
+        else:
+            raise
+        try:
+            unicode("\x20\xAC")
+        except UnicodeDecodeError:
+            #'ascii' codec can't decode byte 0xac in position 1: ordinal not in range(128)
+            pass
+        else:
+            raise
 
         '''
         ##normalization
@@ -883,7 +1194,7 @@ b""" == "a\nb"
 
         # GOOD:
 
-        print u'中文'.encode('UTF-8')
+        print u'中文'.encode('utf-8')
 
 if "##tuple":
 
@@ -984,7 +1295,7 @@ if "##dict":
 
         assert dict(zero=0, one=1) == {'zero': 0, 'one': 1}
 
-        # Dictionnary comprehention:
+        # Dict comprehension:
 
         assert {key: value for (key, value) in [(1, 2), (3, 4)]} == {1: 2, 3: 4}
 
@@ -1075,20 +1386,41 @@ if "##dict":
     assert d.setdefault(1, 3) == 3
     assert d == {1: 3}
 
-    # Add update all keys on d0 with those of d1:
+    if "##update":
 
-    d0 = {0: 'zero', 1: 'one'}
-    d1 = {0: 'zero2', 2: 'two'}
-    d0.update(d1)
-    assert d0 == {0: 'zero2', 1: 'one', 2: 'two'}
+        # Add update all keys on d0 with those of d1:
 
-    # Create a new dict that is the union of two other dicts:
+        d0 = {0: 'zero', 1: 'one'}
+        d1 = {0: 'zero2', 2: 'two'}
+        d0.update(d1)
+        assert d0 == {0: 'zero2', 1: 'one', 2: 'two'}
 
-    d0 = {0: 'zero', 1: 'one'}
-    d1 = {0: 'zero2', 2: 'two'}
-    d01 = d0.copy()
-    d01.update(d1)
-    assert d01 == {0: 'zero2', 1: 'one', 2: 'two'}
+        # Create a new dict that is the union of two other dicts:
+
+        d0 = {0: 'zero', 1: 'one'}
+        d1 = {0: 'zero2', 2: 'two'}
+        d01 = d0.copy()
+        d01.update(d1)
+        assert d01 == {0: 'zero2', 1: 'one', 2: 'two'}
+
+    if "Iterate / loop over dict":
+
+        # Unspecified order. Python 3 has `collections.OrderedDict`.
+
+        # Keys only:
+
+        assert sorted([i for i in {1:-1, 2:-2}]) == [1, 2]
+
+        # Keys value pairs ##iteritems:
+
+        assert sorted([(i,j) for i,j in {1:-1, 2:-2}.iteritems()]) == [(1, -1), (2, -2)]
+
+        # Iteritems sorted by key. Must pull all into memory first.
+
+        assert [(i,j) for i,j in sorted({2:-2, 1:-1}.iteritems())] == [(1, -1), (2, -2)]
+
+        # Iteritems is out of Python3. Items is present in both 2 and 3 but returns a list, not an iterator.
+        # 2to3 converts it automatically.
 
 if "##set":
 
@@ -1855,6 +2187,12 @@ if "##function":
             print 'inside outer function, ex8.var is ', ex8.var
         ex8()
 
+    if "##call function from its name on a string":
+
+        #http://stackoverflow.com/questions/3061/calling-a-function-from-a-string-with-the-functions-name-in-python
+
+        pass
+
 if "##class":
 
     '''
@@ -2008,7 +2346,7 @@ if "##class":
         if "determine type of value":
 
             '''
-            Note how the `type` object is at the base of all the hierarchy.
+            The `type` object is at the base of all the hierarchy.
             '''
 
             assert type(type)   == type
@@ -2177,19 +2515,68 @@ if "##class":
 
     if "##__dict__":
 
-        '''
-        Contains attributes but not all TODO which.
-        '''
+        """
+        Contains all attributes of an object.
 
-        '''
-        Built-in functions and types don't have a dict.
+        Represents a base data structure for objects, and is used on the magic dot `.` attribute lookup.
+        """
 
-        It is not possible to set their attributes.
-        '''
+        if "Does not contain attributes inherited through `__class__` and MRO.":
+
+            class B(object):
+                a = 1
+                def __init__(self):
+                    self.b = 1
+
+            class C(B):
+                c = 2
+                def __init__(self):
+                    self.d = 2
+                    super(C, self).__init__()
+
+            print 'C.__dict__ = ' + str(C.__dict__)
+
+            C.__dict__
+            assert C().__dict__ == {'b':1, 'd':2}
+
+        if "It is possible to write directly to it from both sides.":
+
+            class C(object): pass
+            c = C()
+            c.__dict__['a'] = 1
+            assert c.a == 1
+
+            c.a = 2
+            assert c.__dict__['a'] == 2
+
+            class C(object): pass
+            c = C()
+            c.__dict__ = {'a':1, 'b':2}
+            assert c.a == 1
+            assert c.b == 2
+
+            c.__dict__.update({'a':2, 'c':3})
+            assert c.a == 2
+            assert c.c == 3
+
+            # TODO why not here:
+
+            class C(object): pass
+            try:
+                C.__dict__['a'] = 1
+            except TypeError:
+                #'dictproxy' object does not support item assignment
+                pass
+            else:
+                assert False
+
+        # Built-in functions and types don't have a dict.
+        # It is not possible to set their attributes.
 
         try:
             (1).__dict__
         except AttributeError:
+            #'int' object has no attribute '__dict__'
             pass
         else:
             assert False
@@ -2197,6 +2584,7 @@ if "##class":
         try:
             (1).a = 2
         except AttributeError:
+            #'int' object has no attribute 'a'
             pass
         else:
             assert False
@@ -2204,6 +2592,7 @@ if "##class":
         try:
             (len).a = 2
         except AttributeError:
+            #'builtin_function_or_method' object has no attribute 'a'
             pass
         else:
             assert False
@@ -2223,25 +2612,9 @@ if "##class":
 
         print 'f.__dict__ = ' + str(f.__dict__)
 
-        # Objects
+        # Sample output:
 
-        class B(object):
-            a = 1
-            def __init__(self):
-                self.b = 1
-
-        class C(B):
-            c = 2
-            def __init__(self):
-                self.d = 2
-                super(C, self).__init__()
-
-        print 'C.__dict__ = ' + str(C.__dict__)
-        print 'C().__dict__ = ' + str(C().__dict__)
-
-        #sample output:
-
-            #{'a': 1, '__module__': '__main__', '__doc__': 'doc', 'f': <function f at 0x9cb82cc>}
+        #{'a': 1, '__module__': '__main__', '__doc__': 'doc', 'f': <function f at 0x9cb82cc>}
 
     if "##dir":
 
@@ -2265,6 +2638,37 @@ if "##class":
         '''
         Module that can do many introspective things on Python objects.
         '''
+
+    if "##reflection":
+
+        # Get meta info objects.
+
+        class C:
+            """doc"""
+
+            def __init__(self, name):
+                """initdoc"""
+                self.name = name
+
+            def print_attrs(self):
+                """print_attrs_doc"""
+                for name in dir(self):
+                    attr = getattr(self, name)
+                    if not callable(attr):
+                        print name, ':', attr
+
+
+            def print_method_docs(self):
+                """print_method_docs.doc"""
+                for name in dir(self):
+                    attr = getattr(self, name)
+                    if callable(attr):
+                        print name, ':', attr.__doc__
+
+        c = C('the my object')
+        c.print_attrs()
+
+        # TODO: sane way to get only user defined attributes: http://stackoverflow.com/questions/4241171/inspect-python-class-attributes
 
     if "##vars":
 
@@ -2309,7 +2713,7 @@ if "##class":
 
     if "##members":
 
-        # This shows how the concpet of instance member variables are usually implemented.
+        # This shows how the concept of instance member variables are usually implemented.
 
         class A(object):
 
@@ -2377,10 +2781,26 @@ if "##class":
                 Constructor
                 """
 
-                # If you want to get static members from a method
-                # the best way is to use `__class__` so that you don't repeat the class name.
+                # Direct access fail:
+
+                try:
+                    static
+                except NameError:
+                    #global name 'static' is not defined
+                    pass
+                else:
+                    assert False
+
+                # The best way is to use `__class__`:
 
                 self.__class__.static_refcount += 1
+
+                # Also works but not DRY as it repeats the class name;
+
+                A.static = 0
+
+                # Since this is so verbose, just use `self.` instance attributes for singleton classes.
+                # - memory is not duplicated because singleton
 
             @classmethod
             def class_method(cls, x):
@@ -2402,9 +2822,9 @@ if "##class":
 
             This means that:
 
-            - classmethod is more versatile
+            - classmethod is more versatile and verbose.
 
-            - classmethod is more verbose
+                It is required if the method relies on static variables since `self.__class__` is not possible.
 
             - staticmethod is recommended if the method does not need to access the class,
                 since using it serves as self documentation of that fact.
@@ -2413,7 +2833,7 @@ if "##class":
             '''
 
             a = A()
-            assert a.class_method(0) == (a.__class__, 0)
+            assert a.class_method(0) == (A, 0)
             assert A.class_method(0) == (A, 0)
             assert a.static_method(0) == 0
             assert A.static_method(0) == 0
@@ -2872,8 +3292,16 @@ if "##class":
             - `__get__`, `__set__` and `__delete__`
             '''
 
-        a = A()
-        assert a.__class__.__name__ == 'A'
+        if "##__name__":
+
+            def NameFunc(): pass
+            assert NameFunc.__name__ == 'NameFunc'
+
+            class NameClass(object):
+                def NameMethod():
+                    pass
+            assert NameClass.__name__ == 'NameClass'
+            assert NameClass.NameMethod.__name__ == 'NameMethod'
 
         if "##equality operator for classes ##__eq__":
 
@@ -3198,35 +3626,6 @@ if "##class":
         print b.a
         print a.a #unaltered
 
-    if "##reflection":
-
-        #get meta info objects
-
-        class C:
-            """doc"""
-
-            def __init__(self, name):
-                """initdoc"""
-                self.name = name
-
-            def print_attrs(self):
-                """print_attrs_doc"""
-                for name in dir(self):
-                    attr = getattr(self, name)
-                    if not callable(attr):
-                        print name, ':', attr
-
-
-            def print_method_docs(self):
-                """print_method_docs.doc"""
-                for name in dir(self):
-                    attr = getattr(self, name)
-                    if callable(attr):
-                        print name, ':', attr.__doc__
-
-        c = C('the my object')
-        c.print_attrs()
-
     if "##mixin":
 
         '''
@@ -3481,156 +3880,9 @@ if "##exceptions":
     except CustomException, (instance):
         print instance.parameter
 
-if "##iterators":
-
-    '''
-    Iterators are more memory effiicent for iterations than lists
-    since there is no need to store the entire sequence!
-
-    However, if you must calculate each new item, so more time expensive if
-    you are going to use it more than once
-
-    It is a classic space/time tradeoff.
-    '''
-
-    if "##create":
-
-        def count():
-            """this is already built-in"""
-            i = 0
-            yield i
-            i = i+1
-
-        # Raise exception when over:
-
-            def myxrange(n):
-                i = 0
-                yield i
-                i = i+1
-                if i > n:
-                    raise StopIteration
-
-        if "##generator expressions":
-
-            # Shorthand way to create iterators
-
-            it = (i for i in xrange(10))
-            for i in it:
-                print i
-
-            # Parenthesis can be ommited for single argument func call:
-
-            def mysum(vals):
-                total = 0
-                for val in vals:
-                    total += val
-                return total
-
-            assert mysum(i for i in [0, 2, 5]) == 7
-
-        if "##iter":
-
-            # Converts various types to iterators.
-
-            iter("abc")
-            iter([1, 2, 3])
-
-    if "##next":
-
-        # Will not work with `xrange`! <http://late.am/post/2012/06/18/what-the-heck-is-an-xrange>
-
-        #next(xrange(1))
-
-        i = iter(xrange(2))
-        assert next(i) == 0
-        assert i.next() == 1
-        try:
-            next(i)
-        except StopIteration:
-            pass
-        else:
-            assert False
-
-        # Use default value if over:
-
-        it = iter(xrange(1))
-        assert next(it) == 0
-        assert next(it, 3) == 3
-        assert next(it, 3) == 3
-
-        # There is no has_next method.
-        # The only way is to catch the `StopIteration` exception:
-        # <http://stackoverflow.com/questions/1966591/hasnext-in-python-iterators>
-
-    if "##iterators can't be rewinded":
-
-        # Either store a list on memory or recalculate.
-
-        # Recalculate:
-
-        it = iter("asdf")
-        for i in it:
-            print "first"
-            print i
-        it = iter("asdf")
-        for i in it:
-            print "second"
-            print i
-
-        # Store on memory:
-
-        it = list(iter("asdf"))
-        for i in it:
-            print "first"
-            print i
-        for i in it:
-            print "second"
-            print i
-
-    if "built-in iterator functions":
-
-        if "##enumerate":
-
-            assert list(enumerate(['a', 'c', 'b']) ) == [(0, 'a'), (1, 'c'), (2, 'b'), ]
-
-        if "##reduce":
-
-            '''
-            - take two leftmost, apply func
-            - replace the two leftmost by the result
-            - loop
-
-            On the example below:
-
-            - 2*3 - 1 = 5
-            - 2*5 - 3 = 8
-            '''
-
-            assert reduce(lambda x, y: 2*x - y, [3, 1, 2]) == 8
-
-    if "###itertools":
-
-        import itertools
-
-        '''
-        Hardcore iterator patterns.
-        <http://docs.python.org/2/library/itertools.html#recipes>
-
-        Most important ones:
-
-        - imap: map for iterators
-        - izip: count to infinity
-        - count: count to infinity
-        '''
-
-        # Cartesian product:
-
-        for i, j in itertools.product(xrange(3), xrange(3)):
-            print i, j
-
 if "##decorator":
 
-    '''
+    """
     Decorators are syntaxical sugar syntax that allows to write functions or classes in the forms:
 
         @decorator
@@ -3644,7 +3896,7 @@ if "##decorator":
     Where `decorator` is any callable such as a function of a class that implements `__call__`.
 
     They are documented together with function and class definition syntax.
-    '''
+    """
 
     if "Create a function based function decorator":
 
@@ -3668,6 +3920,25 @@ if "##decorator":
 
         decorated = decorator(f)
         assert decorated(1) == 2
+
+    if "Multiple decorators":
+
+        def decorator(func):
+            def wrapped(i):
+                return func(i) + 2
+            return wrapped
+
+        def decorator2(func):
+            def wrapped(i):
+                return func(i) * 2
+            return wrapped
+
+        @decorator
+        @decorator2
+        def f(i):
+            return i
+
+        assert f(0) == 2
 
     if "Create a callable class based function decorator":
 
@@ -3809,7 +4080,7 @@ if "##exec":
     exec('a = 1')
     assert a == 1
 
-if "##file io ##streams":
+if "##streams":
 
     """
     Like in C, files and pipes are both similar objects
@@ -3824,10 +4095,6 @@ if "##file io ##streams":
     For example, search operations can be done on files, but not on stdin/out.
     """
 
-        #to print without newline in 2.X, you cannout use `print`, try:
-        #import sys
-        #sys.stdout.write()
-
     if "##print statement":
 
         '''
@@ -3841,6 +4108,15 @@ if "##file io ##streams":
     if "##stdout":
 
         sys.stdout.write("stdout")
+        print
+
+        # Best way to print without a newline in 2.X:
+
+        # Many shells don't show input immediately until the next newline. To force that use flush.
+
+        import sys
+        sys.stdout.write('no newline')
+        sys.stdout.flush()
         print
 
     if "##stderr":
@@ -3879,50 +4155,97 @@ if "##file io ##streams":
             # prints True is a user input terminal (no pipes) and waits for user input
             # after ^D, prints what was input by keyboard.
 
-        if "##io and encoding":
+    if "##file IO":
 
-            # Convert to `unicode` *EVERYTIME* you take stdin or command line arguments which
-            # *MIGHT* in some case be unicode, such as filenames.
+        if "binary":
 
-            # Reads stdin as if it were utf-8, which should be the case for any sane non binary stdin input.
+            # Best way to open binary files:
 
-            # TODO convert to stdin tests
+            path = os.path.join(tempfile.gettempdir(), "pythone_fileio.tmp")
+            data = "a\nb"
+            try:
+                with open(path, "w") as f:
+                    f.write(data)
+            except IOError, e:
+                print e
+                raise
+            try:
+                with open(path, "r") as f:
+                    assert f.read() == data
+            except IOError, e:
+                print e
+                raise
+            os.unlink(path)
 
-            pass
+            # `with` is exception safe: on exception will first close file.
 
-            #s = unicode(sys.argv[1], 'utf-8')
+            #http://preshing.com/20110920/the-python-with-statement-by-example
+            #http://effbot.org/zone/python-with-statement.htm
 
-            #Autodetects the encoding of the stdin.
-            #Does not work for pipes, since they don't have a default encoding like a terminal!
+        if "unicode":
 
-            #s = unicode(sys.argv[1], sys.stdin.encoding)
+            '''
+            If all you want to do is slurp read, then encoding manually is a fine option as shown here.
 
-    if "##files":
+            There however operations which are non trivial to do, for example reading linewise,
+            which requires knowledge about the encoding to be done. For this kind of operation, use `codecs`.
+            '''
 
-        # Best way to open:
+            path = os.path.join(tempfile.gettempdir(), "pythone_fileio.tmp")
+            # Euro sign
+            data = u"\u20AC"
+            try:
+                with open(path, "w") as f:
+                    # Raises on most implemtatoins:
+                    #     UnicodeEncodeError: 'ascii' codec can't encode character u'\u20ac' in position 0: ordinal not in range(128)
+                    #f.write(data)
+                    f.write(data.encode('utf-8'))
 
-        path = "open.tmp"
-        data = "a\nb"
-        try:
-            with open(path, "w") as f:
-                f.write(data)
-        except IOError, e:
-            print e
-            raise
+                    # Might work because Python knows if its outputing to a terminal, and uses LC_CTYPE to determine encoding.
+                    # May fail if you pipe however, even if output to terminal works fine. In that case Python uses None as encoding.
+                    #sys.stdout.write(data)
 
-    try:
-        with open(path, "r") as f:
-            assert f.read() == data
-    except IOError, e:
-        print e
-        raise
+                    # To automatically change the default encoding non non terminal output, use on you main imported file:
+                    # http://stackoverflow.com/questions/2276200/changing-default-encoding-of-python
+                    #Output UTF-8 by default.
+                    #import sys
+                    #reload(sys)  # Reload is required.
+                    #sys.setdefaultencoding('utf-8')
+            except IOError, e:
+                print e
+                raise
+            try:
+                with open(path, "r") as f:
+                    read = f.read()
+                    assert type(read) == str
+                    # Because str, only the first byte!
+                    assert read[0] != data
+                    assert read.decode('utf-8')[0] == data
+            except IOError, e:
+                print e
+                raise
+            os.unlink(path)
 
-        os.unlink(path)
+            if "##codecs":
 
-        # Exception safe: on exception will first close because of the `as`.
+                import codecs
 
-        #http://preshing.com/20110920/the-python-with-statement-by-example
-        #http://effbot.org/zone/python-with-statement.htm
+                # Linewise read. Requires the encoding to be known, and is a non trival operation.
+
+                path = os.path.join(tempfile.gettempdir(), "pythone_fileio.tmp")
+                # Two line terminated euro signs.
+                data = u"\u20AC\n\u20AC\n"
+                with open(path, "w") as f:
+                    f.write(data.encode('utf-8'))
+                # 'r' is the default
+                f = codecs.open(path, encoding='utf-8', mode='r')
+                lines = []
+                for line in f:
+                    lines.append(line)
+                f.close()
+                assert lines[0] == u"\u20AC\n"
+                assert lines[1] == u"\u20AC\n"
+                os.unlink(path)
 
     if "##read methods":
 
@@ -3967,9 +4290,33 @@ if "##time":
 
     import time
 
-    # Get number of seconds since 1970:
+    if "##time":
 
-    print 'time.time() = ' + str(time.time())
+        # Get number of seconds since 1970:
+
+        print 'time.time() = ' + str(time.time())
+
+    if "##clock":
+
+        # Quoting the man: "This is the function to use for benchmarking Python or timing algorithms."
+
+        start_time = time.clock()
+        "-".join(str(n) for n in range(10000))
+        elapsed_time = time.clock() - start_time
+        print 'clock elapsed = {0:.6f}s'.format(elapsed_time)
+
+        # Not accurate for wall time. Does not measure time of external programs.
+
+    if "##timeit":
+
+        # Benchmark code snippets from strings. Relies internally on either time or clock.
+
+        import timeit
+        print "timeit time of all iterations= {0}s".format(timeit.timeit('"-".join(str(n) for n in range(100))', number=10000))
+
+        # From the command line:
+
+            #python -m timeit '"-".join(str(n) for n in range(100))'
 
     if "##sleep":
 
@@ -4159,7 +4506,7 @@ if "##os":
 
     print "os.getcwd() = " + os.getcwd()
 
-    if "##walk":
+    if "##walk ##find":
 
         '''
         Walk all subdirectories recursively.
@@ -4170,19 +4517,108 @@ if "##os":
         - onerror callback function
         - followlinks or not
 
-        Missing options that really hurt:
+        For input like:
 
-        - prune search if condition is met. Important special case: maxdepth and mindepth.
+            for root, dirs, files in os.walk(u"tests"):
+                print root
+                print dirs
+                print files
+                print
+
+        The output is of the form:
+
+            directory path
+            [basename of directories inside it]
+            [basename of files inside it]
+
+        It loops over all directories.
+
+        **Be paranoid and always use unicode `u"."` in Python 2.7**, since the output has the same encoding as that input,
+        and paths are primary examples of things that may contain unicode characters.
         '''
 
-    if "##os.path":
+        # Get relative paths to all non-directory files:
+
+        for root, dirs, files in os.walk(u"."):
+            for basename in files:
+                path = os.path.join(root, basename)
+                #print path
+
+        # Get relative paths to all directories:
+
+        for root, dirs, files in os.walk(u"."):
+            for basename in dirs:
+                path = os.path.join(root, basename)
+                #print path
+
+        # Does not include current directory dot `.` nor upper directory two dots `..`.
+
+        # Get relative paths to all files and directories:
+
+        for root, dirs, files in os.walk(u"."):
+            for basename in dirs + files:
+                path = os.path.join(root, basename)
+                #print path
+
+        # To do all of Bash `find` filtering, jus use regular ifs. Sanity!
+
+        for root, dirs, files in os.walk(u"."):
+            for basename in dirs + files:
+                path = os.path.join(root, basename)
+                if os.path.splitext(path)[1] == ".pdf":
+                    #print path
+                    pass
+
+        # The order and choice of directories which will be descended into is determined by `dirs`.
+
+        # If you modify if in-place, you can alter the descent order! Typical applications include:
+
+        # - `sort` to fix descent order
+
+            # Only sorts each level and the descent order:
+
+            # - files come after directories
+            # - shallow come before deep
+
+        for root, dirs, files in os.walk(u"."):
+            dirs.sort()
+            files.sort()
+            for basename in dirs + files:
+                path = os.path.join(root, basename)
+                #print path
+
+            # For a full sort, the only way is to put all paths in a list and sort the list.
+
+            # That is less efficient because 2n log 2n > 2(n log n and rarely necessary.
+
+        # - `remove` to prune any directories with a given basename:
+
+        for root, dirs, files in os.walk(u"."):
+            try:
+                dirs.remove(u"prune_me")
+            except ValueError:
+                pass
+            for basename in dirs + files:
+                path = os.path.join(root, basename)
+                #print path
+
+    if "##path":
 
         import os.path
 
-        ##join
+        if "##join":
 
-        assert os.path.join('a', 'b', 'c') == 'a{s}b{s}c'.format(s=os.sep)
-        os.path.join('a//', '/b')
+            assert os.path.join('a', 'b', 'c') == 'a{s}b{s}c'.format(s=os.sep)
+            os.path.join('a//', '/b')
+
+        if "##split ##splitext":
+
+            path = os.path.join('a', 'b', 'c.e')
+            root, basename = os.path.split(path)
+            basename_noext, ext = os.path.splitext(basename)
+            assert root == os.path.join('a', 'b')
+            assert basename_noext == 'c'
+            assert ext == '.e'
 
         if "##exists":
 
@@ -4249,6 +4685,8 @@ if "##os":
         # Run command from default shell.
 
         # See subprocess for a better option.
+
+        pass
 
 if "##glob":
 
@@ -4402,8 +4840,19 @@ if "##math":
     # Built-in functions:
 
     assert abs(-1) == 1
-    assert max(1, -2, 0) == 1
-    assert max([1, -2, 0]) == 1
+
+    if "##max":
+
+        # Returns the first max item according to some metric:
+
+        assert max(1, -2, 0)   == 1
+        assert max([1, -2, 0]) == 1
+        assert max([1, -2, 0, 2], key=lambda x: x*x) == -2
+
+        # TODO best way to get the value of key withtout recalculating?
+
+        def f(x): return x*x
+        assert f(max([1, -2, 0, 2], key=f)) == 4
 
     import math
 
@@ -4455,9 +4904,15 @@ if "##math":
 
             print random.randint(0,3)
 
+        if "##choice":
+
+            # Take one element at random from an iterable.
+
+            assert random.choice([0, 1]) in [0, 1]
+
         if "##sample":
 
-            # Takes n *different* elements at random from iterable:
+            # Takes n *different* elements at random from iterable. Returns an iterable.
 
             vals = {1:0, 2:0, 3:0}
             n = 2
@@ -4468,7 +4923,7 @@ if "##math":
             for i in vals.keys():
                 assert vals[i] == 0 or vals[i] == 1
 
-            assert sum( vals[k] for k in  vals.keys() ) == n
+            assert sum(vals[k] for k in  vals.keys()) == n
 
 if "##termcolor":
 
@@ -4538,8 +4993,8 @@ if "##environ ##environment variables":
 
 if "##command line arguments ##argv":
 
-    print sys.argv[0]
-    print sys.argv[1:]
+    print 'sys.argv[0]  = ' + repr(sys.argv[0])
+    print 'sys.argv[1:] = ' + repr(sys.argv[1:])
 
 if "##version":
 

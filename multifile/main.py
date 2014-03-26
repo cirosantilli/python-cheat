@@ -71,7 +71,7 @@ if "##module search path":
             # TODO: how does that work for sys.path? It does not work for other lists.
 
             import contains_list
-            contains_list.l[0] = 2
+            contains_list.l[0] = 1
             import a
 
 if "##__init__":
@@ -282,6 +282,16 @@ if "##importing a submodule also imports parent":
     import d.a2
     #assert d.a == 'd.a'
 
+if "##Inform end user that package is missing.":
+
+    """
+    try:
+        import bs4
+    except ImportError:
+        print 'ERROR: Missing dependencies. Install with:\n\nsudo pip install -r requirements.txt'
+        sys.exit(1)
+    """
+
 if "##from":
 
     from d import a2
@@ -396,16 +406,25 @@ if "##symlink":
 
 if "##imp":
 
-    #do import/find in path operations!
+    # Do explicit import / find in path operations!
 
     import imp
 
-    #import relative from *os.getcwd()*, *not* to file location:
+    # Import relative from *os.getcwd()*, *not* to location of this file:
 
-    b = imp.load_source('c','a.py')
+    try:
+        b = imp.load_source('c', 'a.py')
+    except IOError:
+        # Raised if file not found.
+        pass
 
     assert b.f() == 'a.f()'
     assert b.__name__ == 'c'
+
+    # Create a new empty module:
+
+    dynamic_module = imp.new_module('dynamic_module_name')
+    assert dynamic_module.__name__ == 'dynamic_module_name'
 
     ##__dict__ and modules
 

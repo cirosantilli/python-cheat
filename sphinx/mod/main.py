@@ -1,10 +1,10 @@
 #docstrings
 def f(name, state=None):
-    r"""short summary
+    r"""Short summary.
 
-    longer explanation
+    Longer explanation.
 
-    latex math: :math:`a^2 + \alpha`.
+    LaTeX math: :math:`a^2 + \alpha`.
 
     refers to a function: :func:`f2`
 
