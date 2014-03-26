@@ -1,36 +1,27 @@
-Cheats and information on python and libraries.
+Python information and cheatsheets.
 
-Whenever possible, I make the cheat runnable and full of assertions!
+Cheats are runnable and full of assertions wherever possible: only unpredictable outputs are printed.
 
-Watch out for not naming a module with the same as in the stdlib,
-or you will import the module from current dir instead!
-this is why some files are named *cheat.py.
+Stdlib and third party libraries are covered.
 
-#implementations
+Most useful files:
+
+- [main.py](main.py): major cheat on the language.
+
+Watch out for not naming a module with the same as in the stdlib, or you will import the module from current dir instead! This is why some files are named `something_cheat.py` instead of simply `cheat.py`.
+
+#Python Implementations
 
 Python specifies the language and stdlib interfaces, not the implementation.
 
 The main interpreter implementations are:
 
-- [CPython](http://www.python.org/getit/source/).
-
-    Reference implementation.
-
-- PyPy
+- [CPython](http://www.python.org/getit/source/). Reference implementation.
+- PyPy.
 - JPython. Compiles to Java Object Code.
 - IronPython. Compiles to `.NET` object code.
 
-#sources
-
-- <http://www.diveintopython.net/index.html>
-
-    Good beginners tutorial.
-
-- <http://www.cafepy.com/article/python_types_and_objects/python_types_and_objects.html>
-
-    Explains Python types in detail.
-
-#command line options
+#Command line options
 
 - `-O`: optimize.
 
@@ -44,41 +35,43 @@ The main interpreter implementations are:
 
         and it will only show show is `-O` is off.
 
-#pros of python
+#Pros of Python
 
 Python is great for small/medium projects:
 
-- builtin lists [] and dictionnaries {}.
-    Really helpful to type less for shorter scripts.
+- built-in lists and dictionary literals `[]` `{}`. Really helpful to type less for shorter scripts.
 
-    Has the downside of being harder to document, but still is a good thing.
-
-- dinamically typing:
+- dynamic typing:
 
         a = 1
         a = "abc"
 
-    good when writting smaller scripts because it means much less typing.
+    Good when writing smaller scripts because it means much less typing.
 
-#cons of python
+#Cons of Python
 
-- dinamically typing:
+- dynamic typing:
 
         a = 1
         a = "abc"
 
-    what this means is that tons of projects will not document what types of objects functions need to get
-    and large projects become a mess...
+    What this means is that tons of projects will not document what types of objects functions need to get and large projects become a mess.
 
 - putting self in every class method: `__init__(self)`
 
-- global functions that should be class functions: `len([1,2])` instead of `[1.2].len()`
+- global functions that should be methods functions: `len([1,2])` instead of `[1.2].len()`
 
-- package management is still not perfect.
+- there are some key tools missing from the stdlib and without one very dominant implementation:
 
-- autodocumentation tools are still not perfect (`Shpinx`)
+    - package management
+    - auto documentation tools (e.g. Sphinx)
+    - Rake equivalent
 
-#how to hack python projects
+#How to hack Python projects
+
+First of all, use pip + virtualenv to fix your version and environment.
+
+Next, you might want to do the following to isolate the development version of a package:
 
 - create a dir: `$DEVPATH`
 
@@ -86,34 +79,47 @@ Python is great for small/medium projects:
 
 - symlink all the packages of the project into `$DEVPATH`
 
-- to turn off your dev version of matplotlib and fall back to the stable distro installed one,
-    just rename `matplotlib` as `matplotlib.off`
+- to turn off your dev version of Matplotlib and fall back to the stable distro installed one, just rename `matplotlib` as `matplotlib.off`
 
-- if the project contains c/c++ extensions, you can:
+- if the project contains C/C++ extensions, you can:
 
         python setup.py build_ext --inplace
 
-    the first time, and whenever you modify a c/c++ extension.
+    The first time, and whenever you modify a C/C++ extension.
 
-    This will place the compiled c/c++ outputs side by side with the python code in the repo,
-    exactly where they need to be, without touching anything outside the repo.
+    This will place the compiled c/c++ outputs side by side with the python code in the repo, exactly where they need to be, without touching anything outside the repo.
 
-#good python libraries
+#Good Python libraries
 
-##science
+##Science
 
-- numpy
-- scipy
-- matplotlib
+Python is very strong on scientific applications, containing libraries such as:
 
-##web
+- NumPy
+- SciPy
+- Matplotlib
+- Pandas
 
-- django
+##Web
 
-    most used python web framework.
+Python is not as strong as Ruby for web development. Important applications are:
 
-- trac
+- Django
 
-    top django bugtracker.
+    Most used Python web framework.
 
-    Not Django based.
+- Trac
+
+    Top Python-based bug tracker.
+
+    Unfortunately not Django based.
+
+#Sources
+
+- <http://www.diveintopython.net/index.html>
+
+    Good beginners tutorial.
+
+- <http://www.cafepy.com/article/python_types_and_objects/python_types_and_objects.html>
+
+    Explains Python types in detail.
