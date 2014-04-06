@@ -6,7 +6,7 @@ Not part of the stdlib.
 
 Manages package dependencies.
 
-`pip` looks by default for packages under pypi (aka the cheeseshop) located at: <https://pypi.python.org/pypi>
+`pip` looks by default for packages under PyPi (aka the cheeseshop) located at: <https://pypi.python.org/pypi>
 
 It is also possible to add custom servers, and even to install from source control protocols such as git directly.
 

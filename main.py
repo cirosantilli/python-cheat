@@ -5056,6 +5056,13 @@ if "##version":
         #python 2.x code
         pass
 
+    # Get version of module installed with pip:
+
+        #pkg_resources.get_distribution("blogofile").version
+
+    # PEP 8 recommends that modules define `__version__`, but many packages don't do that.
+    #http://legacy.python.org/dev/peps/pep-0008/#version-bookkeeping
+
 if "##exit status":
 
     #if no call is made to sys.exit, exit code is 0.
