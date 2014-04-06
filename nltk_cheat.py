@@ -11,10 +11,17 @@ Install:
 
     sudo pip install nltk
 
-You can then install data with:
+To use ceratin functions, you must data files.
+
+All data files can be downloaded with:
 
     python -m nltk.downloader all
 
+but that takes up 1.8Gb.
+
+Download interactively with a GUI application:
+
+    python -c 'import nltk; nltk.download()'
 """
 
 import nltk

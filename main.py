@@ -94,6 +94,16 @@ if "##whitespace":
 
         # Anything that has `:` like `if`, `while` and `class` works like function.
 
+    if "##multiple commands on a single line":
+
+        #http://stackoverflow.com/questions/6167127/how-to-put-multiple-statements-in-one-line
+
+        # Only possible for multiple simple statements.
+
+        i = 0; i += 1; assert i == 1
+
+        # Only use this for bash one liners.
+
 if "##built-in":
 
     '''
@@ -4513,9 +4523,11 @@ if "##os":
 
     if "##symlink":
 
-        # os.symlink(name, origin)
-        # Where name is the place the symlinke will be created at,
-        # and origin what it points to.
+        '''
+        os.symlink(name, origin)
+        Where name is the place the symlinke will be created at,
+        and origin what it points to.
+        '''
 
     if "##walk ##find":
 
@@ -4740,6 +4752,7 @@ if "##shutil":
         # Not a base utility since it can be done naively with with open read write.
 
         #shutil.copyfile(src, dst)
+        pass
 
 if "##tempfile":
 
