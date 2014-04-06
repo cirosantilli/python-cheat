@@ -5,6 +5,7 @@ Unidecode
 distribute
 ipython
 nltk
+networkx
 numpydoc
 srtmerge
 sympy

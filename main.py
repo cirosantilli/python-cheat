@@ -4278,16 +4278,16 @@ if "##streams":
 
             #f.readline()
 
-        # Same as ``f.read().split(\n)``. This is amost never useful because of ``xreadlines``.
+        # Same as `f.read().split(\n)`. This is amost never useful because of `xreadlines`.
 
             #lines = f.readlines()
             #print lines[2];
 
-        # Never do for loops with ``readlines``, always user ``xreadlines`` instead
+        # Never do for loops with `readlines`, always user `xreadlines` instead
         # because that way you don't clutter memory, and you can read files larger
         # than memory.
 
-        # Iterator based ``readlines``:
+        # Iterator based `readlines`:
 
             #for l in f.xreadlines():
             #    print l
