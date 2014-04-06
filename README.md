@@ -1,12 +1,23 @@
 Python information and cheatsheets.
 
-Cheats are runnable and full of assertions wherever possible: only unpredictable outputs are printed.
-
 Stdlib and third party libraries are covered.
+
+On Ubuntu 12.04 install all dependencies with:
+
+	./install-ubuntu.sh
+
+On other systems, install Python-only dependencies with:
+
+	sudo pip install -r requirements.txt
+
+This does not include certain dependencies which may not be installable with `pip` such as SciPy build dependencies.
 
 Most useful files:
 
 - [main.py](main.py): major cheat on the language.
+- [argparse_cheat.py](argparse_cheat.py)
+
+Cheats are runnable and full of assertions wherever possible: only unpredictable outputs are printed.
 
 Watch out for not naming a module with the same as in the stdlib, or you will import the module from current dir instead! This is why some files are named `something_cheat.py` instead of simply `cheat.py`.
 

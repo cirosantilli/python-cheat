@@ -1,13 +1,13 @@
-fileinput emulates the typical gnu interface:
+`fileinput` implements the typical POSIX / GNU interface:
 
 1) read from files with filenames in stdin[1:], one by one
 2) if none is given, read from stdin.
 
-to run the tests on main, do:
+Run the tests:
 
     ./test_main.py
 
-to see what `main.py` does, try it out:
+Understand what `main.py` does:
 
     ./main.py a b
     ./main.py b a

@@ -1,418 +1,397 @@
 #!/usr/bin/env python
 
-#?usefulness = 8
-
 """
-parse command line arguments
+stdlib.
 
-print nice help and error messages
-
-stdlib
-
-very easy to make complex command line argument interfaces!
+Makes it very easy to create complex POSIX / GNU command line interfaces!
 """
 
 import argparse
 import os.path
 import sys
 
-##basic usage
-sys.argv = ['program_name','0','1']
+if "Basic usage":
 
-parser = argparse.ArgumentParser()
-parser.add_argument('a')
-parser.add_argument('b')
-args = parser.parse_args() #by default takes sys.argv[1:]
-assert args.a == '0'
-assert args.b == '1'
-    
-##good parser template
+    # parse_args takes by default sys.argv[1:], which we have artificially set here.
+    sys.argv = ['program_name','0','1']
+    parser = argparse.ArgumentParser()
+    parser.add_argument('a')
+    parser.add_argument('b')
+    args = parser.parse_args()
+    assert args.a == '0'
+    assert args.b == '1'
 
-parser = argparse.ArgumentParser(
-    description="", #one line summary of program
-    epilog=r"""
-EXAMPLES
+if "Good parser template":
 
-%(f)s
-""" % { 'f' : sys.argv[0] },                    #f contains command name
-    formatter_class=argparse.RawTextHelpFormatter,   #keep newlines
-)
+    parser = argparse.ArgumentParser(
+        description="",
+        epilog=r"""
+    EXAMPLES
 
-##name conversions
+    %(f)s
+    """ % { 'f':sys.argv[0] },                           # f contains command name.
+        formatter_class=argparse.RawTextHelpFormatter,   # Keep newlines.
+    )
 
-#- removes leading '-'
-#- transforms middle '-' to '_'
+if "##Automatic option names.":
 
-##positional args
+    """
+    Given the command line argument form, argparse automatically derives a Python variable name from it:
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-)
-args = parser.parse_args(['1'])
-assert args.a == '1'
-#exits process and prints help:
+    - removes leading '-'
+    - transforms middle '-' to '_'
+    """
+
+    # In case of name conflicts, it becomes simply impossible to access one of the variables.
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('a')
+    parser.add_argument('-a')
+    args = parser.parse_args(['-a','1','2'])
+    # Impossible to access -a.
+    #assert args.-a == '2'
+    assert args.a == '2'
+
+    # This can be resolved this with the `dest` parameter.
+
+    if "##dest":
+
+        # Specifies where input is stored explicitly.
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '-a',
+            '--a-long',
+            dest="d",
+        )
+        args = parser.parse_args(['--a-long','1'])
+        assert args.d == '1'
+        args = parser.parse_args(['-a','1'])
+        assert args.d == '1'
+        assert not hasattr(args,'a')
+        assert not hasattr(args,'a_long')
+
+if "##Positional args":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+    )
+    args = parser.parse_args(['1'])
+    assert args.a == '1'
+    # Exit process and prints help:
     #args = parser.parse_args([])
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '0',
-    default=""
-)
-args = parser.parse_args(['a'])
-assert True
-#TODO
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '0',
+        default=""
+    )
+    args = parser.parse_args(['a'])
+    assert True
+    #TODO
 
-##help
+if "##help":
 
-#gives description to users in case of error/help. always define it.
+    # Gives description to users in case of error/help. Always define it.
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    help = 'help text',
-)
-args = parser.parse_args(['1'])
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        help = 'help text',
+    )
+    args = parser.parse_args(['1'])
 
-##optional args
+if "##Optional args":
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a',
-)
-args = parser.parse_args(['-a','1'])
-assert args.a == '1'
-#ok, a is optional because the name starts with '-':
-args = parser.parse_args([])
-assert args.a == None
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-a',
+    )
+    args = parser.parse_args(['-a','1'])
+    assert args.a == '1'
+    #ok, a is optional because the name starts with '-':
+    args = parser.parse_args([])
+    assert args.a == None
 
-#see <#name conversion>
+if "##default":
 
-#in practice, always give a <default>
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-a',
+        default='2',
+    )
+    args = parser.parse_args([])
+    assert args.a == '2'
+    args = parser.parse_args(['-a','1'])
+    assert args.a == '1'
 
-##default
+    # Does nothing with positional args:
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a',
-    default='2',
-)
-args = parser.parse_args([])
-assert args.a == '2'
-args = parser.parse_args(['-a','1'])
-assert args.a == '1'
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        default='1'
+    )
 
-###does nothing with positional args
+if "##Long name":
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    default='1'
-)
-#exits process:
-    #args = parser.parse_args([])
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-a',
+        '--a-long',
+    )
+    args = parser.parse_args(['--a-long','1'])
+    assert args.a_long == '1'
+    args = parser.parse_args(['-a','1'])
+    assert args.a_long == '1'
+    assert not hasattr(args,'a')
 
-###name conflict
+if "##type":
 
-#bad
+    # int
 
-parser = argparse.ArgumentParser()
-parser.add_argument('a')
-parser.add_argument('-a')
-args = parser.parse_args(['-a','1','2'])
-assert args.a == '2'
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        type=int,
+        default=1,
+    )
+    args = parser.parse_args(['1'])
+    assert args.a == 1
 
-#impossible to access '-a'
+    # float
 
-#may resolve this with <#dest>
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        type=float,
+        default=1.0,
+    )
+    args = parser.parse_args(['1.0'])
+    assert args.a == 1.0
 
-##long name
+    # boolean: see <#store_true> <#action>
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a',
-    '--a-long',
-)
-args = parser.parse_args(['--a-long','1'])
-assert args.a_long == '1'
-args = parser.parse_args(['-a','1'])
-assert args.a_long == '1'
-assert not hasattr(args,'a')
+if "##nargs":
 
-##dest
+    # Fixed number:
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a',
-    '--a-long',
-    dest="d",
-)
-args = parser.parse_args(['--a-long','1'])
-assert args.d == '1'
-args = parser.parse_args(['-a','1'])
-assert args.d == '1'
-assert not hasattr(args,'a')
-assert not hasattr(args,'a_long')
-
-##type
-
-###int
-
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    type=int,
-    default=1,
-)
-args = parser.parse_args(['1'])
-assert args.a == 1
-
-###float
-
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    type=float,
-    default=1.0,
-)
-args = parser.parse_args(['1.0'])
-assert args.a == 1.0
-
-###boolean
-
-#see <#store_true> <#action>
-
-##nargs
-
-###number
-
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    nargs=2,
-    default=['1','2']
-)
-args = parser.parse_args(['1','2'])
-assert args.a == ['1','2']
-#error: must be exactly 2:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        nargs=2,
+        default=['1','2']
+    )
+    args = parser.parse_args(['1','2'])
+    assert args.a == ['1','2']
+    # ERROR: there must be exactly 2:
     #parser.parse_args(['1'])
 
-###1
+    # nargs=1 still is storea a list, not the object directly.
 
-#still is a list.
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        nargs=1,
+        default=['1']
+    )
+    args = parser.parse_args(['1'])
+    assert args.a == ['1']
+    assert args.a != '1'
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    nargs=1,
-    default=['1']
-)
-args = parser.parse_args(['1'])
-assert args.a == ['1']
-assert args.a != '1'
+    # Zero or more arguments:
 
-###star
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        nargs='*',
+        default=[],
+    )
+    args = parser.parse_args(['1','2','3','4'])
+    assert args.a == ['1','2','3','4']
+    args = parser.parse_args([])
+    assert args.a == []
 
-#zero or more
+    # Zero or one. Doe not store return a list, but the element itself.
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    nargs='*',
-    default=[],
-)
-args = parser.parse_args(['1','2','3','4'])
-assert args.a == ['1','2','3','4']
-args = parser.parse_args([])
-assert args.a == []
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        nargs='?',
+        default='2'
+    )
+    args = parser.parse_args(['1'])
+    assert args.a == '1'
+    args = parser.parse_args([])
+    assert args.a == '2'
 
-###interrogation
+    # One or more.
 
-#zero or one
-
-#doe not return a list
-
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a', 
-    nargs='?', 
-    default='2'
-)
-args = parser.parse_args(['1'])
-assert args.a == '1'
-args = parser.parse_args([])
-assert args.a == '2'
-
-###plus
-
-#one or more
-
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    nargs='+',
-    help='1 or more args (must be last arguments)'
-)
-args = parser.parse_args(['1','2','3','4'])
-assert args.a == ['1','2','3','4']
-#error: even if default:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        nargs='+',
+        help='1 or more args (must be last arguments)'
+    )
+    args = parser.parse_args(['1','2','3','4'])
+    assert args.a == ['1','2','3','4']
+    # ERROR: even if default:
     #args = parser.parse_args([])
 
-##action
+if "##action":
 
-###store_true false
+    if "##store":
 
-#good to make switches:
+        # Is the default action:
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a', 
-    action="store_true", 
-    default=False, 
-)
-args = parser.parse_args([])
-assert args.a == False
-args = parser.parse_args(['-a'])
-assert args.a == True
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '-a',
+            action='store',
+            default='2'
+        )
+        args = parser.parse_args(['-a','1'])
+        assert args.a == '1'
+        args = parser.parse_args([])
+        assert args.a == '2'
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a', 
-    action="store_false", 
-    default=True, 
-)
-args = parser.parse_args([])
-assert args.a == True
-args = parser.parse_args(['-a'])
-assert args.a == False
+    if "##store_true false":
 
-###store
+        # Good to make switches:
 
-#is the default action:
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '-a',
+            action="store_true",
+            default=False,
+        )
+        args = parser.parse_args([])
+        assert args.a == False
+        args = parser.parse_args(['-a'])
+        assert args.a == True
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a',
-    action='store', 
-    default='2'
-)
-args = parser.parse_args(['-a','1'])
-assert args.a == '1'
-args = parser.parse_args([])
-assert args.a == '2'
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '-a',
+            action="store_false",
+            default=True,
+        )
+        args = parser.parse_args([])
+        assert args.a == True
+        args = parser.parse_args(['-a'])
+        assert args.a == False
 
-###store_const
+    if "##store_const":
 
-#more general than store_true false, but less useful:
+        # Generalizes `store_true`.
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a',
-    action='store_const',
-    const='1',
-    default='2'
-)
-args = parser.parse_args(['-a'])
-assert args.a == '1'
-args = parser.parse_args([])
-assert args.a == '2'
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '-a',
+            action='store_const',
+            const='1',
+            default='2'
+        )
+        args = parser.parse_args(['-a'])
+        assert args.a == '1'
+        args = parser.parse_args([])
+        assert args.a == '2'
 
-###append
+    if "##append":
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a',
-    action='append',
-    default=[],
-)
-args = parser.parse_args(['-a','1'])
-assert args.a == ['1']
-args = parser.parse_args(['-a','1','-a','2'])
-assert args.a == ['1','2']
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '-a',
+            action='append',
+            default=[],
+        )
+        args = parser.parse_args(['-a','1'])
+        assert args.a == ['1']
+        args = parser.parse_args(['-a','1','-a','2'])
+        assert args.a == ['1','2']
 
-###append_const
+    if "##append_const":
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-a', 
-    action='append_const',
-    const='1',
-)
-args = parser.parse_args(['-a'])
-assert args.a == ['1']
-args = parser.parse_args(['-a','-a'])
-assert args.a == ['1','1']
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '-a',
+            action='append_const',
+            const='1',
+        )
+        args = parser.parse_args(['-a'])
+        assert args.a == ['1']
+        args = parser.parse_args(['-a','-a'])
+        assert args.a == ['1','1']
 
-###custom actions
+    if "##custom actions":
 
-class FooAction(argparse.Action):
-    def __call__(self, parser, namespace, values, option_string=None):
-        """only called if not default value"""
-        #print('%r %r %r' % (namespace, values, option_string))
-        setattr(namespace, self.dest, values)
+        class FooAction(argparse.Action):
+            def __call__(self, parser, namespace, values, option_string=None):
+                """only called if not default value"""
+                #print('%r %r %r' % (namespace, values, option_string))
+                setattr(namespace, self.dest, values)
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '--foo',
-    action=FooAction
-)
-parser.add_argument(
-    'bar',
-    action=FooAction
-)
-args = parser.parse_args( '--foo 1 2'.split() )
-assert args.foo == '1'
-assert args.bar == '2'
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '--foo',
+            action=FooAction
+        )
+        parser.add_argument(
+            'bar',
+            action=FooAction
+        )
+        args = parser.parse_args('--foo 1 2'.split())
+        assert args.foo == '1'
+        assert args.bar == '2'
 
-##choices
+if "##choices":
 
-#select from a set
+    # Restrict argument to a set.
 
-###list
+    if "##list":
 
-#1, 2 or 3 only:
+        # Argment must be in the list.
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    type=int,
-    choices=[1, 2, 3]
-)
-args = parser.parse_args(['1'])
-assert args.a == 1
-args = parser.parse_args(['2'])
-assert args.a == 2
-#error:
-    #args = parser.parse_args(['4'])
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            'a',
+            type=int,
+            choices=[1, 2, 3]
+        )
+        args = parser.parse_args(['1'])
+        assert args.a == 1
+        args = parser.parse_args(['2'])
+        assert args.a == 2
+        # ERROR:
+        #args = parser.parse_args(['4'])
 
-###string
+    if "##string":
 
-#chars.
+        # Argment must be a character in the string.
 
-#a, b or c only:
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            'a',
+            choices='abc'
+        )
+        args = parser.parse_args(['a'])
+        assert args.a == 'a'
+        args = parser.parse_args(['b'])
+        assert args.a == 'b'
+        #error:
+            #args = parser.parse_args(['d'])
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    'a',
-    choices='abc'
-)
-args = parser.parse_args(['a'])
-assert args.a == 'a'
-args = parser.parse_args(['b'])
-assert args.a == 'b'
-#error:
-    #args = parser.parse_args(['d'])
+if "##inheritnace via arguments":
 
-##inheritnace via arguments
+    # *add_help=False is obligatory here*!!
+    # or else will conflict with child help argument.
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument('parent')
 
-#*add_help is obligatory here*!!
-#or else will conflict with child help argument.
-parent_parser = argparse.ArgumentParser( add_help = False )
-parent_parser.add_argument( 'parent' )
+    foo_parser = argparse.ArgumentParser(parents=[parent_parser])
+    foo_parser.add_argument('child')
 
-foo_parser = argparse.ArgumentParser( parents=[parent_parser] )
-foo_parser.add_argument('child')
-
-args = foo_parser.parse_args(['2', '1'])
-assert args.parent == '2'
-assert args.child == '1'
+    args = foo_parser.parse_args(['2', '1'])
+    assert args.parent == '2'
+    assert args.child == '1'

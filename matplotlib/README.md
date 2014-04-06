@@ -1,61 +1,58 @@
-scientific plotting library
+TODO install currently broken!
 
-#install
+Scientific plotting library.
 
-altough it is available in pypi, there are tons of dependancies which pip may not
-install, and it even fails silently!
+#Install
 
-therefore **don't use the pip install:
+Although it is available in PyPi, there are tons of dependencies which pip may not install, and it even fails silently!
+
+Therefore **don't** use the pip install:
 
    #sudo pip install matplotlib
 
-but use the distro's package manager. On ubuntu:
+but use the distro's package manager. On Ubuntu:
 
-   sudo aptitude install python-matplotlib
+	sudo aptitude install python-matplotlib
 
-#developping
+#Developing
 
-clone besides of being able to hack matplotlib,
-you also get of tons of example files with this!
+Clone besides of being able to hack Matplotlib, you also get of tons of example files with this!
 
-if you are on Ubuntu get the built dependencies:
+If you are on Ubuntu get the built dependencies:
 
     sudo aptitude build-dep python-matplotlib
 
-then build c extensions and install with:
+Then build C extensions and install with:
 
     sudo python setup.py install
 
-##test hacks
+##Test hacks
 
-you cannot put the python files in your python path simply without installing,
-because the compiled dependencies won't go to the correct place without an install
-(crashes on `_path` not found).
+You cannot put the Python files in your python path simply without installing, because the compiled dependencies won't go to the correct place without an install (crashes on `_path` not found).
 
 So, after you made changes do again:
 
     sudo python setup.py install
 
-after you build the files c files, which is what takes the longest,
-you don't have to build them again, so after you hack just:
+After you build the files C files, which is what takes the longest, you don't have to build them again, so after you hack just:
 
-the problem with this is that you cannot keep the distro default installed also.
+The problem with this is that you cannot keep the distro default installed also.
 
-TODO how not to install after every change
+TODO how not to install after every change.
 
-#architecture
+#Architecture
 
-##state machine
+##State machine
 
-not object based, but state machine based.
+Not object based, but state machine based.
 
-This means that you often have a current something, and you modify the curent something.
+This means that you often have a current something, and you modify the current something.
 
-this methods like gca() which get you the current something.
+This methods like `gca()` which get you the current something.
 
-rationale: easier to type on interactive sessions
+Rationale: easier to type on interactive sessions
 
-##objects
+##Objects
 
 - figure:              everything
 - axes:                each subplot, including several axis
@@ -63,24 +60,24 @@ rationale: easier to type on interactive sessions
 
 #show
 
-plot to screen
+Plot to screen:
 
     plt.plot([0,1])
     plt.show()
 
-on window close, clears plot, so if you have to replot if you want to reuse the old plot:
+On window close, clears plot, so if you have to replot if you want to reuse the old plot:
 
     plt.plot([1,0])
     plt.show()
 
 #savefig
 
-plot to file
+Plot to file
 
-recommended formats are:
+Recommended formats are:
 
-- sgv: vector. Very precise, but needs to be transformed into bits before being put in a pdf:
-- png: loseless compression. Simpler to put in pdf because it represents bits directly:
+- SGV: vector. Very precise, but needs to be transformed into bits before being put in a PDF.
+- PNG: loseless compression. Simpler to put in PDF because it represents bits directly.
 
 examples:
 

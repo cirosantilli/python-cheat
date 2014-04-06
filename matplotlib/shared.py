@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 
 """
-contains stuff that is common to all plots of a project
+Contains stuff that is common to all plots of a project
 
-takes as input exactly one command line argument which is the
-path of a python file with a `plot` which has the same signature as `plot`:func:
+Takes as input exactly one command line argument which is the path of a python file with a `plot` which has the same signature as `plot`:func:
 
-the goal of this design is to separte separate plots into different
-files so that:
+The goal of this design is to separte separate plots into different files so that:
 
-- it all works well with makefiles so that
-    only plots corresponding to modified `.py` files will be replotted on make
+- it all works well with makefiles so that only plots corresponding to modified `.py` files will be replotted on make
 
 - the code is better organized
 
@@ -31,7 +28,7 @@ out_ext = "svg"
 
 class DefaultParameters:
     """
-    encapsulates all the default plot parameters
+    Encapsulates all the default plot parameters
     """
 
 def plot( plt, params ):

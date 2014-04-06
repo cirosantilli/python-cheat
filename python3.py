@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-This discusses only features present in python 3 that are not in python 2.
+Features present in python 3 that are not in python 2.
 
 Source: <http://docs.python.org/3.0/whatsnew/3.0.html>
 """

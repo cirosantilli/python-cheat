@@ -1,66 +1,66 @@
 #!/usr/bin/env python
 
 """
-can be used for unittesting code
+Embed tests into docstrings.
 
-cannot replace unittest, specially for more complex functions
+Serves mainly as good example for documentation.
 
-serves mainly as good example for documentation
+Cannot replace unittest, specially for more complex functions.
 
-you just copy and paste an interactive session
+The test format is exactly the same as seen in an interactive Python session.
 
-this is a docstring for the module, so it is tested:
+This is a docstring for the module, so tests inside it will be run.
 
-pass:
+Pass:
 
 >>> print 'abc'
 abc
 
-fail:
+Fail:
 
 >>> 1
 2
 
-define names:
+Define names:
 
 >>> a = 1
 >>> print a
 1
 
-this is only works for stuff defined in current docstring:
+This is only works for stuff defined in current docstring:
 
 >>> mod_doc = 1
 
-search for ``mod_doc`` elsewhere and see the fail
+Search for `mod_doc` elsewhere and see the fail.
 
-indent:
+Indent:
 
 >>> if True:
 ...     print 'a'
 a
 
-multiline output:
+Multiline output:
 
 >>> for a in [1,2]:
 ...   print a
 1
 2
 
-unpredictable output:
+Unpredictable output:
 
 >>> f # doctest: +ELLIPSIS
 <function f at 0x...>
 
-the comment `# doctest: +ELLIPSIS` is obligatory and is called a *directive*
+The comment `# doctest: +ELLIPSIS` is obligatory and is called a *directive*.
 
-exceptions:
+Exceptions:
 
 >>> raise ZeroDivisionError
 Traceback (most recent call last):
     File "<stdin>", line 1, in <module>
 ZeroDivisionError
 
-fails:
+Fails:
 
 >>> raise ZeroDivisionError
 Traceback (most recent call last):
@@ -70,17 +70,17 @@ AnotherError
 
 def f():
     """
-    fail:
+    Fail:
 
     >>> 1
     2
 
-    call itself:
+    Call itself:
 
     >>> print f()
     1
 
-    call other funcs:
+    Call other functions:
 
     >>> print f2()
     2
@@ -96,9 +96,9 @@ def f():
     return 1
 
 """
-not a docstring becaues there is stuff before it.
+Not a docstring becaues there is stuff before it.
 
-not tested:
+Not tested:
 
 >>> 1+1
 4
@@ -109,7 +109,7 @@ def f2():
 
 def func_with_very_long_name():
     """
-    to avoid typing large names several times, you could to as follows:
+    To avoid typing large names several times, you could to as follows:
 
     >>> a = func_with_very_long_name
     >>> a()

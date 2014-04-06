@@ -1,66 +1,58 @@
 #!/usr/bin/env python
 
 """
-current best math package for python
+NumPy and SciPy cheat.
+
+Current best math package for Python.
+
+#Install
+
+On Ubuntu 12.04:
+
+    sudo aptitude install python-scipy
+
+Pip may not work because of missing binary dependencies.
+
+    sudo pip install numpy
+    sudo pip install scipy
+
+#NumPy vs SciPy
+
+SciPy uses and extends NumPy (think LAPACK BLAS).
+
+It offers all functions in NumPy and many more conveient ones through the single `scipy` module.
+
+Since NumPy is quite low level, just use SciPy all the time and avoid confusion.
+
+#Sources
+
+- <http://www.scipy.org/Tentative_NumPy_Tutorial>
+- <www.scipy.org/PerformancePython>
 """
-
-##numpy vs scipy
-
-#scipy uses and extends numpy (think lapack blas)
-
-#it offers all functions in numpy
-
-#so just use scipy all the time to avoid confusion
-
-##install
-
-#pip may not work because of missing binary dependencies.
-
-#on ubuntu, the best way to go is:
-
-    #sudo aptitude install python-numpy
-    #sudo aptitude install python-scipy
-
-#which takes care of the dependencies.
-
-#you may also try with pip, but it is not sure to work:
-
-    #sudo pip install numpy
-    #sudo pip install scipy
 
 import scipy as sp
 import scipy.linalg as la
 
-def norm_m2( a ):
+def norm2(a):
     """
-    Mean squared norm
+    Mean squared norm.
     """
-    return la.norm( a )/sp.size(a)
+    return la.norm(a) / sp.size(a)
 
-def dist_m2( a, a2 ):
-    return norm_m2( a - a2 )
+def dist2(a, a2):
+    return norm2(a - a2)
 
-def eqa( a, a2, err = 10e-6, dist = dist_m2 ):
+def array_equal(a, a2, err=10e-6, dist=dist2):
     """
-    states if two sp.arrays are equal according to some distance
+    True iff two sp.arrays are equal within a given `err` precision for given `dist` distance.
     """
-    return dist( a, a2 ) < err
-
-#sources
-
-#- <http://www.scipy.org/Tentative_NumPy_Tutorial>
-#- <www.scipy.org/PerformancePython>
-
-
-#all numpy funcs are available through scipy and much more.
-
-#always use scipy so you don't have to think what is what.
+    return dist(a, a2) < err
 
 ##basic functions
 
 #unlike math.sqrt, this works:
 
-assert eqa( sp.sqrt(-1), 1j )
+assert array_equal(sp.sqrt(-1), 1j)
 
 #so *always* use it
 
@@ -105,15 +97,15 @@ assert eqa( sp.sqrt(-1), 1j )
 #equivalent
 
 assert sp.array_equal(
-    sp.array( [1, 2, 3], dtype = sp.int_ ),
-    sp.int_( [1, 2, 3] )
+    sp.array([1, 2, 3], dtype = sp.int_),
+    sp.int_([1, 2, 3])
 )
 
 ###different types evaluate to equal sp.arrays
 
 assert sp.array_equal(
-    sp.array( [1, 2, 3], dtype = sp.int_   ),
-    sp.array( [1, 2, 3], dtype = sp.float_ )
+    sp.array([1, 2, 3], dtype = sp.int_  ),
+    sp.array([1, 2, 3], dtype = sp.float_)
 )
 
 ###get type
@@ -183,7 +175,7 @@ assert sp.array([[1],[2]]).shape    == (2,1)
 
 v = sp.arange(5.1)
 v.shape = (2,3)
-assert sp.array_equal( v, sp.array([[0,1,2],[3,4,5]]) )
+assert sp.array_equal(v, sp.array([[0,1,2],[3,4,5]]))
 
 #create new:
 
@@ -219,32 +211,32 @@ assert not sp.array_equal(
 
 assert sp.array_equal(
     sp.zeros((1, 2)),
-    sp.array( [[0,0]] )
+    sp.array([[0,0]])
 )
 
 assert sp.array_equal(
     sp.zeros((2, 1)),
-    sp.array( [[0],[0]] )
+    sp.array([[0],[0]])
 )
 
 assert sp.array_equal(
     sp.zeros((1, 2, 3)),
-    sp.array( [[[0,0,0],
-                [0,0,0]]] )
+    sp.array([[[0,0,0],
+                [0,0,0]]])
 )
 
 ###ones
 
 assert sp.array_equal(
     sp.ones((1, 2)),
-    sp.array( [[1,1]] )
+    sp.array([[1,1]])
 )
 
 ###arange
 
 #BAD idea:
 
-    #assert eqa(
+    #assert array_equal(
             #sp.arange(3),
             #sp.array([0, 1, 2])
         #)
@@ -253,29 +245,29 @@ assert sp.array_equal(
 
 #good idea:
 
-assert eqa(
+assert array_equal(
     sp.arange(2.1),
     sp.array([0, 1, 2])
 )
 
-assert eqa(
+assert array_equal(
     sp.arange(2, 5.1),
     sp.array([ 2, 3, 4, 5])
 )
 
-assert eqa(
+assert array_equal(
     sp.arange(0.1, 2.2),
     sp.array([ 0.1, 1.1, 2.1])
 )
 
-assert eqa(
+assert array_equal(
     sp.arange(0, 5, 2),
     sp.array([0, 2, 4])
 )
 
 ###linspace
 
-assert eqa(
+assert array_equal(
     sp.linspace(0, 1, 6),
     sp.array([ 0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
 )
@@ -286,7 +278,7 @@ x = sp.arange(0, 2.1)
 y = sp.arange(0, 3.1)
 (X, Y) = sp.meshgrid(x, y)
 
-assert eqa(
+assert array_equal(
     X,
     sp.array([
     [ 0.,  1.,  2.],
@@ -295,7 +287,7 @@ assert eqa(
     [ 0.,  1.,  2.]])
 )
 
-assert eqa(
+assert array_equal(
     Y,
     sp.array([
     [ 0.,  0.,  0.],
@@ -306,7 +298,7 @@ assert eqa(
 
 ###indices
 
-assert eqa(
+assert array_equal(
     sp.indices((2, 3)),
     sp.array(
         [[[0, 0, 0],
@@ -319,15 +311,15 @@ assert eqa(
 ###file io
 
 #a = sp.zeros((2, 3))
-#sp.savetxt( "a.tmp", a )
+#sp.savetxt("a.tmp", a)
 #sp.savetxt("b.tmp", delimiter = ", ")
 #sp.savetxt("c.txt", delimiter = 3)                              #single width format
 #sp.savetxt("d.txt", delimiter = (4, 3, 2))                      #multi width format
 #sp.savetxt("e.txt", autostrip = True)                           #strip trailling/starting whitespace
 #sp.savetxt("f.txt", comments = '#')                             #stop reading line when # is found
 #sp.savetxt("g.txt", skip_header = 1, skip_footer = 2)           #skip first line, and last two lines
-#sp.savetxt("h.txt", usecols = (0, -1) )                         #only use first and last columns
-#sp.savetxt("b.txt", names = "a, b, c", usecols = ("a", "c") )   #same, give names
+#sp.savetxt("h.txt", usecols = (0, -1))                         #only use first and last columns
+#sp.savetxt("b.txt", names = "a, b, c", usecols = ("a", "c"))   #same, give names
 #b = genfromtxt("a.tmp")
 
 ###indexing
@@ -380,7 +372,7 @@ assert sp.array_equal(
 
 #arrays of same size:
 
-assert eqa(
+assert array_equal(
     sp.arange(5.1).reshape((2,3)) +
     sp.array([[0,1,0],[1,0,1]]),
     sp.array([[0,2,2],[4,4,6]]),
@@ -388,7 +380,7 @@ assert eqa(
 
 #between arrays of different size:
 
-assert eqa(
+assert array_equal(
     sp.arange(5.1).reshape(2,3) +
     sp.arange(2.1),
     sp.array([[ 0,  2, 4],
@@ -397,26 +389,26 @@ assert eqa(
 
 #broadcasting for scalars:
 
-assert eqa(
+assert array_equal(
     sp.arange(5.1) + 1,
     sp.arange(1,6.1)
 )
 
 #over all elements:
 
-assert eqa(
+assert array_equal(
     sp.sum([[0, 1], [2, 3]]),
     6
 )
 
 #some dimensions only:
 
-assert eqa(
+assert array_equal(
     sp.sum([[0, 1], [2, 3]], axis = 0),
     sp.array([2, 4])
 )
 
-assert eqa(
+assert array_equal(
     sp.sum([[0, 1], [2, 3]], axis = 1),
     sp.array([1, 5])
 )
@@ -425,29 +417,29 @@ assert eqa(
 
 #scalar broadcast:
 
-assert eqa(
+assert array_equal(
     sp.arange(3.1) * 2,
-    sp.arange( 0, 6.1, 2.0 )
+    sp.arange(0, 6.1, 2.0)
 )
 
 #elementwise:
 
-assert eqa(
+assert array_equal(
     sp.arange(3.1) * 2,
-    sp.arange( 0, 6.1, 2.0 )
+    sp.arange(0, 6.1, 2.0)
 )
 
 #between arrays of same dimensions:
 
-assert eqa(
+assert array_equal(
     sp.arange(3.1) *
     sp.arange(3.1),
-    sp.array( [0, 1, 4, 9] )
+    sp.array([0, 1, 4, 9])
 )
 
 #between arrays of different size:
 
-assert eqa(
+assert array_equal(
     sp.arange(5.1).reshape(2,3) *
     sp.arange(2.1),
     sp.array([[ 0,  1,  4],
@@ -463,8 +455,8 @@ def add(a, b):
     return a + b
 
 vec_add = sp.vectorize(add)
-assert eqa(
-    vec_add( sp.array([0,1,2]), sp.array([3,4,5])),
+assert array_equal(
+    vec_add(sp.array([0,1,2]), sp.array([3,4,5])),
     sp.array([3,5,7])
 )
 
@@ -522,14 +514,14 @@ assert sp.array_equal(
 
 ###conjugate
 
-assert eqa(
+assert array_equal(
     sp.array([[1j,2j]]).conjugate(),
     sp.array([[-1j,-2j]]),
 )
 
 ###conjugate transpose
 
-assert eqa(
+assert array_equal(
     sp.array([[1j,2j]]).conjugate().T,
     sp.array([[-1j],[-2j]]),
 )
@@ -544,7 +536,7 @@ assert sp.array_equal(
 
 ###determinant
 
-assert eqa(
+assert array_equal(
     la.det(sp.array([[1,2],[3,4]])),
     -2
 )
@@ -553,7 +545,7 @@ assert eqa(
 
 A = sp.array([[1, 2], [3, 4]])
 x = sp.array([[1, 2]]).T
-assert eqa(
+assert array_equal(
     A.dot(x),
     sp.array([[5],
               [11]])
@@ -563,7 +555,7 @@ assert eqa(
 
 A = sp.array([[1, 2], [3, 4]])
 x = sp.array([[1, 2]]).T
-assert eqa(
+assert array_equal(
     A*x,
     sp.array([[1, 2],
               [6, 8]])
@@ -575,14 +567,14 @@ assert eqa(
 
 #use <#solve> instead, or an explicit LU decomposition.
 
-#( solve likelly uses LU it under the hood )
+#(solve likelly uses LU it under the hood)
 
 #this will be faster and more stable.
 
 #Learn what LU decomposition is now if you don't know so.
 
 A = sp.array([[1, 2], [3, 4]])
-assert eqa(
+assert array_equal(
     la.inv(A).dot(A),
     sp.eye(2)
 )
@@ -594,24 +586,24 @@ assert eqa(
 A = sp.array([[1, 2], [3, 4]])
 b = sp.array([[5, 11]]).T
 x = la.solve(A, b)
-assert eqa(
+assert array_equal(
     A.dot(x),
     b
 )
 
-#solve many linear systems:
+# Solve multiple linear systems:
 
 #TODO
 
 A = sp.array([[1, 2], [3, 4]])
 b = sp.array([[5, 11],[5,11]])
 x = la.solve(A, b)
-assert eqa(
+assert array_equal(
     A.dot(x),
     b
 )
 
-#singular raises exception:
+# Singular raises exception:
 
 A = sp.zeros((2,2))
 b = sp.array([[5, 11]]).T
@@ -629,19 +621,19 @@ A = sp.array([[1, 1], [0, 2]])
 vals, vecs = la.eig(A)
 n = A.shape[0]
 
-#check they are eigenvectors:
+# Check they are eigenvectors:
 
 for i in xrange(0,n):
-    assert eqa(
+    assert array_equal(
         A.dot(vecs[:,i].T),
         vals[i] * vecs[:,i]
-    )
+   )
 
-#check that they are normalized:
+# Check that they are normalized:
 
-assert eqa(
-    sp.sum( abs(vecs**2), axis = 0),
-    sp.ones( (1,n) )
+assert array_equal(
+    sp.sum(abs(vecs**2), axis = 0),
+    sp.ones((1,n))
 )
 
 ###norms
@@ -656,34 +648,34 @@ A = sp.array([[0, 1], [2, 3]])
 
 #sum squares and take squre root:
 
-assert eqa(
+assert array_equal(
     la.norm(A),
-    sp.sqrt( sp.sum(A*A) )
+    sp.sqrt(sp.sum(A*A))
 )
-assert eqa(
+assert array_equal(
     la.norm(A,'fro'),
-    sp.sqrt( sp.sum(A*A) )
+    sp.sqrt(sp.sum(A*A))
 )
 
 #norm inf == max row sum:
 
-assert eqa(
+assert array_equal(
     la.norm(A,sp.inf),
-    max( sp.sum( A, axis = 1) )
+    max(sp.sum(A, axis = 1))
 )
 
 #norm 1 == max column sum:
 
-assert eqa(
+assert array_equal(
     la.norm(A,1),
-    max( sp.sum( A, axis = 0) )
+    max(sp.sum(A, axis = 0))
 )
 
 #norm -1 == min column sum:
 
-assert eqa(
+assert array_equal(
     la.norm(A,-1),
-    min( sp.sum( A, axis = 0) )
+    min(sp.sum(A, axis = 0))
 )
 
 ##polynomials
@@ -706,17 +698,11 @@ assert sp.array_equal(
 
 ###evaluate
 
-assert eqa(
-    p([1,2]),
-    sp.array([6,11])
-)
+assert array_equal(p([1,2]), sp.array([6,11]))
 
 ###roots
 
-assert eqa(
-    p( p.r ),
-    sp.zeros(p.order)
-)
+assert array_equal(p(p.r), sp.zeros(p.order))
 
 ###operations
 

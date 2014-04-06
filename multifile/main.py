@@ -3,18 +3,28 @@
 import os
 import sys
 
-"""
-What `import os` does:
+if "##__init__ ##module":
 
-Search for module named `os` in the following order:
+    # A *module* is either:
 
-- relative to current file ( possibly != from `os.getcwd()` ! )
-- python module search path
-"""
+    # - a `.py` or `.pyc` file
+    # - dir with and `__init__.py`
+
+        # `__init__.py` code is executed when the module is loaded,
+
+        # Just like code in a file is executed when it is loaded
+
+    # It is not possible to distinguish between both except by looking at <#__file__>
+
+    import a
+    assert a.f() == "a.f()"
+
+    import d
+    assert d.f() == "d.f()"
 
 if "##module search path":
 
-    #view current python module search path:
+    # View current python module search path:
 
     print sys.path
 
@@ -22,11 +32,11 @@ if "##module search path":
 
         if "##environment variable":
 
-            #simplest way to change path for all system
+            # Simplest way to change path for all system.
 
-            #change this variable in `bashrc`
+            # Change this variable in `bashrc`.
 
-            #a bit platform dependent (harder to to in windows...)
+            # A bit platform dependent (harder to to in windows...).
 
             if 'PYTHONPATH' in os.environ:
                 print os.environ['PYTHONPATH']
@@ -74,108 +84,194 @@ if "##module search path":
             contains_list.l[0] = 1
             import a
 
-if "##__init__":
+if "##import":
 
-    #a *module* is either:
+    if "##imports of imports are not imported":
 
-    #- a `.py` or `.pyc` file
-    #- dir with and `__init__.py`
+        # Imports inside imports are not put in current namespace.
 
-        #`__init__.py` code is executed when the module is loaded,
+        # Even if module `imported_from_a` was imported in a, it is not defined here!
 
-        #just like code in a file is executed when it is loaded
+        import a
 
-    #it is not possible to distinguish between both except by looking at <#__file__>
+        try:
+            imported_from_a.n
+        except NameError:
+            pass
+        else:
+            assert False
 
-    import a
-    assert a.f() == "a.f()"
+        # Therefore, this is not the same as copying code from the module and pasting here
+        # as a c include does!
 
-    import d
-    assert d.f() == "d.f()"
+        # If you really want to copy code from a file and execute it use <#execfile>
 
-if "##imports of imports are not imported":
+    if "##relative imports":
 
-    #imports inside imports are not put in current namespace.
+        # Only work inside dirs structure with `__init__` files, that is, submodule structure
 
-    #therefore, even if module `imported_from_a` was imported in a, it is not defined here!
+        if "##Can't call method from d.a by importing only d but not importing d.a":
 
-    import a
+            import d
 
-    try:
-        imported_from_a.n
-    except NameError:
-        pass
-    else:
-        assert False
+            try:
+                d.a.f()
+            except AttributeError:
+                pass
+            else:
+                assert False
 
-    #therefore, this is not the same as copying code from the module and pasting here
-    #as a c include does!
+            import d.a2
+            assert d.a2.f() == "d.a2.f()"
 
-    #if you really want to copy code from a file and execute it use <#execfile>
+            import d.d2.a3
+            assert d.d2.a3.f() == "d.d2.a3.f()"
 
-if "##execfile":
+        if "Can only be done inside module structure":
 
-    #copy contents of file and exec them here
+            try:
+                from . import re
+                assert re.f() == "re.f()"
+            except ValueError:
+                pass
+            else:
+                assert False
 
-    #same as `exec(read("file.py"))`
+            # Does not work here because we have no `__init__.py` in current dir!
 
-    defined_in_execed = 0
-    execfile("execed.py")
-    assert defined_in_execed == 1
+            # See <#/d/d/d/a> for an example
 
-    #paths are either absolute or relative to `os.getcwd()`!
+        if "Can only import modules, not their attributes":
 
-    ###usually a bad idea
+            try:
+                import a.f
+            except ImportError:
+                pass
+            else:
+                assert False
 
-    #for the same reason that `from BLA import *` is a bad idea.
+        if "Go up on module structure":
 
-    #always prefer: `from module import var1, var2`,
-    #so that you keep control of what is being imported
+            pass
 
-if "##stuff defined in import overrides definitions of importer scope":
+            #from .. import a
+            #a.f()
 
-    #first define some names on current scope:
+            #up two modules:
 
-    import imported_from_main
+            #from ... import a
+            #a.f()
 
-    a = 'a'
-    def f():
-        return 'f()'
+            #up three modules:
 
-    #now the import will override them:
-    import a
+            #from .... import a
+            #a.f()
 
-    assert a.a == 'a.a'
-    assert a.f() == 'a.f()'
+    if "##from":
 
-if "##you can reassign what modules symbols mean":
+        from d import a2
+        assert a2.f() == "d.a2.f()"
 
-    """
-    Once imported, a module is just another dict like namespace,
-    and you can edit it was you wish in the current namespace.
+        #can also be used to import module contents:
 
-    Those changes will not however reflect on other modules that imported that module!
-    """
+        from a import f
+        assert f() == "a.f()"
 
-    a.a = 1
-    assert a.a == 1
+        if "##star ##*":
 
-    a = 2
-    assert a == 2
+            #never use this except for bad practice
 
-    #reassign on parent modules disables the children also:
+            #makes it very hard to know what is being imported or not and what is its name!
 
-    import d
-    import d.a
-    d = 1
-    try:
-        d.a
-    except AttributeError:
-        pass
-    else:
-        assert False
+            from d import *
+            assert a2.f() == "d.a2.f()"
+            assert d2.f() == "d.d2.f()"
 
-if "##magic methods don't work":
+            #can also be used to import module contents:
+
+            from a import *
+            assert f() == "a.f()"
+            assert g() == "a.g()"
+
+            #if module is a dir, imports both its 
+
+            from d import *
+            assert f() == "d.f()"
+            assert a2.f() == "d.a2.f()"
+            assert d2.f() == "d.d2.f()"
+
+            #will import nothing, since a has no submodules
+
+        if "##as":
+
+            from a import f as g
+            assert g() == "a.f()"
+
+            #ERROR:
+            #from d import d as d2
+            #import d2.d
+            ##must use import d.d.d
+
+            ##multiline
+
+            from d import (
+                a2,
+                d2,
+            )
+
+    if "Stuff defined in import overrides definitions of importer scope":
+
+        # First define some names on current scope:
+
+        import imported_from_main
+
+        a = 'a'
+        def f():
+            return 'f()'
+
+        # Now the import will override them:
+        import a
+
+        assert a.a == 'a.a'
+        assert a.f() == 'a.f()'
+
+    if "You can reassign what modules symbols mean":
+
+        """
+        Once imported, a module is just another dict like namespace,
+        and you can edit it was you wish in the current namespace.
+
+        Those changes will not however reflect on other modules that imported that module!
+        """
+
+        a.a = 1
+        assert a.a == 1
+
+        a = 2
+        assert a == 2
+
+        # Reassign on parent modules disables the children also:
+
+        import d
+        import d.a
+        d = 1
+        try:
+            d.a
+        except AttributeError:
+            pass
+        else:
+            assert False
+
+    if "Uncaught ##exceptions at imported blow up at importer":
+
+        try:
+            import raise_exception
+        except Exception:
+            pass
+        else:
+            assert False
+
+if "Magic methods don't work":
 
     try:
         assert a() == "a.__call__()"
@@ -184,103 +280,35 @@ if "##magic methods don't work":
     else:
         assert False
 
-if "##uncaught exceptions at imported blow up at importer":
+if "##submodules":
 
-    try:
-        import raise_exception
-    except Exception:
-        pass
-    else:
-        assert False
+    if "Submodule vs attribute":
 
-if "##relative imports":
+        # *never define in your __init__ file an attribute which has the same name as a module*
 
-    #only work inside dirs structure with `__init__` files, that is, submodule structure
+        import d.a
+        assert d.a.a == 'd.a'
 
-    ##can't call method from d.a by importing only d but not importing d.a
+        #TODO1
 
-    import d
+        import d
+        #assert d.a == 'd.a'
 
-    try:
-        d.a.f()
-    except AttributeError:
-        pass
-    else:
-        assert False
+    if "##importing a submodule also imports parent":
 
-    import d.a2
-    assert d.a2.f() == "d.a2.f()"
-
-    import d.d2.a3
-    assert d.d2.a3.f() == "d.d2.a3.f()"
-
-    if "##can only be done inside module structure:":
+        d = 1
 
         try:
-            from . import re
-            assert re.f() == "re.f()"
-        except ValueError:
+            assert d.a == 'd.a'
+        except AttributeError:
             pass
-        else:
+        except:
             assert False
 
-        #does not work here because we have no `__init__.py` in current dir!
+        #TODO2 related to TODO1
 
-        #see <#/d/d/d/a> for an example
-
-        ##can only import modules, not their attributes:
-
-        try:
-            import a.f
-        except ImportError:
-            pass
-        else:
-            assert False
-
-    if "##go up on module structure":
-
-        pass
-
-        #from .. import a
-        #a.f()
-
-        #up two modules:
-
-        #from ... import a
-        #a.f()
-
-        #up three modules:
-
-        #from .... import a
-        #a.f()
-
-if "##submodule vs attribute":
-
-    #*never define in your __init__ file an attribute which has the same name as a module*
-
-    import d.a
-    assert d.a.a == 'd.a'
-
-    #TODO1
-
-    import d
-    #assert d.a == 'd.a'
-
-if "##importing a submodule also imports parent":
-
-    d = 1
-
-    try:
-        assert d.a == 'd.a'
-    except AttributeError:
-        pass
-    except:
-        assert False
-
-    #TODO2 related to TODO1
-
-    import d.a2
-    #assert d.a == 'd.a'
+        import d.a2
+        #assert d.a == 'd.a'
 
 if "##Inform end user that package is missing.":
 
@@ -292,77 +320,25 @@ if "##Inform end user that package is missing.":
         sys.exit(1)
     """
 
-if "##from":
-
-    from d import a2
-    assert a2.f() == "d.a2.f()"
-
-    #can also be used to import module contents:
-
-    from a import f
-    assert f() == "a.f()"
-
-    if "##star ##*":
-
-        #never use this except for bad practice
-
-        #makes it very hard to know what is being imported or not and what is its name!
-
-        from d import *
-        assert a2.f() == "d.a2.f()"
-        assert d2.f() == "d.d2.f()"
-
-        #can also be used to import module contents:
-
-        from a import *
-        assert f() == "a.f()"
-        assert g() == "a.g()"
-
-        #if module is a dir, imports both its 
-
-        from d import *
-        assert f() == "d.f()"
-        assert a2.f() == "d.a2.f()"
-        assert d2.f() == "d.d2.f()"
-
-        #will import nothing, since a has no submodules
-
-    if "##as":
-
-        from a import f as g
-        assert g() == "a.f()"
-
-        #ERROR:
-        #from d import d as d2
-        #import d2.d
-        ##must use import d.d.d
-
-        ##multiline
-
-        from d import (
-            a2,
-            d2,
-        )
-
 if "##module attributes":
 
     if "###__file__":
 
         """
-        contains the full path of a file
+        Contains the full path of a file.
 
-        only defined for imported modules
+        Only defined for imported modules.
 
-        not defined on the file script being executed run!
+        Not defined on the file script being executed run!
 
-        possible reason: modules are always loaded from files,
+        Possible reason: modules are always loaded from files,
         while scripts may exist in RAM only:
 
            #echo "print __file__" | python
 
         *it is impossible to get the path to the script being run*
 
-        check if a module is in path and if yes print its path:
+        Check if a module is in path and if yes print its path:
         """
 
         try:
@@ -391,9 +367,9 @@ if "##module attributes":
 
 if "##symlink":
 
-    #act exactly as files that have the same content as their destination
+    # Acts exactly as files that have the same content as their destination.
 
-    #can even link to non `.py` files:
+    # Can even link to non `.py` files:
 
     import a
     import aln
@@ -403,6 +379,23 @@ if "##symlink":
     import d.aln
     assert d.aln.a == 'a'
     assert os.path.splitext( d.aln.__file__ )[0] == os.path.join( os.path.dirname( a.__file__ ), 'd', 'aln' )
+
+if "##execfile":
+
+    # Copy contents of file and exec them here
+
+    # Same as `exec(read("file.py"))`
+
+    defined_in_execed = 0
+    execfile("execed.py")
+    assert defined_in_execed == 1
+
+    # Paths are either absolute or relative to `os.getcwd()`!
+
+    # Usually a bad idea for the same reason that `from BLA import *` is a bad idea.
+
+    # Always prefer: `from module import var1, var2`,
+    # so that you keep control of what is being imported.
 
 if "##imp":
 

@@ -4464,32 +4464,35 @@ if "##os":
 
     print "os.sep = " + os.sep.encode('string-escape')
 
-    # Newline separtor ('\n' linux, '\r' mac, '\n\r' windows):
+    # System newline separtor ('\n' Linux, '\r' Mac, '\n\r' Windows):
 
     print "os.linesep = " + os.linesep.encode('string-escape')
 
-    #ls:
+    if "#listdir #ls":
 
-    print 'os.listdir(u".") = ' + "\n".join(os.listdir(u'/'))
+        # **Always** use Unicode input since the output gets the same encoding as this input
+        # and filenames may contain non ascii chars!
 
-    # **Always** use unicode input since the output gets the same encoding as this input
-    # and filenames may contain non ascii chars!
+        print 'os.listdir(u".") = ' + "\n".join(os.listdir(u'/'))
 
-    # Remove a file:
+    if "##unlink #rm":
 
-    path = "open.tmp"
-    f = open(path, "w")
-    assert os.path.isfile(path)
-    os.unlink(path)
-    assert not os.path.exists(path)
+        path = "open.tmp"
+        f = open(path, "w")
+        assert os.path.isfile(path)
+        os.unlink(path)
+        assert not os.path.exists(path)
 
-    # Create and remove a directory:
+    if "#mkdir #rmdir":
 
-    path = "dir.tmp"
-    os.mkdir(path)
-    assert os.path.isdir(path)
-    os.rmdir(path)
-    assert not os.path.exists(path)
+        # Only works if directory is empty.
+        # For recursive directory removal, see `shutil.rmtree`.
+
+        path = "dir.tmp"
+        os.mkdir(path)
+        assert os.path.isdir(path)
+        os.rmdir(path)
+        assert not os.path.exists(path)
 
     if "##makedirs":
 
@@ -4502,9 +4505,17 @@ if "##os":
         assert os.path.isdir(path)
         os.removedirs(path)
 
-    # Get current working dir (each process has a cwd)
+    if "##getcwd #pwd #chdir #cd":
 
-    print "os.getcwd() = " + os.getcwd()
+        # Get current working dir (each process has a cwd)
+
+        print "os.getcwd() = " + os.getcwd()
+
+    if "##symlink":
+
+        # os.symlink(name, origin)
+        # Where name is the place the symlinke will be created at,
+        # and origin what it points to.
 
     if "##walk ##find":
 
@@ -4622,6 +4633,9 @@ if "##os":
 
         if "##exists":
 
+            # Returns False for broken symlinks.
+            # lexists returns True in that case.
+
             temp = tempfile.NamedTemporaryFile()
             assert os.path.exists(temp.name)
             temp.close()
@@ -4706,7 +4720,7 @@ if "##shutil":
 
     import shutil
 
-    if "#rmtree":
+    if "#rmtree #rm -rf":
 
         # Recursive directory removal like rm -rf:
 
@@ -4720,6 +4734,12 @@ if "##shutil":
             assert False
         shutil.rmtree(temp)
         assert not os.path.exists(temp)
+
+    if "#copyfile #cp":
+
+        # Not a base utility since it can be done naively with with open read write.
+
+        #shutil.copyfile(src, dst)
 
 if "##tempfile":
 
@@ -4773,67 +4793,81 @@ if "##tempfile":
 
 if "##logging":
 
-    #standard way to output error messages
+    # Standard way to output error messages.
 
-    #<http://docs.python.org/2/howto/logging.html>
+    # Advantages:
 
-    #TODO log all at once
+    # - has many useful built-in error formats
+    # - has a level system
+    # - easy to change where logs go, e.g. a file.
 
-    ### defult logger
+    # <http://docs.python.org/2/howto/logging.html>
 
-    import logging
+    # TODO log all at once
 
-    logging.basicConfig(
-        #filename = 'example.log', #default stderr
-        #filemode = 'w'
+    if "## defult logger":
 
-        level = logging.DEBUG,
-        #level = logging.INFO,
-        #level = logging.WARNING,
-        #level = logging.ERROR,
-        #level = logging.CRITICAL,
+        import logging
 
-        format = '%(levelname)s %(name)s %(asctime)s %(message)s',
+        logging.basicConfig(
+            # Log to a file. Default is sys.stderr.
+            # This can only take file path strings.
+            # To log to stdout, use:
+            #filename = 'example.log',
+            #filemode = 'w'
 
-        datefmt = '%m/%d/%Y %I:%M:%S %p', #format for asctime
+            # Minimum log level that will get printed.
+            # Often taken as a CLI parameter.
+            level = logging.DEBUG,
+            #level = logging.INFO,
+            #level = logging.WARNING,
+            #level = logging.ERROR,
+            #level = logging.CRITICAL,
 
-    )
+            format = '  %(levelname)s %(name)s %(asctime)s %(message)s',
 
-    logging.debug('very detailed, debugging only')
-    logging.info('confirm everything is fine')
-    logging.warning('unexpected, maybe problem in future')
-    logging.error('could not perform some function')
-    logging.critical('serious error. program cant run anymore')
-    try:
-        raise Exception
-    except:
-        logging.exception('inside exception. also prints exception stack')
+            # Format for asctime
+            datefmt = '%m/%d/%Y %I:%M:%S %p',
+        )
+        sys.stderr.write("logging:\n")
+        logging.debug('debug')
+        logging.info('info')
+        logging.warning('warning')
+        logging.error('error')
+        logging.critical('critical')
+        try:
+            raise Exception
+        except:
+            logging.exception('inside exception. also prints exception stack')
 
-    ### custom loggers
+    if "##custom loggers":
 
-    # create logger
-    logger = logging.getLogger('simple_example')
-    logger.setLevel(logging.DEBUG)
+        # Create logger
+        logger = logging.getLogger('logger_name')
+        logger.setLevel(logging.DEBUG)
 
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+        # Create console handler and set level to debug
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.DEBUG)
 
-    # create formatter
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        # Create formatter
+        formatter = logging.Formatter('  %(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    # add formatter to ch
-    ch.setFormatter(formatter)
+        # Add formatter to ch
+        ch.setFormatter(formatter)
 
-    # add ch to logger
-    logger.addHandler(ch)
+        # Add ch to logger
+        logger.addHandler(ch)
 
-    # 'application' code
-    logger.debug('debug message')
-    logger.info('info message')
-    logger.warn('warn message')
-    logger.error('error message')
-    logger.critical('critical message')
+        # Usage:
+        sys.stderr.write("custom logger:\n")
+        logger.debug('debug')
+        logger.info('info')
+        logger.warn('warn')
+        logger.error('error')
+        logger.critical('critical')
+
+    # TODO: log all / a certain level to stdout
 
 if "##math":
 

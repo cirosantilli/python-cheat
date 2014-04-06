@@ -1,0 +1,15 @@
+# Packages required to run files in this repository and utils which I like.
+Pygments
+Sphinx
+Unidecode
+distribute
+ipython
+nltk
+numpydoc
+srtmerge
+sympy
+# This seems really promissing for parsing:
+#pyparsing
+termcolor
+virtualenv
+yolk

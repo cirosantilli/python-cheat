@@ -1,47 +1,41 @@
 *.py[cod]
 
-#c
+# Extensions
 *.o
 *.a
 *.so
 
-#packages
+# Packages
 *.egg
 *.egg-info
 dist
 build
 eggs
 parts
-#bin
 var
 sdist
 develop-eggs
 .installed.cfg
 lib
 lib64
-
-#install
 pip-log.txt
 
-#tests
+# Tests
 .coverage
 .tox
 nosetests.xml
 
-#translations
+# Translations
 *.mo
 
-#mr developer
+# MR developer
 .mr.developer.cfg
 .project
 .pydevproject
 
-_gitignore
-_out
-
-#sphinx
+# Sphinx
 _build
 _static
 _templates
 
-*.todo
+_out
