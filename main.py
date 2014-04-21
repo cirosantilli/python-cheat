@@ -554,6 +554,8 @@ if "##list":
         assert filter(lambda x: x % 2 == 1, l) == [1, 3]
         assert l == range(4)
 
+        ##itertools.ifilter for iterators.
+
 if "##iterators ##yield":
 
     '''
@@ -998,6 +1000,13 @@ b""" == "a\nb"
 
         prefix="ab"
         assert "abcd"[len(prefix):] == "cd"
+
+    if "##contains substring":
+        assert "bc" in "abcd"
+        assert "bc" not in "abdc"
+        # The empty string is contained in all others:
+        assert "" in ""
+        assert "" in "a"
 
     # String to number:
 
@@ -3333,7 +3342,6 @@ if "##class":
             if "##compare by all members automatically do this":
 
                 class C:
-
                     def __init__(self, i=0, j=1):
                         self.i = i
                         self.j = j
@@ -3368,6 +3376,17 @@ if "##class":
                 a = A()
                 assert not a is None
                 assert a == None
+
+            if "##__ne__":
+
+                # *Not* automatically deduced from __eq__.
+
+                class C:
+                    def __eq__(self, other):
+                        return True
+
+                assert C() == C()
+                assert C() != C()
 
         if "##descriptors ##__get__ ##__set__ ##__delete__":
 
@@ -4685,9 +4704,9 @@ if "##os":
 
         os.path.islink('/a')
 
-        # Absolute path:
+        ##Absolute path:
 
-        os.path.abspath(u'.')
+        print "os.path.abspath(u'.') = " + os.path.abspath(u'.')
 
         # Absolute path resolving links recursively:
 

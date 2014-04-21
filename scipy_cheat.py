@@ -48,80 +48,74 @@ def array_equal(a, a2, err=10e-6, dist=dist2):
     """
     return dist(a, a2) < err
 
-##basic functions
+if "##arrays":
 
-#unlike math.sqrt, this works:
+    """
+    Basic n-dimensional computational object.
 
-assert array_equal(sp.sqrt(-1), 1j)
+    Are like C sp.arrays fixed length and efficient.
 
-#so *always* use it
+    To extend them, must make new one.
 
-##arrays
+    Allocate all at once with zeros.
 
-#basic n-dimensional computational object
+    $a*b$ and $a+b$ ARE MUCH MORE EFFICIENT THAN PYTHON LOOPS!
+    because they are already compiled
 
-#are like c sp.arrays fixed length and efficient.
+    Try to replace every loop with those operations.
+    """
 
-#to extend them, must make new one.
+if "##datatypes":
 
-#allocate all at once with zeros
+    """
+    There are explicit datatypes for `sp.arrays`.
 
-#$a*b$ and $a+b$ ARE MUCH MORE EFFICIENT THAN PYTHON LOOPS!
-#because they are already compiled
+    System dependant width (most efficient for system):
 
-#try to replace every loop with those operations
+    - bool_ 	Boolean (True or False) stored as a byte
+    - int_     Platform integer (normally either int32 or int64).
+    - float_ 	Shorthand for float64.
+    - complex_	Shorthand for complex128.
 
-##datatypes
+    Those are the same as python types and may be interchanged.
 
-#there are explicit datatypes for sp.arrays.
+    Fixed widths:
 
-#system dependant width (most efficient for system):
+    - int32 	Integer (-2147483648 to 2147483647)
+    - uint32 	Unsigned integer (0 to 4294967295)
+    - float32 	Single precision float: sign bit, 8 bits exponent, 23 bits mantissa
+    - float64 	Double precision float: sign bit, 11 bits exponent, 52 bits mantissa
+    - complex64 	Complex number, represented by two 32-bit floats (real and imaginary components)
 
-#- bool_ 	Boolean (True or False) stored as a byte
-#- int_     Platform integer (normally either int32 or int64).
-#- float_ 	Shorthand for float64.
-#- complex_	Shorthand for complex128.
+    Those have fixed width on all systems, and may not be compatible with the python types.
+    """
 
-#those are the same as python types and may be interchanged.
+    assert sp.array_equal(
+        sp.array([1, 2, 3], dtype = sp.int_),
+        sp.int_([1, 2, 3])
+    )
 
-#fixed widths:
+    # Different types evaluate to equal sp.arrays
 
-#- int32 	Integer (-2147483648 to 2147483647)
-#- uint32 	Unsigned integer (0 to 4294967295)
-#- float32 	Single precision float: sign bit, 8 bits exponent, 23 bits mantissa
-#- float64 	Double precision float: sign bit, 11 bits exponent, 52 bits mantissa
-#- complex64 	Complex number, represented by two 32-bit floats (real and imaginary components)
+    assert sp.array_equal(
+        sp.array([1, 2, 3], dtype = sp.int_  ),
+        sp.array([1, 2, 3], dtype = sp.float_)
+    )
 
-#those have fixed width on all systems, and may not be compatible with the python types
+    # Get type
 
-#equivalent
+    v = sp.array([1,2], dtype = sp.int32)
+    assert v.dtype == sp.int32
 
-assert sp.array_equal(
-    sp.array([1, 2, 3], dtype = sp.int_),
-    sp.int_([1, 2, 3])
-)
+    # Subtype:
 
-###different types evaluate to equal sp.arrays
+    sp.issubdtype(sp.int32, sp.int_)
 
-assert sp.array_equal(
-    sp.array([1, 2, 3], dtype = sp.int_  ),
-    sp.array([1, 2, 3], dtype = sp.float_)
-)
+    # Convert type
 
-###get type
-
-v = sp.array([1,2], dtype = sp.int32)
-assert v.dtype == sp.int32
-
-###subtypes
-
-sp.issubdtype(sp.int32, sp.int_)
-
-##convert type
-
-v = sp.array([1,2], dtype = sp.int32)
-vf = v.astype(sp.float_)
-assert vf.dtype == sp.float_
+    v = sp.array([1,2], dtype = sp.int32)
+    vf = v.astype(sp.float_)
+    assert vf.dtype == sp.float_
 
 ##create
 

@@ -7,29 +7,38 @@ Makes it very easy to create complex POSIX / GNU command line interfaces!
 """
 
 import argparse
-import os.path
 import sys
 
 if "Basic usage":
 
     # parse_args takes by default sys.argv[1:], which we have artificially set here.
-    sys.argv = ['program_name','0','1']
+    sys.argv = ['program_name', '0', '1']
     parser = argparse.ArgumentParser()
     parser.add_argument('a')
     parser.add_argument('b')
     args = parser.parse_args()
+    # Same:
+    #args = parser.parse_args(sys.argv)
     assert args.a == '0'
     assert args.b == '1'
+
+    '''
+    Thigs this does already include:
+
+    - add a `-h` / `--help` option that prints usage and exits after `parse_args`.
+    '''
 
 if "Good parser template":
 
     parser = argparse.ArgumentParser(
+        # One line description.
         description="",
+        # Full description.
         epilog=r"""
     EXAMPLES
 
     %(f)s
-    """ % { 'f':sys.argv[0] },                           # f contains command name.
+    """.format(f=sys.argv[0]),                           # f contains command name.
         formatter_class=argparse.RawTextHelpFormatter,   # Keep newlines.
     )
 
@@ -47,7 +56,7 @@ if "##Automatic option names.":
     parser = argparse.ArgumentParser()
     parser.add_argument('a')
     parser.add_argument('-a')
-    args = parser.parse_args(['-a','1','2'])
+    args = parser.parse_args(['-a', '1', '2'])
     # Impossible to access -a.
     #assert args.-a == '2'
     assert args.a == '2'
@@ -64,12 +73,12 @@ if "##Automatic option names.":
             '--a-long',
             dest="d",
         )
-        args = parser.parse_args(['--a-long','1'])
+        args = parser.parse_args(['--a-long', '1'])
         assert args.d == '1'
-        args = parser.parse_args(['-a','1'])
+        args = parser.parse_args(['-a', '1'])
         assert args.d == '1'
-        assert not hasattr(args,'a')
-        assert not hasattr(args,'a_long')
+        assert not hasattr(args, 'a')
+        assert not hasattr(args, 'a_long')
 
 if "##Positional args":
 
@@ -108,7 +117,7 @@ if "##Optional args":
     parser.add_argument(
         '-a',
     )
-    args = parser.parse_args(['-a','1'])
+    args = parser.parse_args(['-a', '1'])
     assert args.a == '1'
     #ok, a is optional because the name starts with '-':
     args = parser.parse_args([])
@@ -123,7 +132,7 @@ if "##default":
     )
     args = parser.parse_args([])
     assert args.a == '2'
-    args = parser.parse_args(['-a','1'])
+    args = parser.parse_args(['-a', '1'])
     assert args.a == '1'
 
     # Does nothing with positional args:
@@ -141,11 +150,11 @@ if "##Long name":
         '-a',
         '--a-long',
     )
-    args = parser.parse_args(['--a-long','1'])
+    args = parser.parse_args(['--a-long', '1'])
     assert args.a_long == '1'
-    args = parser.parse_args(['-a','1'])
+    args = parser.parse_args(['-a', '1'])
     assert args.a_long == '1'
-    assert not hasattr(args,'a')
+    assert not hasattr(args, 'a')
 
 if "##type":
 
@@ -181,10 +190,10 @@ if "##nargs":
     parser.add_argument(
         'a',
         nargs=2,
-        default=['1','2']
+        default=['1', '2']
     )
-    args = parser.parse_args(['1','2'])
-    assert args.a == ['1','2']
+    args = parser.parse_args(['1', '2'])
+    assert args.a == ['1', '2']
     # ERROR: there must be exactly 2:
     #parser.parse_args(['1'])
 
@@ -208,8 +217,8 @@ if "##nargs":
         nargs='*',
         default=[],
     )
-    args = parser.parse_args(['1','2','3','4'])
-    assert args.a == ['1','2','3','4']
+    args = parser.parse_args(['1', '2', '3', '4'])
+    assert args.a == ['1', '2', '3', '4']
     args = parser.parse_args([])
     assert args.a == []
 
@@ -234,8 +243,8 @@ if "##nargs":
         nargs='+',
         help='1 or more args (must be last arguments)'
     )
-    args = parser.parse_args(['1','2','3','4'])
-    assert args.a == ['1','2','3','4']
+    args = parser.parse_args(['1', '2', '3', '4'])
+    assert args.a == ['1', '2', '3', '4']
     # ERROR: even if default:
     #args = parser.parse_args([])
 
@@ -251,7 +260,7 @@ if "##action":
             action='store',
             default='2'
         )
-        args = parser.parse_args(['-a','1'])
+        args = parser.parse_args(['-a', '1'])
         assert args.a == '1'
         args = parser.parse_args([])
         assert args.a == '2'
@@ -306,10 +315,10 @@ if "##action":
             action='append',
             default=[],
         )
-        args = parser.parse_args(['-a','1'])
+        args = parser.parse_args(['-a', '1'])
         assert args.a == ['1']
-        args = parser.parse_args(['-a','1','-a','2'])
-        assert args.a == ['1','2']
+        args = parser.parse_args(['-a', '1', '-a', '2'])
+        assert args.a == ['1', '2']
 
     if "##append_const":
 
@@ -321,8 +330,8 @@ if "##action":
         )
         args = parser.parse_args(['-a'])
         assert args.a == ['1']
-        args = parser.parse_args(['-a','-a'])
-        assert args.a == ['1','1']
+        args = parser.parse_args(['-a', '-a'])
+        assert args.a == ['1', '1']
 
     if "##custom actions":
 
