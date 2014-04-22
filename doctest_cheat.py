@@ -135,5 +135,17 @@ class C():
         return 'C.f'
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    if "##testmod":
+
+        # Test current module:
+
+        import doctest
+        doctest.testmod()
+
+        # Test given module:
+
+        #doctest.testmod(doctest)
+
+        # From the command line:
+
+            #python -m doctest file.py

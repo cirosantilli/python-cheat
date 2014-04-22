@@ -978,7 +978,7 @@ b""" == "a\nb"
 
         assert "0\n1\r2\r\n3".splitlines()  == ['0', '1', '2', '3']
 
-    if "##strip":
+    if "##strip ##rstrip ##lstrip":
 
         '''
         Strip chars either from either beginning or end, *not* middle!
@@ -986,6 +986,8 @@ b""" == "a\nb"
         Characters to strip are given on a string.
 
         Default argument: `string.whitespace`
+
+        r and l strip for one sided versions.
         '''
 
         assert "cbaba0a1b2ccba".strip("abc") == "0a1b2"
@@ -4423,6 +4425,11 @@ if "##regex":
         assert p.sub('0', 'abaac') == '0b00c'
 
     if "##flags":
+
+        '''
+        ##DOTALL: dot matches all characters, including newlines
+        ##MULTILINE: ^ and $ also matches at \n
+        '''
 
         p = re.compile(r'a', re.IGNORECASE | re.DOTALL)
 

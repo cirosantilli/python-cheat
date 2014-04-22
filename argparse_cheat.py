@@ -180,7 +180,7 @@ if "##type":
     args = parser.parse_args(['1.0'])
     assert args.a == 1.0
 
-    # boolean: see <#store_true> <#action>
+    # boolean: see store_true and action.
 
 if "##nargs":
 

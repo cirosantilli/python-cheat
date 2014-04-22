@@ -271,6 +271,16 @@ if "##import":
         else:
             assert False
 
+    if "##__import__":
+
+        '''
+        Backend for the `import` statement.
+
+        Import module with name that cannot be variable, e.g. hyphens in executables:
+
+            test_mod = __import__("test-mod")
+        '''
+
 if "Magic methods don't work":
 
     try:
