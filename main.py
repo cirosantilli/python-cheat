@@ -785,7 +785,7 @@ b""" == "a\nb"
 
         if "##raw string literals ##r literals":
 
-            # raw literals lose all backslash escape magic
+            # Raw literals lose all backslash escape magic.
 
             assert r"\n" == "\\n"
             assert r"\\" == "\\\\"
@@ -998,10 +998,19 @@ b""" == "a\nb"
         assert "abc".startswith("ab") == True
         assert "abc".startswith("bc") == False
 
-        # Remove prefix: http://stackoverflow.com/questions/599953/python-how-to-remove-the-left-part-of-a-string
+        # Remove prefix: <http://stackoverflow.com/questions/599953/python-how-to-remove-the-left-part-of-a-string>
 
-        prefix="ab"
+        # If sure that the prefix is there:
+
+        prefix = "ab"
         assert "abcd"[len(prefix):] == "cd"
+
+        # Otherwise:
+
+        prefix = "ab"
+        s = "abcd"
+        if s.startswith(prefix):
+            assert s[len(prefix):] == "cd"
 
     if "##contains substring":
         assert "bc" in "abcd"
