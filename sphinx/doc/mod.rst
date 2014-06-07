@@ -1,35 +1,38 @@
-mod Package
+mod package
 ===========
 
-:mod:`mod` Package
-------------------
+Submodules
+----------
 
-.. automodule:: mod.__init__
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`a` Module
----------------
+mod.a module
+------------
 
 .. automodule:: mod.a
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`b` Module
----------------
+mod.b module
+------------
 
 .. automodule:: mod.b
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`main` Module
-------------------
+mod.main module
+---------------
 
 .. automodule:: mod.main
     :members:
     :undoc-members:
     :show-inheritance:
 
+
+Module contents
+---------------
+
+.. automodule:: mod
+    :members:
+    :undoc-members:
+    :show-inheritance:

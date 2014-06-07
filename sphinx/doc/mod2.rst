@@ -1,11 +1,10 @@
-mod2 Package
+mod2 package
 ============
 
-:mod:`mod2` Package
--------------------
+Module contents
+---------------
 
-.. automodule:: mod2.__init__
+.. automodule:: mod2
     :members:
     :undoc-members:
     :show-inheritance:
-

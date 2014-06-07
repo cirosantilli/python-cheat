@@ -5,7 +5,7 @@ This includes the possibility to control:
 - version of each installed python module
 
 This allows to control environments so that program behavior is reproducible.
-This is fundamental for example for Paas services, where you want to be sure
+This is fundamental for example for PaaS services, where you want to be sure
 that your local tests reflect what happens on the server.
 
 virtualenv can only control Python aspects. If you need even more control over the system,
