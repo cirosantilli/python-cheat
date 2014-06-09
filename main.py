@@ -3764,7 +3764,7 @@ if "##docstring":
 
     assert f.__doc__ == 'doc0'
 
-if "##exceptions":
+if '##exception':
 
     # They go up until somthing catches them:
 
@@ -3784,23 +3784,101 @@ if "##exceptions":
 
     What gets printed:
 
-    1) traceback: where the exception came from (modules, functions, lines)
+    - traceback: where the exception came from (modules, functions, lines)
         #this is userful for debug, so you can find where the problem comes from
-    2) <Exception class>: <exception.__repr__>
+
+    - <Exception class>: <exception.__repr__>
         raise Exception("repr")
         print "cant reach here"
     '''
 
-    ###raise and catch
+    if '##else':
 
-    try:
-        print "try"
-    except:
-        print "any exception"
-    else:
-        print "no exceptions happened"
-    finally:
-        print "this is *always* executed, with or without exception"
+        # Only execute if the exception did not happen.
+
+        try:
+            raise Exception()
+        except:
+            pass
+        else:
+            assert False
+
+        e = False
+        try:
+            pass
+        except:
+            assert False
+        else:
+            e = True
+        assert e
+
+    if '##finally':
+
+        # Always executed, wether the exception happened or not.
+
+        f = False
+        try:
+            raise Exception()
+        except:
+            pass
+        else:
+            assert False
+        finally:
+            f = True
+        assert f
+
+        f = False
+        try:
+            pass
+        except:
+            assert False
+        else:
+            pass
+        finally:
+            f = True
+        assert f
+
+    if 'What can be raised':
+
+        # Only old style classes or derived classes from exception can be raised.
+
+        # In particular, strings cannot be raised, or that raises a `TypeError` instead of the string.
+
+        # This was made possible around Python 2.5, but removed in Python 2.6.
+
+        class Old: pass
+        try:
+            raise Old()
+        except Old:
+            pass
+        else:
+            assert False
+
+        class New(object): pass
+        try:
+            raise New()
+        except TypeError:
+            pass
+        else:
+            assert False
+
+        class New(Exception): pass
+        try:
+            raise New()
+        except New:
+            pass
+        else:
+            assert False
+
+        # Since `'str'` is a new style object:
+
+        try:
+            raise 'str'
+        except TypeError:
+            pass
+        else:
+            assert False
+
 
     ###except catches derived classes only
 
@@ -5006,29 +5084,6 @@ if "##math":
                 assert vals[i] == 0 or vals[i] == 1
 
             assert sum(vals[k] for k in  vals.keys()) == n
-
-if "##termcolor":
-
-    #change color and attributes of terminal output
-
-    #``` {.bash}
-    #sudo pip install termcolor
-    #```
-
-    #from __future__ import print_function
-    #cprint kwargs are the print_function kwargs
-    #color is obsolete, exists only not to break interface, never use it
-
-    import termcolor
-
-    termcolor.cprint(
-        "red on green",
-        'red',
-        'on_green',
-        attrs = ['bold', 'blink'],
-        end = '',
-        file = sys.stderr,
-    )
 
 if "##environ ##environment variables":
 
