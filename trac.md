@@ -1,20 +1,22 @@
-top python written bugracker
+# Trac
 
-not written in django unfortunatelly
+Top Python written bug tracker.
 
-dependency:
+Not written in Django unfortunately.
+
+Dependency:
 
     sudo aptitude install -y python-mysqldb
 
-install:
+Install:
 
     sudo pip install trac
 
-#prerequesites
+## Prerequisites
 
 Learn how to use <#apache> if you ever want to do serious deployment.
 
-#create project
+## Create project
 
 create db to use:
 
@@ -34,17 +36,17 @@ enter:
                          ^^^^        
                          default mysql port
 
-#test server
+##test server
 
     tracd --port 8000 /path/to/project
     firefox localhost:8000
 
-#apache deployment
+##apache deployment
 
-for real deployment, can be much fater.
+For real deployment, can be much faster.
 
-##access rights
-    
+###access rights
+
 the server process must have ownership of the project dir
 
 by default, the owner of the dir is the owner who run ``trac-admin``
@@ -63,35 +65,35 @@ finally, change ownership:
 
     chown -R $username.$groupname "$d"
 
-on ubuntu at the time of writting the default was:
+on Ubuntu at the time of writing the default was:
 
     username=www-data
     groupname=www-data
 
-##authentication
+###Authentication
 
-trac uses <#http authentication> and cookies.
+Trac uses <#http authentication> and cookies.
 
 you have to set http authentication to the (virtual) location ``/trac/projectname/login``.
 
-when an user hits this url authenticated, trac sends session cookies back to him.
+when an user hits this URL authenticated, Trac sends session cookies back to him.
 
-to create an admin user, choose the htpasswd user you want to promote to admin,
+to create an admin user, choose the `htpasswd` user you want to promote to admin,
 and do:
     
     trac-admin "$project_dir" permission add "$admin_username" TRAC_ADMIN
 
-where ``"$admin_username"`` is exactly one of the htpasswd users.
+where ``"$admin_username"`` is exactly one of the `htpasswd` users.
 
-##fastgci
-    
-install fastgci. see: <#fastcgi>.
+###fastgci
+
+Install fastgci.
 
     FastCgiConfig -initial-env TRAC_ENV_PARENT_DIR=/usr/share/trac/projects/
 
-TRAC_ENV_PARENT_DIR is the parent of all trac projects.
+`TRAC_ENV_PARENT_DIR` is the parent of all Trac projects.
 
-##automated
+###automated
 
 this section automates full project creation and setup
 

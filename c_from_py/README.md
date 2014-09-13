@@ -1,1 +1,3 @@
-this dir shows how to call c functions from python on linux
+# C from Python
+
+This dir shows how to call C functions from python on Linux.

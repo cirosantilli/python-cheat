@@ -1,3 +1,5 @@
+# Sphinx
+
 HTML/PDF documentation from rest markdown.
 
 May use docstrings with a default extension.
@@ -6,15 +8,15 @@ It is used on the python official documentation
 
 The automatic doc finding/generation is not yet very good IMHO, but the rest works good.
 
-#Install
+## Install
 
     sudo pip install sphinx
 
-#Directory structure structure
+## Directory structure structure
 
 This simulates a real project, with documentation in `doc/`, and `mod` and `mod2` are modules.
 
-##Build
+### Build
 
     make html
 
@@ -25,9 +27,9 @@ I added a make `firefox` rule to the `Makefile` to make it easier to test:
 
 And also automated `sphinx-autodoc` generation on my `Makefile`.
 
-#Extensions
+## Extensions
 
-##Autodoc
+### Autodoc
 
 Generate doc from docstrings
 
@@ -79,7 +81,7 @@ or add mod it to the `toctree`:
 
 which searches for a file mod.(rst|txt) in current dir and adds its doctree here.
 
-###First time
+#### First time
 
 You can all of this automatically the first time by using the `-F` option:
 
@@ -89,11 +91,11 @@ Which also generates the templates that were generated with `sphinx-quickstart`,
 
 Note however that in current version if you add a file to your module, it is not automatically added on the default make, and you have to run `sphinx-apidoc` manually.
 
-##Math
+### Math
 
 there are two default methods: MathJax or PNG.
 
-###PNG
+#### PNG
 
 I prefer PNG because it loads instantaneously.
 
@@ -105,7 +107,7 @@ On Ubuntu 12.04:
 
     sudo aptitude install dvipng
 
-##doctest
+### doctest
 
 Check all `>>>` unit test snippets.
 

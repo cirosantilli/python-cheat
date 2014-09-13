@@ -1,20 +1,18 @@
+# Matplotlib
+
 TODO install currently broken!
 
 Scientific plotting library.
 
-#Install
+## Install
 
 Although it is available in PyPi, there are tons of dependencies which pip may not install, and it even fails silently!
 
-Therefore **don't** use the pip install:
-
-   #sudo pip install matplotlib
-
-but use the distro's package manager. On Ubuntu:
+Therefore **don't** use the pip install: but use the distro's package manager. On Ubuntu:
 
 	sudo aptitude install python-matplotlib
 
-#Developing
+## Developing
 
 Clone besides of being able to hack Matplotlib, you also get of tons of example files with this!
 
@@ -26,7 +24,7 @@ Then build C extensions and install with:
 
     sudo python setup.py install
 
-##Test hacks
+### Test hacks
 
 You cannot put the Python files in your python path simply without installing, because the compiled dependencies won't go to the correct place without an install (crashes on `_path` not found).
 
@@ -40,9 +38,9 @@ The problem with this is that you cannot keep the distro default installed also.
 
 TODO how not to install after every change.
 
-#Architecture
+## Architecture
 
-##State machine
+### State machine
 
 Not object based, but state machine based.
 
@@ -52,13 +50,13 @@ This methods like `gca()` which get you the current something.
 
 Rationale: easier to type on interactive sessions
 
-##Objects
+### Objects
 
 - figure:              everything
 - axes:                each subplot, including several axis
 - axis (!= axes):      the line with the ticks and numbers
 
-#show
+## show
 
 Plot to screen:
 
@@ -70,14 +68,14 @@ On window close, clears plot, so if you have to replot if you want to reuse the 
     plt.plot([1,0])
     plt.show()
 
-#savefig
+## savefig
 
 Plot to file
 
 Recommended formats are:
 
 - SGV: vector. Very precise, but needs to be transformed into bits before being put in a PDF.
-- PNG: loseless compression. Simpler to put in PDF because it represents bits directly.
+- PNG: lossless compression. Simpler to put in PDF because it represents bits directly.
 
 examples:
 
@@ -85,21 +83,21 @@ examples:
     plt.savefig( 'svg.png', format='png', bbox_inches='tight' )
     plt.savefig( 'png.png', format='png', bbox_inches='tight' )
 
-#format options
+## format options
 
-many format options can be given on either:
+Many format options can be given on either:
 
 - in a single format string at once
-- in separate kwargs
+- in separate `kwargs`
 
-use only separate kwargs in non-interactive programs since this is more manageable
+use only separate `kwargs` in non-interactive programs since this is more manageable
 
-##string
+### string
 
     plt.plot([0,1], 'r--')
     plt.show()
 
-##kwargs
+### kwargs
 
     plt.plot([0,1,2,3], [0,1,4,9], color='r', linestyle='--'  )
     save_svg_clear('r--kwargs')

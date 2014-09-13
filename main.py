@@ -1038,9 +1038,9 @@ b""" == "a\nb"
         Before reading this you should understand what is ASCII, Unicode,
         UTF8, UTF16.
 
-        The difference between unicode and str is that:
+        The difference between the `unicode` and `str` classes is that:
 
-        - `str` is just an array of bytes.
+        -   `str` is just an array of bytes.
 
             These could represent ASCII chars since those fit into 1 byte,
             but they could also represent UTF8 chars.
@@ -1051,7 +1051,7 @@ b""" == "a\nb"
 
             `str` is the output of an encode operation, or the input of a decode operation.
 
-        - `unicode`: represents actual Unicode characters.
+        -   `unicode`: represents actual Unicode characters.
 
             Unicode strings do not have an explicit encoding,
             although Python probably uses one int per char containing the Unicode code of that character.
@@ -1088,19 +1088,19 @@ b""" == "a\nb"
             however some escapes cannot represent all characters.
             The possile escapes are:
 
-            - `\xAA` represents one character of up to one byte.
+            -   `\xAA` represents one character of up to one byte.
 
                 This is not very useful with Unicode, since most of those characters
                 have a printable and therefore more readable ASCII char to represent them.
 
                 Characters with more than 1 byte cannot be represented with a `\xAA` escape.
 
-            - `\uAAAA`: 2 bytes.
+            -   `\uAAAA`: 2 bytes.
 
                 This is the most useful escape, as the most common unicode code points are
                 use either one or 2 bytes.
 
-            - `\UAAAAAAAA`: 4 bytes
+            -   `\UAAAAAAAA`: 4 bytes
 
                 It is very rare to have to use `\UAAAAAAAA`, since characters in that region
                 map mostly to languages with very small number of speakers (or none for ancient languages)<
@@ -3570,9 +3570,9 @@ if "##class":
             """
             <http://stackoverflow.com/questions/3993239/python-class-override-is-behavior>
 
-            - is: always implements id compairison.
+            -   is: always implements id compairison.
 
-            - not, and and or: only depend on the truth value assignment of objects,
+            -   not, and and or: only depend on the truth value assignment of objects,
                 which depends on `__notzero__` and `__len__` in Python 2.
 
             - assignment: makes no sense since assignment always replaces one object for another.
@@ -3879,6 +3879,14 @@ if '##exception':
         else:
             assert False
 
+        # A lightweight alternative is to raise Exception with a custom message:
+
+        try:
+            raise Exception('str')
+        except Exception:
+            pass
+        else:
+            assert False
 
     ###except catches derived classes only
 

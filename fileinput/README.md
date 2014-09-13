@@ -1,7 +1,9 @@
+# fileinput
+
 `fileinput` implements the typical POSIX / GNU interface:
 
-1) read from files with filenames in stdin[1:], one by one
-2) if none is given, read from stdin.
+- read from files with filenames in stdin[1:], one by one
+- if none is given, read from stdin.
 
 Run the tests:
 

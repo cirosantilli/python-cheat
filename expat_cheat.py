@@ -7,6 +7,9 @@ No child/parent concept.
 
 Harder to use if you need node wise operations,
 but very fast and memory efficient as it does not need to read the entire file at once.
+
+Python has many other XML parsing methods:
+<http://stackoverflow.com/questions/1912434/how-do-i-parse-xml-in-python>
 """
 
 import os.path
@@ -19,9 +22,9 @@ class Parser:
         self._parser = expat.ParserCreate()
 
         # Set what function does what.
-        self._parser.StartElementHandler    = self.tagOpen
-        self._parser.EndElementHandler      = self.tagClose
-        self._parser.CharacterDataHandler   = self.tagData
+        self._parser.StartElementHandler  = self.tagOpen
+        self._parser.EndElementHandler    = self.tagClose
+        self._parser.CharacterDataHandler = self.tagData
 
         # Find attributes of matching opening tag of a closing tag.
         self._attr_stack = []

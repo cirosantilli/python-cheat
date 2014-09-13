@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-#sources
+#Sources
 
 <http://docs.python.org/2/library/subprocess.html>
 
@@ -9,7 +9,7 @@
 
 <http://stackoverflow.com/questions/377017/test-if-executable-exists-in-python>
 
-#alternatives
+#Alternatives
 
 Using the subprocess module is the best option.
 
@@ -20,9 +20,9 @@ and intelligent (does not do smart quoting for you)
 
 #Popen
 
-the main class of the module.
+The main class of the module.
 
-there are other convenience functions, but they are only shortcuts to `Popen`
+There are other convenience functions, but they are only shortcuts to `Popen`
 so just *always* use `Popen` which is more versatile and less confugins.
 
 ##commands
@@ -45,18 +45,18 @@ executable even if we are not in a shell.
 
 ##subprocess.PIPE
 
-you must use subprocess.PIPE for each pipe you want to communicate via python
+You must use `subprocess.PIPE` for each pipe you want to communicate via python
 for example via `process.communicate`
 
-if you ommit those, they go/come from the default place: the terminal or pipes
+If you ommit those, they go/come from the default place: the terminal or pipes
 
 ##universal_newlines
 
-if True, converts `os.linsep` to `\n` on stdout and stderr, and `\n` to `os.linesep` on stdin
+If `True`, converts `os.linsep` to `\n` on stdout and stderr, and `\n` to `os.linesep` on stdin
 
-default False.
+Default: `False`.
 
-it is up to the data creator do define if this should be on or off,
+It is up to the data creator do define if this should be on or off,
 but almost always this should be on whenever the generator may generate
 output fit for terminal consuption, and False otherswise.
 
@@ -71,7 +71,6 @@ It `stdin = PIPE`, `Popen.stdin` represents the pipes stdin, and you can write t
 TODO why can this fill buffers but not communicate?
 
 TODO example
-
 """
 
 import os
