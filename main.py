@@ -488,12 +488,17 @@ if "##list":
             assert None == l.sort(reverse=True)
             assert l == [3, 2, 1]
 
-    if "##items are references, not copies":
+    if "##Items are references, not copies":
 
-        l0 = range(3)
+        l0 = [0]
+        l1 = l0
+        l1[0] = 1
+        assert l0 == [1]
+
+        l0 = [0]
         l1 = [l0]
         l1[0][0] = 1
-        assert l0 == [1, 1, 2]
+        assert l0 == [1]
 
     if "##access":
 
@@ -1775,7 +1780,7 @@ if "##function":
 
             return a, b, list(args), kwargs
 
-        #ERROR:  argument a vas no value
+        #ERROR: argument a has no value
 
             #f()
 
@@ -1795,7 +1800,9 @@ if "##function":
         assert f(b = 2, a = 1)          == (1, 2, [], {} )
         assert f(a = 1, b = 2, c = 5)   == (1, 2, [], {'c':5} )
 
-        if "##unpack argument lists":
+        if "##Unpack argument lists ##Splat":
+
+            # Splat is the Rubish term for it.
 
             # Transform list or dictionnaries into function arguments.
 
