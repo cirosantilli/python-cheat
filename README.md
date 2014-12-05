@@ -1,4 +1,4 @@
-# ![logo](logo.png) Python Cheat
+# Python Cheat ![logo](logo.png)
 
 Python information and cheatsheets.
 

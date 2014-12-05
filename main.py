@@ -1037,6 +1037,8 @@ b""" == "a\nb"
 
     assert '\n'.encode('string-escape') == '\\n'
 
+    # `string-escape` is similar to `repr`.
+
     if "##unicode ##encodings":
 
         '''
