@@ -71,7 +71,7 @@ if "##Automatic option names.":
         parser.add_argument(
             '-a',
             '--a-long',
-            dest="d",
+            dest='d',
         )
         args = parser.parse_args(['--a-long', '1'])
         assert args.d == '1'
@@ -354,11 +354,11 @@ if "##action":
         assert args.foo == '1'
         assert args.bar == '2'
 
-if "##choices":
+if '##choices':
 
     # Restrict argument to a set.
 
-    if "##list":
+    if '##list':
 
         # Argment must be in the list.
 
@@ -375,7 +375,40 @@ if "##choices":
         # ERROR:
         #args = parser.parse_args(['4'])
 
-    if "##string":
+        # With nargs:
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            'a',
+            type=int,
+            choices=[1, 2],
+            nargs='?',
+            default=0
+        )
+        args = parser.parse_args(['1'])
+        assert args.a == 1
+        args = parser.parse_args([])
+        assert args.a == 0
+
+        # TODO
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            'a',
+            type=int,
+            choices=[[], 1, 2],
+            nargs='*',
+        )
+
+        args = parser.parse_args(['1', '2'])
+        assert args.a == [1, 2]
+
+        args = parser.parse_args([])
+        assert args.a == []
+
+        # args = parser.parse_args(['1', '3'])
+
+    if '##string':
 
         # Argment must be a character in the string.
 
@@ -391,7 +424,7 @@ if "##choices":
         #error:
             #args = parser.parse_args(['d'])
 
-if "##inheritnace via arguments":
+if '##inheritnace via arguments':
 
     # *add_help=False is obligatory here*!!
     # or else will conflict with child help argument.

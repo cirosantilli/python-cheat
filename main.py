@@ -2,15 +2,22 @@
 # -*- coding: utf-8 -*-
 
 """
-Cheat on the Python language and stdlibs.
+Major cheat on the Python language and stdlibs.
+
+Contains every test that does not:
+
+- produces too much stdout, or one that is too complex to assert, e.g. human readable
+- takes a perceptible ammount of time to run
+- cannot be contained on a single file
 """
 
+import re
 import sys
 import shutil
 import tempfile
 import itertools
 
-if "##whitespace":
+if '##whitespace':
 
     # Python forces certain indentations
 
@@ -29,13 +36,13 @@ if "##whitespace":
     2
     )
 
-    if "##whitespace and functions":
+    if '##whitespace and functions':
 
         # Cannot separate `(` from function def:
 
-            #def f
-                #(x,y):
-                #pass
+        #def f
+            #(x,y):
+            #pass
 
         # Everything else works.
 
@@ -94,9 +101,9 @@ if "##whitespace":
 
         # Anything that has `:` like `if`, `while` and `class` works like function.
 
-    if "##multiple commands on a single line":
+    if '##multiple commands on a single line':
 
-        #http://stackoverflow.com/questions/6167127/how-to-put-multiple-statements-in-one-line
+        # <http://stackoverflow.com/questions/6167127/how-to-put-multiple-statements-in-one-line>
 
         # Only possible for multiple simple statements.
 
@@ -104,9 +111,9 @@ if "##whitespace":
 
         # Only use this for bash one liners.
 
-if "##built-in":
+if '##built-in':
 
-    '''
+    """
     Python has three kinds of built-ins:
 
     - functions
@@ -120,15 +127,15 @@ if "##built-in":
 
     Notable differences include:
 
-    - they do not need to be imported: they are always available on any scope.
+    -   they do not need to be imported: they are always available on any scope.
 
-    - some (but not all) built-in types have nice looking literals such as `1`, `[1]` or `{1: 2}`
+    -   some (but not all) built-in types have nice looking literals such as `1`, `[1]` or `{1: 2}`
         It is however be possible to create any type with a built-in factory function.
 
-    - most built-in types are lower case words by convention, while classes usually start with Upper case.
-    '''
+    -   most built-in types are lower case words by convention, while classes usually start with Upper case.
+    """
 
-    if "It is not possible to set attributes of built-in types.":
+    if 'It is not possible to set attributes of built-in types.':
 
         class C: pass
         C.i = 1
@@ -140,57 +147,61 @@ if "##built-in":
         else:
             assert False
 
-if "##built-in constants":
+if '##built-in constants':
 
-    '''
+    """
     Python has the following built-in constants:
 
-    - True
-    - False
-    - None
-    - ##NotImplemented
+    -   `True`
+
+    -   `False`
+
+    -   `None`
+
+    -   ##NotImplemented
 
         Vs. `NotImplementedError` built-in exception:
 
         <http://stackoverflow.com/questions/878943/why-return-notimplemented-instead-of-raising-notimplementederror>
 
-    - Ellipsis
-    - __debug__
+    -   `Ellipsis`
+
+    -   `__debug__`
 
     Besides those, there are also builtin exception objects.
-    '''
+    """
 
-if "##built-in functions":
+if '##built-in functions':
 
-    if "##help":
+    if '##help':
 
-        '''
+        """
         Intended for interactive usage documentation retrieval.
 
         If linked to a tty, opens the doc of the given object in a pager.
 
         Else, does nothing.
-        '''
+        """
 
         def f():
             """doc"""
         #help(f)
 
-    if "##locals":
+    if '##locals':
 
         # TODO
 
         pass
 
-    if "##globals":
+    if '##globals':
 
         # TODO
 
         pass
 
-if "##built-in types":
+if '##built-in types':
 
-    '''
+    """
     <http://docs.python.org/3.3/reference/datamodel.html>
 
     Types which are already defined by the interpreter,
@@ -251,25 +262,25 @@ if "##built-in types":
         - dict
 
     - super
-    '''
+    """
 
     assert(type(int())      == type(0))
     assert(type(float())    == type(0.0))
     assert(type(long())     == type(0L))
     assert(type(complex())  == type(1j))
 
-if "##bytearray":
+if '##bytearray':
 
-    '''
+    """
     Mutable version of `str`.
-    '''
+    """
 
     ba = bytearray(b'ab')
     ba2 = ba
     ba2[0] = ord(b'b')
     assert ba == bytearray(b'bb')
 
-if "##numbers":
+if '##numbers':
 
     # Defines an hierarchy on numbers. <http://docs.python.org/2/library/numbers.html>
 
@@ -281,7 +292,7 @@ if "##numbers":
     assert isinstance(0, numbers.Complex)
     assert not isinstance(1j, numbers.Real)
 
-    if "##int ##long ##float":
+    if '##int ##long ##float':
 
         # int, float and long are classes.
         # It is just that `1` and `1.1` are nice looking literals.
@@ -318,11 +329,11 @@ if "##numbers":
 
         assert myint(1) + myint(2) == myint(3)
 
-    if "##imaginary ##complex":
+    if '##imaginary ##complex':
 
-        '''
+        """
         Imaginary numbers have built-in literals of the form `Nj`.
-        '''
+        """
 
         assert 1j * 1j == -1
 
@@ -337,15 +348,15 @@ if "##numbers":
         assert (1 + 2j).imag == 2
         assert 1j.conjugate() == -1j
 
-if "##list":
+if '##list':
 
     # List of any mix of types.
 
-    if "##create new list":
+    if '##Create new list':
 
         # List have literals:
 
-        l = [1, 2, "a", "b"]
+        l = [1, 2, 'a', 'b']
 
         # List have a global factory method that takes an iterable.
         # Therefore they can be built from anything that is iterable:
@@ -358,7 +369,7 @@ if "##list":
 
         assert list(xrange(0, 3)) == [0, 1, 2]
 
-        if "##range":
+        if '##range':
 
             # Creates lists directly:
 
@@ -366,25 +377,33 @@ if "##list":
             assert range(1, 3) == [1, 2]
             assert range(1, 6, 2) == [1, 3, 5]
 
-        if "##list comprehention":
+        if 'n copies of given element':
+
+            # <http://stackoverflow.com/questions/8528178/list-of-zeros-in-python>
+
+            # The best method for immutable objects is `*`:
+
+            assert [0] * 4 == [0, 0, 0, 0]
+
+        if '##List comprehension':
 
             assert [i for i in xrange(4) if i != 2] == [0, 1, 3]
 
             # Multilevel / nested: TODO parenthise this to understand it better.
 
-            assert [i for j in [1, 2] for i in [j,-j]] == [1, -1, 2, -2]
+            assert [i for j in [1, 2] for i in [j, -j]] == [1, -1, 2, -2]
 
-        if "##map method":
+        if '##map method':
 
             assert map(lambda i: 2 * i, xrange(3)) == [0, 2, 4]
 
-        if "##+ for lists":
+        if '##+ for lists':
 
             l = range(2)
             assert l + [2, 3] == [0, 1, 2, 3]
             assert l == range(2)
 
-        if "##slice":
+        if '##slice':
 
             l = range(4)
             assert l[:2]  == [0, 1]
@@ -399,31 +418,33 @@ if "##list":
             assert l[0:3:2] == [0, 2]
             assert l[::-1]  == [4,3,2,1,0] #invert list!
 
-            if "##ellipsis #...":
+            if '##ellipsis #...':
 
-                '''
+                """
                 TODO
-                '''
+                """
 
-        if "##sorted":
+        if '##sorted':
 
             l = [2, 1]
             assert sorted(l) == [1, 2]
             assert l == [2, 1]
 
-        if "##remove dupes":
+        if '##remove dupes':
 
             assert list(set([1, 2, 1])) == [1, 2]
 
-    if "##modify inplace":
+    if 'Modify inplace':
 
         l = range(3)
         l[0] = 10
         assert l == [10, 1, 2]
 
-        l = range(3)
-        assert l.append(3) == None
-        assert l == [0, 1, 2, 3]
+        if '##append':
+
+            l = range(3)
+            assert l.append(3) == None
+            assert l == [0, 1, 2, 3]
 
         l = range(3)
         assert l.extend([3, 4]) == None
@@ -433,7 +454,7 @@ if "##list":
         assert l.insert(0, 3) == None
         assert l == [3, 0, 1, 2]
 
-        if "##pop":
+        if '##pop':
 
             l = range(3)
             assert l.pop(1) == 1
@@ -443,7 +464,7 @@ if "##list":
             assert l.pop() == 2
             assert l == [0, 1]
 
-        if "##remove":
+        if '##remove':
 
             # Remove first occurence of value.
 
@@ -461,9 +482,9 @@ if "##list":
             else:
                 assert False
 
-        if "##del":
+        if '##del':
 
-            '''
+            """
             Remove element from list.
 
             Is a statement.
@@ -474,13 +495,13 @@ if "##list":
 
             Rather insane: why is this not a list method? Why a language *statement*?
             I'd rather use `pop(i)`.
-            '''
+            """
 
             l = range(3)
             del l[1]
             assert l == [0, 2]
 
-        if "##sort":
+        if '##sort':
 
             l = [2, 1, 3]
             assert l.sort() == None
@@ -488,7 +509,7 @@ if "##list":
             assert None == l.sort(reverse=True)
             assert l == [3, 2, 1]
 
-    if "##Items are references, not copies":
+    if '##Items are references, not copies':
 
         l0 = [0]
         l1 = l0
@@ -500,7 +521,7 @@ if "##list":
         l1[0][0] = 1
         assert l0 == [1]
 
-    if "##access":
+    if '##access':
 
         l = [0, 1, 2]
         assert l[0] == 0
@@ -510,7 +531,7 @@ if "##list":
         assert l[-1] == 2
         assert l[-2] == 1
 
-        if "##out of bounds":
+        if '##out of bounds':
 
             l = [0, 1]
             try:
@@ -524,15 +545,15 @@ if "##list":
 
             l = range(3)
             i = 1
-            assert l[i] if i < len(l) else "default" == 1
+            assert l[i] if i < len(l) else 'default' == 1
             i = 3
-            assert l[i] if i < len(l) else "default" == "default"
+            assert l[i] if i < len(l) else 'default" == "default'
 
-    if "##concatenate ##cat":
+    if '##concatenate ##cat':
 
         assert [0, 2] + [1, 3] == [0, 2, 1, 3]
 
-    if "##find item":
+    if '##find item':
 
         # First match for criteria with generator expression:
 
@@ -551,7 +572,7 @@ if "##list":
         else:
             assert False
 
-    if "##filter":
+    if '##filter':
 
         # Leave only elements for which a function is True.
 
@@ -559,11 +580,14 @@ if "##list":
         assert filter(lambda x: x % 2 == 1, l) == [1, 3]
         assert l == range(4)
 
-        ##itertools.ifilter for iterators.
+        ##ifilter
 
-if "##iterators ##yield":
+            # `itertools.ifilter` for iterators.
+            # https://docs.python.org/2/library/itertools.html#itertools.ifilter
 
-    '''
+if '##iterators ##yield':
+
+    """
     Iterators are more memory efficent for iterations than lists
     since there is no need to store the entire sequence!
 
@@ -571,9 +595,9 @@ if "##iterators ##yield":
     you are going to use it more than once
 
     It is a classic space/time tradeoff.
-    '''
+    """
 
-    if "##create":
+    if '##create':
 
         # An iterator is just a function with a `yield` method:
 
@@ -592,7 +616,7 @@ if "##iterators ##yield":
                 if i > n:
                     raise StopIteration
 
-        if "##generator expressions":
+        if '##generator expressions':
 
             # Shorthand way to create iterators
 
@@ -610,14 +634,14 @@ if "##iterators ##yield":
 
             assert mysum(i for i in [0, 2, 5]) == 7
 
-        if "##iter":
+        if '##iter':
 
             # Converts various types to iterators.
 
-            iter("abc")
+            iter('abc')
             iter([1, 2, 3])
 
-    if "##next":
+    if '##next':
 
         # Will not work with `xrange`! <http://late.am/post/2012/06/18/what-the-heck-is-an-xrange>
 
@@ -644,40 +668,40 @@ if "##iterators ##yield":
         # The only way is to catch the `StopIteration` exception:
         # <http://stackoverflow.com/questions/1966591/hasnext-in-python-iterators>
 
-    if "##iterators can't be rewinded":
+    if '##iterators can\'t be rewinded':
 
         # Either store a list on memory or recalculate.
 
         # Recalculate:
 
-        it = iter("asdf")
+        it = iter('asdf')
         for i in it:
-            print "first"
+            print 'first'
             print i
-        it = iter("asdf")
+        it = iter('asdf')
         for i in it:
-            print "second"
+            print 'second'
             print i
 
         # Store on memory:
 
-        it = list(iter("asdf"))
+        it = list(iter('asdf'))
         for i in it:
-            print "first"
+            print 'first'
             print i
         for i in it:
-            print "second"
+            print 'second'
             print i
 
-    if "built-in iterator functions":
+    if 'Built-in iterator functions':
 
-        if "##enumerate":
+        if '##enumerate':
 
             assert list(enumerate(['a', 'c', 'b']) ) == [(0, 'a'), (1, 'c'), (2, 'b'), ]
 
-        if "##reduce":
+        if '##reduce':
 
-            '''
+            """
             - take two leftmost, apply func
             - replace the two leftmost by the result
             - loop
@@ -686,15 +710,15 @@ if "##iterators ##yield":
 
             - 2*3 - 1 = 5
             - 2*5 - 3 = 8
-            '''
+            """
 
             assert reduce(lambda x, y: 2*x - y, [3, 1, 2]) == 8
 
-    if "###itertools":
+    if '##itertools':
 
         import itertools
 
-        '''
+        """
         Hardcore iterator patterns.
         <http://docs.python.org/2/library/itertools.html#recipes>
 
@@ -703,7 +727,7 @@ if "##iterators ##yield":
         - imap: map for iterators
         - izip: count to infinity
         - count: count to infinity
-        '''
+        """
 
         # Cartesian product:
 
@@ -714,9 +738,9 @@ if "##iterators ##yield":
 
         assert [i for i in itertools.chain(xrange(2), xrange(2))] == [0, 1, 0, 1]
 
-    if "##iterable combos":
+    if '##iterable combos':
 
-        if "Merge two lists of same length odd / even elements":
+        if 'Merge two lists of same length odd / even elements':
 
             # http://stackoverflow.com/questions/18041840/python-merge-two-lists-even-odd-elements
 
@@ -726,36 +750,49 @@ if "##iterators ##yield":
             y = [2, 3]
             assert [ x for t in zip(x,y) for x in t ] == [0, 2, 1, 3]
 
-if "##string ##str":
+if '##string ##str':
 
-    '''
+    """
     There are 2 commonly used classes which are informaly called *strings* in python:
     *str* and *unicode*
 
     *basestring* is their common ancestor.
-    '''
+    """
 
     assert isinstance(str(), basestring)
     assert isinstance(unicode(), basestring)
     assert not isinstance(bytearray(), basestring)
 
-    if "##literals":
+    if '##string literals':
 
-        if "###single vs double quotes":
+        if '##Single vs double quotes':
 
             # There is no semantical difference:
 
-            assert "abc" == 'abc'
+            assert 'abc' == 'abc'
 
             # Except for excaping quotes themselves:
 
             assert "'" == '\''
             assert '"' == "\""
+            assert "\n" == '\n'
 
-            # By convention, `'` is more used for identifiers (say, map keys)
-            # while `"` is more used for messages: `print "Hello world!"`.
+            # Advantages of single quote `'`:
 
-        if "##multiline strings ##triple quotes":
+            # - prints as less pixels so less noisy
+            # - easier to type on a standard keyboard since no shift required
+
+            # PEP 8 and Google Style say choose one and stick with it.
+            # Only use the other to avoid backslash escaping the one.
+
+            # Other styles promote a semantic differentiation:
+
+            # - `'` for identifiers, e.g., map keys
+            # - `"` for human readable messages: `print "Hello world!"`
+
+            # But this differentiation harder to maintain.
+
+        if '##multiline strings ##triple quotes':
 
             # Like in C, whitespace separated strings are glued together:
 
@@ -788,41 +825,39 @@ b""" == "a\nb"
         assert "\x61" == "a"
         assert "\n" == "\x0A"
 
-        if "##raw string literals ##r literals":
+        if '##raw string literals ##r literals':
 
             # Raw literals lose all backslash escape magic.
 
-            assert r"\n" == "\\n"
-            assert r"\\" == "\\\\"
+            assert r'\n' == '\\n'
+            assert r'\\' == '\\\\'
 
             # The exception is to escape the character that would terminate the string (`'` or `"`).
             # In that case, the backslash *remains* in the string:
 
-            assert r"\"" == "\\\""
+            assert r'\"' == "\\\""
 
             # A consequence is that it is impossible to write a raw string literal that ends in backslash.
 
-            assert "\\" != r""
+            assert '\\' != r''
 
-            '''
-            Raw string literals are often used with regular expressions,
-            which often contain many literal backslashes.
-            '''
+            # Raw string literals are often used with regular expressions,
+            # which often contain many literal backslashes.
 
-    if "##format strings ##precision ##decimal places":
+    if '##format strings ##precision ##decimal places':
 
-        '''
+        """
         Mostly like C printf.
 
         There are two forms: tuple or dict.
 
         Single value form: only works for a single input.
-        '''
+        """
 
-        assert "%d" % 1 == "1"
+        assert '%d' % 1 == '1'
 
         try:
-            assert "%d %d" % 1, 2 == "1 2"
+            assert '%d %d' % 1, 2 == "1 2"
         except TypeError:
             pass
         else:
@@ -830,19 +865,19 @@ b""" == "a\nb"
 
         # Tuple form: works for any number of arguments.
 
-        assert "%d"     % ( 1 )         == "1"
-        assert "%d %d"  % ( 1, 2 )      == "1 2"
-        assert "%.2f"   % ( 1.2 )       == "1.20"
-        assert "%5.2f"  % ( 1.2 )       == " 1.20"
-        assert "%s"     % ( "abc" )     == "abc"
+        assert '%d'     % ( 1 )         == "1"
+        assert '%d %d'  % ( 1, 2 )      == "1 2"
+        assert '%.2f'   % ( 1.2 )       == "1.20"
+        assert '%5.2f'  % ( 1.2 )       == " 1.20"
+        assert '%s'     % ( "abc" )     == "abc"
 
         # Map form:
 
         assert "%(v1)s %(#)03d %(v1)s %(#)03d" % {'v1':"asdf", "#":2} == 'asdf 002 asdf 002'
 
-        if "##python3 format":
+        if '##format method':
 
-            '''
+            """
             The percent format operator becomes deprecated in Python 3.1,
 
             The `format` method is introduced and backported to Python 2,
@@ -855,7 +890,7 @@ b""" == "a\nb"
             <http://www.python.org/dev/peps/pep-3101/>
 
             Only operators `[]` and `.` are supported inside the formats.
-            '''
+            """
 
             assert '{1} {0} {1} {2[0]} {a}'.format(0, 1, [0, 1], a=2 ) == '1 0 1 0 2'
 
@@ -877,7 +912,7 @@ b""" == "a\nb"
             # Does not work like in Ruby where strings are magic: only the format method interprets anything.
 
             a = 2
-            assert "{a}" != "2"
+            assert '{a}' != '2'
 
             # Format is of the form:
 
@@ -885,49 +920,51 @@ b""" == "a\nb"
 
             # It is C printf like, but **NOT** the same!
 
-            # Fill:
+            # Fill to minimum width:
 
-            assert '{:2d}'.format(1)    == " 1"
-            assert '{:02d}'.format(1)   == "01"
+            assert '{:2d}'.format(1)  == ' 1'
+            assert '{:02d}'.format(1) == '01'
 
             # Align left:
 
-            assert '{:<2d}'.format(1)   == "1 "
+            assert '{:<2d}'.format(1) == '1 '
 
             # Decimal places:
 
-            assert '{:.2f}'.format(1.0)    == "1.00"
-            assert '{0:.2f}'.format(1.0)   == "1.00"
-            assert '{x:.2f}'.format(x=1.0) == "1.00"
+            assert '{:.2f}'.format(1.0)    == '1.00'
+            assert '{0:.2f}'.format(1.0)   == '1.00'
+            assert '{x:.2f}'.format(x=1.0) == '1.00'
 
             # Format via an argument combo:
 
-            assert '{0:.{1}f}'.format(1.23456, 4) == "1.2346"
-            assert '{number:.{digits}f}'.format(number=1.23456, digits=4) == "1.2346"
+            assert '{0:.{1}f}'.format(1.23456, 4) == '1.2346'
+            assert '{number:.{digits}f}'.format(number=1.23456, digits=4) == '1.2346'
 
-            if "##table printing":
+            if '##table printing':
 
                 # There seems to be no built-in one liner.
 
                 # Two rows built-in solution:
 
-                print "Label value table combo:"
-                labels = ["label 0", "very long label 1", "l 2"]
+                print 'Label value table combo:'
+                labels = ['label 0', 'very long label 1', 'l 2']
                 values = [0, 1, 2]
-                sys.stdout.write("{:<{l}}{}\n{:<{l}}{}\n{:<{l}}{}\n".format(
+                sys.stdout.write('{:<{l}}{}\n{:<{l}}{}\n{:<{l}}{}\n'.format(
                     *[x for t in zip(labels,values) for x in t],
                     l=len(max(labels, key=len)) + 2
                 ))
 
-                # Output:
+                """
+                Output:
 
-                #label 0            0
-                #very long label 1  1
-                #l 2                2
+                    label 0            0
+                    very long label 1  1
+                    l 2                2
 
-                # Many solutions with external libraries since Python is so scientific based:
-                # - http://stackoverflow.com/questions/9535954/python-printing-lists-as-tabular-data
-                # - http://stackoverflow.com/questions/17279059/print-list-in-table-format-in-python
+                Many solutions with external libraries since Python is so scientific based:
+                - http://stackoverflow.com/questions/9535954/python-printing-lists-as-tabular-data
+                - http://stackoverflow.com/questions/17279059/print-list-in-table-format-in-python
+                """
 
     # Character access is like for a list:
 
@@ -944,20 +981,23 @@ b""" == "a\nb"
     else:
         assert False
 
-    ##cat
+    if '##Concatenate':
 
-    assert "ab" + "cd" == "abcd"
+        # Used to be inneficient because strings are immutable, but has gotten much better it seems:
+        # <http://stackoverflow.com/questions/4435169/good-way-to-append-to-a-string>
 
-    #implicit: only works for strings
+        assert 'ab' + 'cd' == 'abcd'
+
+    # For string literals:
 
     assert "ab" "cd" == "abcd"
     assert "ab" * 3 == "ababab"
 
-    # replace: replaces at most once:
+    # `replace`: replaces at most once:
 
-    assert "aabbcc".replace("b", "0")   == "aa00cc"
-    assert "aabbcc".replace("bb", "0")  == "aa0cc"
-    assert "aabbcc".replace("b", "0", 1) == "aa0bcc"
+    assert 'aabbcc'.replace('b',  '0')    == 'aa00cc'
+    assert 'aabbcc'.replace('bb', '0')    == 'aa0cc'
+    assert 'aabbcc'.replace('b',  '0', 1) == 'aa0bcc'
 
     if "##string import":
 
@@ -971,8 +1011,8 @@ b""" == "a\nb"
 
         # Split string into array of strings:
 
-        assert "0ab1ab2".split("ab") == ['0', '1', '2']
-        assert "0abab2".split("ab")  == ['0', '', '2']
+        assert '0ab1ab2'.split('ab') == ['0', '1', '2']
+        assert '0abab2'.split('ab')  == ['0', '', '2']
 
         # If string not given, splits at `string.whitespace*` **regex**!:
         # Very confusing default that changes behaviour completely!
@@ -985,7 +1025,7 @@ b""" == "a\nb"
 
     if "##strip ##rstrip ##lstrip":
 
-        '''
+        """
         Strip chars either from either beginning or end, *not* middle!
 
         Characters to strip are given on a string.
@@ -993,7 +1033,7 @@ b""" == "a\nb"
         Default argument: `string.whitespace`
 
         r and l strip for one sided versions.
-        '''
+        """
 
         assert "cbaba0a1b2ccba".strip("abc") == "0a1b2"
         assert "\t\n0 1 2\v \r".strip() == "0 1 2"
@@ -1041,7 +1081,7 @@ b""" == "a\nb"
 
     if "##unicode ##encodings":
 
-        '''
+        """
         Before reading this you should understand what is ASCII, Unicode,
         UTF8, UTF16.
 
@@ -1064,9 +1104,9 @@ b""" == "a\nb"
             although Python probably uses one int per char containing the Unicode code of that character.
 
             `unicode` is the output of a decode operation, or the input of an encode operation.
-        '''
+        """
 
-        '''
+        """
         To be able to use utf8 directly in Python source.
         The second line of the file *must* be:
 
@@ -1075,22 +1115,22 @@ b""" == "a\nb"
         Otherwise, you must use escape characters.
 
         This changes in Python 3 where utf-8 becomes the default encoding.
-        '''
+        """
 
         if "##u backslash escapes ##unicode literals":
 
-            '''
+            """
             Unicode literals are just like string literals, but they start with `u`.
 
             The string below has 2 characters. Characters are treated differently depending on
             if strings are str or unicode.
-            '''
+            """
 
             u = u'\u4E2D\u6587'
             assert u[0] == u'\u4E2D'
             assert u[1] == u'\u6587'
 
-            '''
+            """
             Each escape character represents exactly one Unicode character,
             however some escapes cannot represent all characters.
             The possile escapes are:
@@ -1109,22 +1149,25 @@ b""" == "a\nb"
 
             -   `\UAAAAAAAA`: 4 bytes
 
-                It is very rare to have to use `\UAAAAAAAA`, since characters in that region
-                map mostly to languages with very small number of speakers (or none for ancient languages)<
-                and most computers don't even have fonts to render those characters.
+                It is very rare to have to use `\UAAAAAAAA` literals,
+                since Unicode plane 0 which contains the most common characters
+                fit into one byte.
+
+                Also note that `\U0010FFFF` is the largest possible character:
+                the first byte must always be 0, since that is as far as Unicode goes.
 
             Remember: `\` escapes are interpreted inside multiline comment strings.
             Therefore, if you write an invalid escape like `\\xYY`, your code will not run!
-            '''
+            """
 
             assert u'\u4E2D\u6587' == u'中文'
             assert u'\U00010000' == u'𐀀'
 
-            '''
+            """
             A is done to confirm that a byte is a known unicode character.
             For example `\UAAAAAAAA` does not currently represent any Unicode character,
             so you cannot use it.
-            '''
+            """
 
             #u'\UAAAAAAAA'
 
@@ -1135,13 +1178,13 @@ b""" == "a\nb"
             assert s[1] == 'u'
             assert s[2] == '4'
 
-        '''
+        """
         ##encode ##decode
 
             Encode transforms an `unicode` string to a byte string `str`.
 
             Decode transforms a byte string `str` to an `unicode` string.
-        '''
+        """
 
         assert u'中'.encode('utf-8') == '\xE4\xB8\xAD'
         assert u'中' == '\xE4\xB8\xAD'.decode('utf-8')
@@ -1150,28 +1193,38 @@ b""" == "a\nb"
 
         assert u'\n'.encode('ASCII') == '\n'
 
-        # When mixing encodings implicily, ASCII is assumed by default, so things break only if there are non-ASCII chars.
+        # When mixing encodings implicily, ASCII is assumed by default,
+        # so things break only if there are non-ASCII chars.
         # Don't do any of the following:
 
-        assert u"a" == "a"
-        assert u"\u20AC" != "\x20\xAC"
-        assert u"\u20AC" + "a" == u"\u20ACa"
+        assert u'a' == 'a'
+        assert u'\u20AC' != '\x20\xAC'
+
         try:
-            str(u"\u20AC")
+            str(u'\u20AC')
         except UnicodeEncodeError:
             #'ascii' codec can't encode character u'\u20ac' in position 0: ordinal not in range(128)
             pass
         else:
             raise
+
         try:
-            unicode("\x20\xAC")
+            assert u'\u20AC'.decode('utf-8')
+        except UnicodeEncodeError:
+            #'ascii' codec can't encode character u'\u20ac' in position 0: ordinal not in range(128)
+            pass
+        else:
+            raise
+
+        try:
+            unicode('\x20\xAC')
         except UnicodeDecodeError:
             #'ascii' codec can't decode byte 0xac in position 1: ordinal not in range(128)
             pass
         else:
             raise
 
-        '''
+        """
         ##normalization
 
             Some unicode characters can be represented by multiple sequences.
@@ -1182,14 +1235,14 @@ b""" == "a\nb"
             unicode strings with different normalizations compare False.
 
             Normalization may be modified via `unicodedata`.
-        '''
+        """
 
         assert u'\u00EAtre' != u'e\u0302tre'
 
         import unicodedata
         assert unicodedata.normalize('NFC', u'\u00eatre') == unicodedata.normalize('NFC', u'e\u0302tre')
 
-        '''
+        """
         IO is typically done via arrays of bytes since that is how the system really sees it,
         and not via unicode chars.
 
@@ -1201,9 +1254,9 @@ b""" == "a\nb"
 
         There may be however some convenience wrappers that deal with encoding.
         For example, `codecs.open` opens a file in a encoding aware manner.
-        '''
+        """
 
-        '''
+        """
         ##unicode and file IO
 
             First remember that `sys.stdout` is a file object,
@@ -1221,7 +1274,7 @@ b""" == "a\nb"
             If there are any non ASCII characters, this leads to an exception!
             Therefore, if it is ever possible that there could be unicode chars
             on the output string, encode it explicitly.
-        '''
+        """
 
         print 'sys.stdout.encoding = ' + str(sys.stdout.encoding)
 
@@ -1304,19 +1357,19 @@ if "##tuple":
 
 if "##memoryview":
 
-    '''
+    """
     TODO
-    '''
+    """
 
 ##map
 
     # See dict.
 
-if "##dict":
+if '##dict':
 
     # Unordered map of hashable keys and to values of any type.
 
-    if "##create":
+    if '##create':
 
         # Built-in constructor syntax:
 
@@ -1344,6 +1397,20 @@ if "##dict":
             pass
         else:
             assert False
+
+        if '##fromkeys':
+
+            # <https://docs.python.org/2/library/stdtypes.html#dict.fromkeys>
+
+            # Create a dictionary with keys from a list, and a single value.
+
+            # `dict` here is the `dict` type.
+
+            assert dict.fromkeys([1, 2, 3]) == {1: None, 2: None, 3: None}
+            assert dict.fromkeys([1, 2, 3], 0) == {1: 0, 2: 0, 3: 0}
+
+            # Note however that this is not usually what you want for mutable objects:
+            # http://stackoverflow.com/questions/8174723/dictionary-creation-with-fromkeys-and-mutable-objects-a-surprise
 
     # To list of pairs:
 
@@ -1461,7 +1528,7 @@ if "##dict":
 
 if "##set":
 
-    '''
+    """
     Unordered set of unique elements.
 
     Quick method ref:
@@ -1485,7 +1552,7 @@ if "##set":
     - s.discard(x) 	  	                removes x from set s if present
     - s.pop() 	  	                    remove and return an arbitrary element from s; raises KeyError if empty
     - s.clear() 	  	                remove all elements from set s
-    '''
+    """
 
     # Literals:
 
@@ -1539,11 +1606,11 @@ if "##set":
 
 if "##frozenset":
 
-    '''
+    """
     Immutable version of set.
 
     As a consequence, it is hashable.
-    '''
+    """
 
     fs = frozenset([0, 1])
     try:
@@ -1557,7 +1624,7 @@ if "##frozenset":
 
 if "##operator":
 
-    '''
+    """
     In python everything is an object.
 
     Therefore, every operator has a correponding method.
@@ -1572,7 +1639,7 @@ if "##operator":
     - `//` and `__TODO__()`
 
     Built-in classes like `int` simply implement those methods.
-    '''
+    """
 
     assert 0 == 0
 
@@ -1652,7 +1719,7 @@ if "##branching":
 
     if "##truth value testing for objects":
 
-        '''
+        """
         Any object can be used on an if or while.
 
         In Python 2, an object evaluates to false iff:
@@ -1669,7 +1736,7 @@ if "##branching":
         - zero of any numeric type, for example, 0, 0L, 0.0, 0j.
         - any empty sequence, for example, '', (), [], set().
         - any empty mapping, for example, {}.
-        '''
+        """
 
         if "":
             assert False
@@ -1690,11 +1757,11 @@ if "##branching":
         if None:
             assert False
 
-        '''
+        """
         Truth value testing can differ from `__eq__` to True or false!
 
         Something that is not equal to True can still works for an if!
-        '''
+        """
 
         assert -1 != True
 
@@ -1983,10 +2050,10 @@ if "##function":
                 f(x)
                 assert x == [2]
 
-            '''
+            """
             Immutable built-in types all implement `__hash__`. Mutable built-in types are not.
             User defined types are all hashable.
-            '''
+            """
 
             s = set()
             s.add(1) # OK: hashable.
@@ -1997,9 +2064,9 @@ if "##function":
             else:
                 assert False
 
-            '''
+            """
             list constructor does shallow copies.
-            '''
+            """
 
             x = [0, [10]]
             y = list(x) # or x[:]
@@ -2126,14 +2193,14 @@ if "##function":
 
     if "##lambda":
 
-        '''
+        """
         Lambda is a function without name
 
         Lambda functions can only contain a single expression.
 
         This means in particular that they cannot contain assigments,
         so they are very limited.
-        '''
+        """
 
         f = lambda x: x + 1
         assert f(0) == 1
@@ -2141,10 +2208,10 @@ if "##function":
 
     if "##scope":
 
-        '''
+        """
         If the value of a variable was not defined inside the function,
         the value in the currently executing scope is taken.
-        '''
+        """
 
         def f(b):
             return a == b
@@ -2234,7 +2301,7 @@ if "##function":
 
 if "##class":
 
-    '''
+    """
     Python classes are designed such that some of its syntax is analogous to C++
     classes.
 
@@ -2254,7 +2321,7 @@ if "##class":
     - attributes and the dot `.` operator
     - __dict__
     - bound methods
-    '''
+    """
 
     if "classes are objects":
 
@@ -2310,15 +2377,15 @@ if "##class":
 
     if "##__metaclass__ ##__new__":
 
-        '''
+        """
         TODO
-        '''
+        """
 
     if "##bound method ##unbound method":
 
-        '''
+        """
         <http://stackoverflow.com/questions/114214/class-method-differences-in-python-bound-unbound-and-static>
-        '''
+        """
 
         class C(object):
             def __init__(self, i):
@@ -2340,7 +2407,7 @@ if "##class":
 
     if "##object":
 
-        '''
+        """
         Base type of all Python built-in types.
 
         In Python 2, it is possible for a user defined object not to
@@ -2348,7 +2415,7 @@ if "##class":
 
         In Python 3, user defined classes automatically inherit from it,
         so every type derives from `object`.
-        '''
+        """
 
         assert isinstance(1, object)
         assert isinstance("ab", object)
@@ -2369,7 +2436,7 @@ if "##class":
 
     if "##type":
 
-        '''
+        """
         Built-in function type does two things:
 
         - determine the type of an object
@@ -2380,13 +2447,13 @@ if "##class":
         - the type of any type (built-in or user defined) is `type`.
         - the type of any object is its type,
             also known as class for user defined types.
-        '''
+        """
 
         if "determine type of value":
 
-            '''
+            """
             The `type` object is at the base of all the hierarchy.
-            '''
+            """
 
             assert type(type)   == type
             assert type(object) == type
@@ -2422,23 +2489,23 @@ if "##class":
 
     if "##__class__":
 
-        '''
+        """
         Corresponding class object of a object.
 
         The only difference from `type()` seems to be for old style classes:
         <http://stackoverflow.com/questions/1060499/difference-between-typeobj-and-obj-class>
 
         Therefore, there is no difference in Python 3.
-        '''
+        """
 
         assert object.__class__ == type
         assert (1).__class__    == int
 
-        '''
+        """
         `__class__` can be set to something else however.
 
         This has no special effect.
-        '''
+        """
 
         class D(object): pass
 
@@ -2450,9 +2517,9 @@ if "##class":
 
     if "##isinstance":
 
-        '''
+        """
         TODO: like type but also considers base types?
-        '''
+        """
 
         assert isinstance(object, type)
         assert isinstance(1, int)
@@ -2463,7 +2530,7 @@ if "##class":
 
     if "##attributes":
 
-        '''
+        """
         Anything you can get from an object via a dot `.`, including methods and memebers.
 
         Good tutorial: <http://www.cafepy.com/article/python_attributes_and_methods/contents.html>
@@ -2473,7 +2540,7 @@ if "##class":
         1) `obj.__dict__` itself
         2) `obj.__class__.__dict__`
         3) then searches all base classes via MRO.
-        '''
+        """
 
         class C:
             pass
@@ -2657,13 +2724,13 @@ if "##class":
 
     if "##dir":
 
-        '''
+        """
         Returns a list of all attributes of an object.
 
         Includes attributes available through `__class__` and base classes.
 
         Does a search in the `__dict__` attributes in the same order as the dot `.` operator.
-        '''
+        """
 
         print 'dir(1) = ' + str(dir(1))
         class C(object): pass
@@ -2674,9 +2741,9 @@ if "##class":
 
     if "##inspect":
 
-        '''
+        """
         Module that can do many introspective things on Python objects.
-        '''
+        """
 
     if "##reflection":
 
@@ -2717,7 +2784,7 @@ if "##class":
 
     if "##old style ##new style ##classic":
 
-        '''
+        """
         In Python 2 there are 2 types of classes:
 
         - classic classes. The only type that existed up to `2.1`.
@@ -2739,7 +2806,7 @@ if "##class":
         - MRO changed
         - descriptors added
         - `__slots__` added
-        '''
+        """
 
         class Old:
             pass
@@ -2789,12 +2856,12 @@ if "##class":
 
     if "##private":
 
-        '''
+        """
         By convention the underline '_' indicates private varibales and methods.
 
         Nothing in the language prevents you from using it outside
         except your code breaking later on because you broke the convention.
-        '''
+        """
 
         class C:
             _private_static = 1
@@ -2855,7 +2922,7 @@ if "##class":
 
         if "##classmethod and ##staticmethod":
 
-            '''
+            """
             The only difference between classmethod and staticmethod is that classmethod
             also gets a reference to the class as argument.
 
@@ -2869,7 +2936,7 @@ if "##class":
                 since using it serves as self documentation of that fact.
 
             <http://stackoverflow.com/questions/136097/what-is-the-difference-between-staticmethod-and-classmethod-in-python>
-            '''
+            """
 
             a = A()
             assert a.class_method(0) == (A, 0)
@@ -2879,14 +2946,14 @@ if "##class":
 
         if "Static variables are attributes of the class.":
 
-            '''
+            """
             It is possible to read them as attributes of objects directly,
             if they are not already an attribute of the object, since attribute
             lookup looks at the object and then its class.
 
             It is not possible to assign to them, or you create a new attribute
             of the object which will shadow that of the class.
-            '''
+            """
 
             a = A()
             b = A()
@@ -2911,11 +2978,11 @@ if "##class":
             assert a.static == 2
             assert b.static == 3
 
-            '''
+            """
             You could however achieve that using `__class__`.
 
             This could be useful if you don't want to repeat the class name.
-            '''
+            """
 
             a = A()
             b = A()
@@ -3040,7 +3107,7 @@ if "##class":
 
         if "##super":
 
-            '''
+            """
             Both a:
 
             - built-in type (seldom used directly)
@@ -3049,7 +3116,7 @@ if "##class":
                 constructors of base classes
                 TODO what does it return? How does it work?
                 <http://www.artima.com/weblogs/viewpost.jsp?thread=236275>
-            '''
+            """
 
             class A(object):
                 def __init__(self, i):
@@ -3062,9 +3129,9 @@ if "##class":
 
             assert B(1).i == 1
 
-            '''
+            """
             Only works for new style classes.
-            '''
+            """
 
             class A():
                 pass
@@ -3108,9 +3175,9 @@ if "##class":
 
         if "##__bases__":
 
-            '''
+            """
             Tuple of direct base classes.
-            '''
+            """
 
             class C00(object): pass
             class C01(object): pass
@@ -3120,7 +3187,7 @@ if "##class":
 
         if "##MRO ##method resolution order ##C3 linearization":
 
-            '''
+            """
             Order in which attributes (including methods) are searched for on its base classes.
 
             This has changed from old style classes to new style classes:
@@ -3145,7 +3212,7 @@ if "##class":
                 `mro()` is a method that returns an `__mro__` tuple.
                 It can be overridden, and its result is sotored in `__mro__` at class
                 instanciation.
-            '''
+            """
 
             # Old:
 
@@ -3179,11 +3246,11 @@ if "##class":
             assert C12.__mro__ == (C12, C1, C2, C, object)
             assert C21.__mro__ == (C21, C2, C1, C, object)
 
-            '''
+            """
             Some hierarchies do not admit linearization.
 
             In those cases, an exception is raised.
-            '''
+            """
 
             class C11(object): pass
             class C12(object): pass
@@ -3323,24 +3390,13 @@ if "##class":
                 """
                 return n + 1
 
-            '''
+            """
             Special attributes which shall not be discussed in this class
             because they deserved a more involved discussion:
 
             - `__slots__`
             - `__get__`, `__set__` and `__delete__`
-            '''
-
-        if "##__name__":
-
-            def NameFunc(): pass
-            assert NameFunc.__name__ == 'NameFunc'
-
-            class NameClass(object):
-                def NameMethod():
-                    pass
-            assert NameClass.__name__ == 'NameClass'
-            assert NameClass.NameMethod.__name__ == 'NameMethod'
+            """
 
         if "##equality operator for classes ##__eq__":
 
@@ -3410,7 +3466,7 @@ if "##class":
 
         if "##descriptors ##__get__ ##__set__ ##__delete__":
 
-            '''
+            """
             Allow to control what the dot `.` does on access, assignment and del
             of an attribute.
 
@@ -3421,7 +3477,7 @@ if "##class":
                 descr.__set__(self, obj, value) --> None
 
                 descr.__delete__(self, obj) --> None
-            '''
+            """
 
             class Desc(object):
 
@@ -3449,9 +3505,9 @@ if "##class":
             #TODO what do obj and cls do?
 
 
-            '''
+            """
             Only work for new style classes
-            '''
+            """
 
             class Desc():
 
@@ -3469,9 +3525,9 @@ if "##class":
 
             if "##property":
 
-                '''
+                """
                 Allows to make descriptors with a single class.
-                '''
+                """
 
                 assert type(property) == type
 
@@ -3546,14 +3602,14 @@ if "##class":
 
         if "##__slots__":
 
-            '''
+            """
             Only available in new style classes.
 
             Fixes exactly what attributes a class can have.
 
             Only to be used as a memory optimization tool when
             there are many many objects of a given type in a performance critical point.
-            '''
+            """
 
             class Foo(object):
                 __slots__ = ['x']
@@ -3677,11 +3733,11 @@ if "##class":
 
     if "##mixin":
 
-        '''
+        """
         Hard to say what it is in Python, people don't agree much.
 
         <http://stackoverflow.com/questions/533631/what-is-a-mixin-and-why-are-they-useful>
-        '''
+        """
 
         if "single inheritance definition":
 
@@ -3762,16 +3818,43 @@ if "##class":
 
 if "##docstring":
 
-    '''
+    """
+    First string that comes after a function or class.
+
     It is possible to access them at runtime.
 
     This can be used by documentation generators.
-    '''
+
+    Their recommended style guide is documented at: <https://www.python.org/dev/peps/pep-0257/>
+
+    Basically: use triple double quoted docstrings, either one-liners or multi-liners.
+
+    For non-docstring string literals, use the same quote type as you use for single quoted strings.
+    """
+
+    # Good:
 
     def f():
-        """doc0"""
+        """One liner."""
 
-    assert f.__doc__ == 'doc0'
+    assert f.__doc__ == 'One liner.'
+
+    # Good:
+
+    def f():
+        """
+        Multi liner.
+        """
+
+    print repr(f.__doc__)
+    assert re.match('\n *Multi liner.\n *', f.__doc__)
+
+    # Bad style, but also works:
+
+    def f():
+        'a'
+
+    assert f.__doc__ == 'a'
 
 if '##exception':
 
@@ -3786,20 +3869,22 @@ if '##exception':
     try:
         d()
     except:
-        print "exception!"
+        pass
+    else:
+        raise Exception
 
-    '''
+    """
     If nothing catches them, they explode on stdX and stop program excecution!
 
     What gets printed:
 
-    - traceback: where the exception came from (modules, functions, lines)
-        #this is userful for debug, so you can find where the problem comes from
+        traceback: where the exception came from (modules, functions, lines)
+          #this is userful for debug, so you can find where the problem comes from
 
-    - <Exception class>: <exception.__repr__>
-        raise Exception("repr")
-        print "cant reach here"
-    '''
+        <Exception class>: <exception.__repr__>
+          raise Exception("repr")
+          print "cant reach here"
+    """
 
     if '##else':
 
@@ -3902,22 +3987,22 @@ if '##exception':
     try:
         raise Exception()
     except ZeroDivisionError:
-        print "ZeroDivisionErrorOnly or derived classes"
+        print 'ZeroDivisionErrorOnly or derived classes'
     except Exception:
-        print "Exception, or its derived classes, therefore all exceptions"
+        print 'Exception, or its derived classes, therefore all exceptions'
     except:
-        print "same as above"
+        print 'same as above'
 
-    ###passing args to exceptions
+    ###pass args to exceptions
 
     try:
         raise Exception(1, 2)
-        #raise Exception, (1, 2) #same as above, but more verbose and implicit. NEVER user this
+        # Same as above, but more verbose and implicit. NEVER user this.
+        #raise Exception, (1, 2)
     except Exception, e:
-        print "e is an instance of Exception"
-        print Exception, e
+        print 'e is an instance of Exception'
+        print 'Exception, e = ' + str(e)
         print e.args[0], e.args[1]
-        print e
 
     ###reraise
 
@@ -3964,12 +4049,12 @@ if '##exception':
 
     if "##built-in exceptions":
 
-        '''
+        """
         Like other built-ins, the following exceptions are always available
         without any imports.
 
         <http://docs.python.org/2/library/exceptions.html>
-        '''
+        """
 
         try:
             print 1/0
@@ -4146,10 +4231,10 @@ if "##decorator":
 
     if "Decorator functions of __call__ methods must take at exactly one argument.":
 
-        '''
+        """
         If you want to pass parameters to a decorator, make a class based decorator
         and use its __init__ method for the arguments.
-        '''
+        """
 
         # Direct function approach fails.
 
@@ -4197,7 +4282,7 @@ if "##decorator":
 
 if "##with":
 
-    '''TODO'''
+    """TODO"""
 
 if "##__builtins__":
 
@@ -4232,13 +4317,13 @@ if "##streams":
 
     if "##print statement":
 
-        '''
+        """
         In 2.X there is the `print` statement (not a regular function)
         which will be replaced by the print function in 3.X.
         This will make the interface more standard and support more options.
 
         In 2.X, the `print s` is exactly the same as `sys.stdout.write(s)`.
-        '''
+        """
 
     if "##stdout":
 
@@ -4319,12 +4404,12 @@ if "##streams":
 
         if "unicode":
 
-            '''
+            """
             If all you want to do is slurp read, then encoding manually is a fine option as shown here.
 
             There however operations which are non trivial to do, for example reading linewise,
             which requires knowledge about the encoding to be done. For this kind of operation, use `codecs`.
-            '''
+            """
 
             path = os.path.join(tempfile.gettempdir(), "pythone_fileio.tmp")
             # Euro sign
@@ -4455,7 +4540,7 @@ if "##time":
 
     if "##sleep":
 
-        '''Sleep for the given number of seconds'''
+        """Sleep for the given number of seconds"""
 
         #time.sleep(3)
 
@@ -4486,7 +4571,7 @@ if "##regex":
 
     import re
 
-    '''
+    """
     Perl like.
 
     General operation:
@@ -4516,7 +4601,7 @@ if "##regex":
         - \S
         - \w [a-zA-Z0-9_].
         - \W
-    '''
+    """
 
     if "##lookahead":
 
@@ -4530,10 +4615,10 @@ if "##regex":
 
     if "##flags":
 
-        '''
+        """
         ##DOTALL: dot matches all characters, including newlines
         ##MULTILINE: ^ and $ also matches at \n
-        '''
+        """
 
         p = re.compile(r'a', re.IGNORECASE | re.DOTALL)
 
@@ -4613,7 +4698,7 @@ if "##os":
         # **Always** use Unicode input since the output gets the same encoding as this input
         # and filenames may contain non ascii chars!
 
-        print 'os.listdir(u".") = ' + "\n".join(os.listdir(u'/'))
+        print 'os.listdir(u".") = ' + str(os.listdir(u'/'))
 
     if "##unlink #rm":
 
@@ -4653,15 +4738,15 @@ if "##os":
 
     if "##symlink":
 
-        '''
+        """
         os.symlink(name, origin)
         Where name is the place the symlinke will be created at,
         and origin what it points to.
-        '''
+        """
 
     if "##walk ##find":
 
-        '''
+        """
         Walk all subdirectories recursively.
 
         Out of the box options:
@@ -4688,7 +4773,7 @@ if "##os":
 
         **Be paranoid and always use unicode `u"."` in Python 2.7**, since the output has the same encoding as that input,
         and paths are primary examples of things that may contain unicode characters.
-        '''
+        """
 
         # Get relative paths to all non-directory files:
 
@@ -4836,7 +4921,7 @@ if "##os":
             def ischild(path1, path2):
                 return os.path.commonprefix([path1, path2]) == path2
 
-    if "#system":
+    if "##system":
 
         # Run command from default shell.
 
@@ -4846,23 +4931,23 @@ if "##os":
 
 if "##glob":
 
-    '''
+    """
     Searches directories using POSIX glob patterns.
 
     Applications:
 
     - list files at a given level: os.glob('*/*/*')
-    '''
+    """
 
 if "##shutil":
 
-    '''
+    """
     High level file operations based on `os`.
-    '''
+    """
 
     import shutil
 
-    if "#rmtree #rm -rf":
+    if "##rmtree ##rm -rf":
 
         # Recursive directory removal like rm -rf:
 
@@ -4877,7 +4962,7 @@ if "##shutil":
         shutil.rmtree(temp)
         assert not os.path.exists(temp)
 
-    if "#copyfile #cp":
+    if "##copyfile ##cp":
 
         # Not a base utility since it can be done naively with with open read write.
 
@@ -5031,27 +5116,29 @@ if "##math":
         def f(x): return x*x
         assert f(max([1, -2, 0, 2], key=f)) == 4
 
-    import math
+    if '##math module':
 
-    assert abs(math.sin(0) - 0.0) < 0.01
-    assert abs(math.cos(0) - 1.0) < 0.01
-    assert abs(math.exp(0) - 1.0) < 0.01
+        import math
 
-    if "##sqrt":
+        assert abs(math.sin(0) - 0.0) < 0.01
+        assert abs(math.cos(0) - 1.0) < 0.01
+        assert abs(math.exp(0) - 1.0) < 0.01
 
-        assert abs( math.sqrt(4) - 2.0 ) < 0.01
+        if "##sqrt":
 
-        try:
-            math.sqrt(-1)
-        except ValueError:
-            pass
-        else:
-            assert False
+            assert abs(math.sqrt(4) - 2.0 ) < 0.01
 
-    assert abs(math.pi     - 3.14) < 0.01
-    assert abs(math.exp(0) - 1.0 ) < 0.01
-    assert abs(math.exp(1) - 2.71) < 0.01
-    assert math.floor( 1.5 ) == 1
+            try:
+                math.sqrt(-1)
+            except ValueError:
+                pass
+            else:
+                assert False
+
+        assert abs(math.pi     - 3.14) < 0.01
+        assert abs(math.exp(0) - 1.0 ) < 0.01
+        assert abs(math.exp(1) - 2.71) < 0.01
+        assert math.floor( 1.5 ) == 1
 
     if "##random":
 
@@ -5104,46 +5191,40 @@ if "##math":
 
 if "##environ ##environment variables":
 
-    #environment variables
-
     import os
 
-    #a dictionnary that contains all environment variables:
+    # A dictionnary that contains all environment variables:
 
-    print os.environ
+    print "os.environ = " + str(os.environ)
 
-    #get one from the dict:
+    # Get one from the dict:
 
-    if 'PATH' in os.environ:
-        print "PATH = " + os.environ['PATH']
+    if "PATH" in os.environ:
+        print "PATH = " + os.environ["PATH"]
 
-    for v in os.environ:
-        print v + ' = ' + os.environ[v]
+    # Always check if it is defined before using it.
 
-    #always check if it is defined!
+    # Loop over them all:
 
-    ###set values
+    #for v in os.environ:
+        #print v + ' = ' + os.environ[v]
 
-    ####good
+    if "##set values":
 
-    #one by one
+        if "Good":
 
-    os.environ['SOME_VAR'] = 'abc'
-    assert os.environ['SOME_VAR'] == 'abc'
+            os.environ['SOME_VAR'] = 'abc'
+            assert os.environ['SOME_VAR'] == 'abc'
 
-    #subprocess will inherit this, for example those opened with `Popen`.
+            # Subprocess will inherit this, for example those opened with `Popen`.
 
-    ####bad
+        # if "Bad":
 
-    #this does *not* work!:
-    os.environ = {'a':'b'}
-    #child process will not inherit it!
+            # Does *not* work!:
 
-    #and now this won't reset environ either
-    os.environ
-    #the docs say it only sets os.environ the first time it is imported!
+            #os.environ = {'a':'b'}
 
-    #you have onlly change what the name environ means here.
+            # Child process will not inherit it.
 
 if "##command line arguments ##argv":
 
@@ -5157,11 +5238,13 @@ if "##version":
 
     # Sample output:
 
-        #sys.version_info(major=2, minor=7, micro=4, releaselevel='final', serial=0)
+    #sys.version_info(major=2, minor=7, micro=4, releaselevel='final', serial=0)
 
     if sys.version_info[0] == 2:
-        #python 2.x code
+
         pass
+
+        # Python 2.x code
 
     # Get version of module installed with pip:
 
@@ -5172,8 +5255,12 @@ if "##version":
 
 if "##exit status":
 
-    #if no call is made to sys.exit, exit code is 0.
+    pass
 
-    sys.exit()
-    sys.exit(0)
-    sys.exit(1)
+    # If no call is made to sys.exit, exit code is 0.
+
+    #sys.exit()
+    #sys.exit(0)
+    #sys.exit(1)
+
+print "ALL ASSERTS PASSED"

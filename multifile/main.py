@@ -86,7 +86,7 @@ if "##module search path":
 
 if "##import":
 
-    if "##imports of imports are not imported":
+    if "Imports of imports are not imported":
 
         # Imports inside imports are not put in current namespace.
 
@@ -154,15 +154,17 @@ if "##import":
 
             pass
 
+            # Up once:
+
             #from .. import a
             #a.f()
 
-            #up two modules:
+            # Up two modules:
 
             #from ... import a
             #a.f()
 
-            #up three modules:
+            # Up three modules:
 
             #from .... import a
             #a.f()
@@ -179,38 +181,40 @@ if "##import":
 
         if "##star ##*":
 
-            #never use this except for bad practice
+            # Never use this except for bad practice.
 
-            #makes it very hard to know what is being imported or not and what is its name!
+            # Makes it very hard to know what is being imported or not and what is its name!
 
             from d import *
             assert a2.f() == "d.a2.f()"
             assert d2.f() == "d.d2.f()"
 
-            #can also be used to import module contents:
+            # Can also be used to import module contents:
 
             from a import *
             assert f() == "a.f()"
             assert g() == "a.g()"
 
-            #if module is a dir, imports both its 
+            # If module is a dir, imports both its:
 
             from d import *
             assert f() == "d.f()"
             assert a2.f() == "d.a2.f()"
             assert d2.f() == "d.d2.f()"
 
-            #will import nothing, since a has no submodules
+            # Will import nothing, since a has no submodules.
 
         if "##as":
 
             from a import f as g
             assert g() == "a.f()"
 
-            #ERROR:
+            # ERROR:
+
             #from d import d as d2
             #import d2.d
-            ##must use import d.d.d
+
+            # Must use import `d.d.d`
 
             ##multiline
 
@@ -332,7 +336,9 @@ if "##Inform end user that package is missing.":
 
 if "##module attributes":
 
-    if "###__file__":
+    # https://docs.python.org/2/reference/datamodel.html#the-standard-type-hierarchy
+
+    if "##__file__ ##file":
 
         """
         Contains the full path of a file.
@@ -345,11 +351,9 @@ if "##module attributes":
         while scripts may exist in RAM only:
 
            #echo "print __file__" | python
-
-        *it is impossible to get the path to the script being run*
-
-        Check if a module is in path and if yes print its path:
         """
+
+        # Check if a module is in path and if yes print its path:
 
         try:
             import os
@@ -360,9 +364,9 @@ if "##module attributes":
 
     if "##__name__":
 
-        #if file was imported, TODO
+        # If file was imported, TODO.
 
-        #if the file is being executed it equals '__main__'
+        # If the file is being executed it equals '__main__'.
 
         import a
         assert a.__name__ == 'a'
@@ -409,7 +413,7 @@ if "##execfile":
 
 if "##imp":
 
-    # Do explicit import / find in path operations!
+    # Do explicit import / find in path operations.
 
     import imp
 
@@ -423,6 +427,10 @@ if "##imp":
 
     assert b.f() == 'a.f()'
     assert b.__name__ == 'c'
+
+    # In practice this is unusable as it fails for requires that require other files:
+    # http://stackoverflow.com/questions/9066777/howto-import-modules-with-dependencies-in-the-same-absolute-relative-path
+    # The best thing to do is to play with the path.
 
     # Create a new empty module:
 

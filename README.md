@@ -2,7 +2,15 @@
 
 Python information and cheatsheets.
 
+Most useful files:
+
+- [main.py](main.py): major cheat
+- [multifile/main.py](multifile/main.py): `import`, modules, `imp`
+- [argparse_cheat.py](argparse_cheat.py)
+
 Stdlib and third party libraries are covered.
+
+Cheats are runnable and full of assertions wherever possible: only unpredictable outputs are printed.
 
 On Ubuntu 12.04 install all dependencies with:
 
@@ -14,16 +22,13 @@ On other systems, install Python-only dependencies with:
 
 This does not include certain dependencies which may not be installable with `pip` such as SciPy build dependencies.
 
-Most useful files:
-
-- [main.py](main.py): major cheat on the language.
-- [argparse_cheat.py](argparse_cheat.py)
-
-Cheats are runnable and full of assertions wherever possible: only unpredictable outputs are printed.
-
 Watch out for not naming a module with the same as in the stdlib, or you will import the module from current dir instead! This is why some files are named `something_cheat.py` instead of simply `cheat.py`.
 
-## Python Implementations
+## Instal Python
+
+Use `virtualenv` as early as possible. It's like Ruby `rvm` for Python, and allows you to have multiple installations at once.
+
+## Implementations
 
 Python specifies the language and stdlib interfaces, not the implementation.
 
@@ -38,9 +43,9 @@ The main interpreter implementations are:
 
 -   `-O`: optimize.
 
-    - `assert` is removed from `.pyc`
+    -   `assert` is removed from `.pyc`
 
-    - `__debug__ == False`
+    -   `__debug__ == False`
 
         You can write stuff like
 
@@ -48,9 +53,24 @@ The main interpreter implementations are:
 
         and it will only show show is `-O` is off.
 
-## Installation
+## Style guides
 
-Use `virtualenv` as early as possible. It's like `rvm` for Python.
+-   [PEP 8](https://www.python.org/dev/peps/pep-0008) for most of the language,
+    and [PEP 257](https://www.python.org/dev/peps/pep-0257) for docstrings.
+
+    Official recommendations.
+
+-   [Google Python Style Guide](https://google-styleguide.googlecode.com/svn/trunk/pyguide.html)
+
+    Since Google is a heavy Python user, this one should be very good.
+
+## Lint tools
+
+-   [Pylint](https://bitbucket.org/logilab/pylint).
+
+    Likely the most popular one.
+
+    Source: <https://bitbucket.org/logilab/pylint>
 
 ## Advantages of Python
 
@@ -87,8 +107,6 @@ Python is great for small / medium projects:
     - Rake equivalent
 
 ## How to hack Python projects
-
-First of all, use pip + virtualenv to fix your version and environment.
 
 Next, you might want to do the following to isolate the development version of a package:
 

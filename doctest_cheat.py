@@ -134,8 +134,8 @@ class C():
         """
         return 'C.f'
 
-if __name__ == "__main__":
-    if "##testmod":
+if __name__ == '__main__':
+    if '##testmod':
 
         # Test current module:
 
@@ -148,4 +148,4 @@ if __name__ == "__main__":
 
         # From the command line:
 
-            #python -m doctest file.py
+        #python -m doctest file.py
