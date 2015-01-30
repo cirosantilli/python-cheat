@@ -4402,6 +4402,18 @@ if "##streams":
             #http://preshing.com/20110920/the-python-with-statement-by-example
             #http://effbot.org/zone/python-with-statement.htm
 
+        if '#open':
+
+            pass
+
+            # Unsafe way, but good for quick and dirty scrits.
+
+            # Read:
+
+            #f = open('f')
+            #s = f.read()
+            #f.close()
+
         if "unicode":
 
             """
@@ -4450,7 +4462,7 @@ if "##streams":
 
                 import codecs
 
-                # Linewise read. Requires the encoding to be known, and is a non trival operation.
+                # Linewise read. Requires the encoding to be known, and is a non-trival operation.
 
                 path = os.path.join(tempfile.gettempdir(), "pythone_fileio.tmp")
                 # Two line terminated euro signs.
@@ -4503,6 +4515,8 @@ if "##streams":
             #    print l
 
         # This is the way to go for looping over lines one at a time.
+
+        # Each line ends in a newline.
 
         pass
 
