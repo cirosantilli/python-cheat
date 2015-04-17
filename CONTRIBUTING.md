@@ -4,6 +4,10 @@ Style: follow PEP 8 and the Google Style Guide.
 
 Use single quotes for string literals.
 
+Cheats are runnable and full of assertions wherever possible: only unpredictable outputs are printed.
+
+Watch out for not naming a module with the same as in the stdlib, or you will import the module from current dir instead! This is why some files are named `something_cheat.py` instead of simply `cheat.py`.
+
 The cheats use the following "literate Python" style that mixes prose with runnable code:
 
 ## Markdown

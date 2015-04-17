@@ -171,6 +171,13 @@ if '##built-in constants':
     Besides those, there are also builtin exception objects.
     """
 
+    # Can be reassigned in Python 2.
+
+    def f():
+        False = 10
+        assert False == 10
+    f()
+
 if '##built-in functions':
 
     if '##help':
@@ -199,7 +206,7 @@ if '##built-in functions':
 
         pass
 
-if '##built-in types':
+if '##built-in types ##types':
 
     """
     <http://docs.python.org/3.3/reference/datamodel.html>
@@ -214,21 +221,21 @@ if '##built-in types':
 
     All the Python 2 built-in types are:
 
-    - numbers: implement the `numbers.Number` ABC or its derived classes.
+    -   numbers: implement the `numbers.Number` ABC or its derived classes.
 
         All immutable.
 
-        - integers: `numbers.Integral`
+        -   integers: `numbers.Integral`
 
             - int
             - long
             - bool
 
-            - real: `numbers.Real`
+            -   real: `numbers.Real`
 
-                - float
+                -   float
 
-                - complex: `numbers.Complex`
+                -   complex: `numbers.Complex`
 
                     - complex
 
@@ -238,26 +245,26 @@ if '##built-in types':
 
         In Python 3 they implement `collections.abc.Sequence`. Much saner.
 
-        - immutable:
+        -   immutable:
 
             - str
             - unicode
             - tuple
 
-        - mutable:
+        -   mutable:
 
             - list
             - bytearray
             - memoryview
 
-    - sets: in Python 3 they implement `collections.abc.Set`
+    -   sets: in Python 3 they implement `collections.abc.Set`
 
         - set
         - frozenset
 
-    - mappings:
+    -   mappings:
 
-        Only one
+        Only one:
 
         - dict
 
@@ -397,17 +404,41 @@ if '##list':
 
             assert map(lambda i: 2 * i, xrange(3)) == [0, 2, 4]
 
-        if '##+ for lists':
+        if '##+ for lists ##plus for lists':
 
             l = range(2)
             assert l + [2, 3] == [0, 1, 2, 3]
             assert l == range(2)
 
+        if '##+= for lists':
+
+            """
+            Same as extend.
+
+            http://stackoverflow.com/questions/3653298/concatenating-two-lists-difference-between-and-extend
+
+            And `a = a + b` is different from `a += b`, take `b = [a]`:
+            `+=` generates a list that contains itself, `+` does not.
+            """
+
+        if '##... ##Elipses in a list that contains itself':
+
+            # Python can deal with lists that contain a refernce to itself.
+
+            # This ugly thing can only happen in dynamically typed languages:
+            # on template based languages like C++ and Java, the outter list must always be one level above:
+
+                #List<List<Integer>> l.append(List<Integer>);
+
+            a = []
+            a += [a]
+            assert str(a) == '[[...]]'
+
         if '##slice':
 
             l = range(4)
-            assert l[:2]  == [0, 1]
-            assert l[2:]  == [2, 3]
+            assert l[:2] == [0, 1]
+            assert l[2:] == [2, 3]
             assert l[:-2] == [0, 1]
             assert l[-2:] == [2, 3]
 
@@ -416,7 +447,7 @@ if '##list':
             assert l[:3:2]  == [0, 2]
             assert l[2::2]  == [2, 4]
             assert l[0:3:2] == [0, 2]
-            assert l[::-1]  == [4,3,2,1,0] #invert list!
+            assert l[::-1]  == [4, 3, 2, 1, 0] #invert list!
 
             if '##ellipsis #...':
 
@@ -434,6 +465,12 @@ if '##list':
 
             assert list(set([1, 2, 1])) == [1, 2]
 
+    if '##len ##size ##length':
+
+        # Get list length.
+
+        pass
+
     if 'Modify inplace':
 
         l = range(3)
@@ -442,13 +479,23 @@ if '##list':
 
         if '##append':
 
+            # Append a single element to the end.
+
             l = range(3)
             assert l.append(3) == None
             assert l == [0, 1, 2, 3]
 
-        l = range(3)
-        assert l.extend([3, 4]) == None
-        assert l == [0, 1, 2, 3, 4]
+        if '##extend':
+
+            # Same as `+=`.
+
+            # Append all elements of a given list to another.
+
+            # Similar to `+` but in-place.
+
+            l = range(3)
+            assert l.extend([3, 4]) == None
+            assert l == [0, 1, 2, 3, 4]
 
         l = range(3)
         assert l.insert(0, 3) == None
@@ -1697,10 +1744,20 @@ if "##branching":
             a = 1 if False else 2
             assert a == 2
 
-    if "##is":
+    if '##is':
 
-        # `is` is stricter than `==`, as it also checks type.
+        # `is` checks for equality of reference equality instead of using __equals__
 
+        class C(object):
+            def __eq__(self, other): True
+        assert C() != C()
+        assert not C() is C()
+        c = C()
+        assert c is c
+
+        # In Python 2, not guaranteed because True and False can be reassigned.
+        # In Python 3, guaranteed.
+        # http://stackoverflow.com/questions/2764017/is-false-0-and-true-1-in-python-an-implementation-detail-or-is-it-guarante
         assert 1 == True
         assert not 1 is True
 
@@ -1710,9 +1767,9 @@ if "##branching":
         assert not None == False
         assert not None is False
 
-        assert not "" == False
-        assert not "" is False
-        assert not "" == None
+        assert not '' == False
+        assert not '' is False
+        assert not '' == None
 
         assert not [] == False
         assert not [] is False
@@ -1967,7 +2024,7 @@ if "##function":
             g = f
             assert g(0) == 1
 
-        if "##immutable types #mutable types":
+        if "##immutable types ##mutable types":
 
             """
             Literals like `1` and `1.1` are objects.
@@ -2434,7 +2491,7 @@ if "##class":
         print 'dir(object) = ' + str(dir(object))
         print 'dir(object()) = ' + str(dir(object()))
 
-    if "##type":
+    if '##type':
 
         """
         Built-in function type does two things:
@@ -2449,7 +2506,7 @@ if "##class":
             also known as class for user defined types.
         """
 
-        if "determine type of value":
+        if 'determine type of value':
 
             """
             The `type` object is at the base of all the hierarchy.
@@ -2459,8 +2516,8 @@ if "##class":
             assert type(object) == type
             assert type(1)      == int
             assert type(1.0)    == float
-            assert type("abc")  == str
-            assert type(u"s")   == unicode
+            assert type('abc')  == str
+            assert type(u's')   == unicode
             assert type([])     == list
             assert type({})     == dict
 
@@ -2475,7 +2532,7 @@ if "##class":
             print type(os)
             #<type 'module'>
 
-        if "make classes dynamically":
+        if 'Make classes dynamically':
 
             class B(object): pass
 
@@ -2487,7 +2544,7 @@ if "##class":
             C = type('C', (B,), {'a': 1})
             assert C.a == 1
 
-    if "##__class__":
+    if '##__class__':
 
         """
         Corresponding class object of a object.
@@ -2515,7 +2572,7 @@ if "##class":
         assert type(C()) == C
         assert C().__class__ == D
 
-    if "##isinstance":
+    if '##isinstance':
 
         """
         TODO: like type but also considers base types?
@@ -2528,7 +2585,7 @@ if "##class":
         assert isinstance(C1(), C1)
         assert isinstance(C1(), C0)
 
-    if "##attributes":
+    if '##attributes':
 
         """
         Anything you can get from an object via a dot `.`, including methods and memebers.
@@ -2575,7 +2632,7 @@ if "##class":
         C.m = m
         assert C().m() == 1
 
-        if "##hasattr":
+        if "##haSattr":
 
             class A:
                 a = 1
@@ -2590,7 +2647,7 @@ if "##class":
             assert hasattr(A(), 'f')
             assert not hasattr(A(), 'b')
 
-        if "##geattr":
+        if "##geAttr":
 
             class C:
                 def __init__(self, i):
@@ -2601,7 +2658,7 @@ if "##class":
             assert getattr(c, "attribute2") == 2
             assert getattr(c, "notanattribute", "default") == "default"
 
-        if "##setattr":
+        if "##seTattr":
 
             class A: pass
 
@@ -2619,7 +2676,7 @@ if "##class":
 
             assert A.a == 1
 
-    if "##__dict__":
+    if '##__dict__':
 
         """
         Contains all attributes of an object.
@@ -2645,7 +2702,7 @@ if "##class":
             C.__dict__
             assert C().__dict__ == {'b':1, 'd':2}
 
-        if "It is possible to write directly to it from both sides.":
+        if 'It is possible to write directly to it from both sides.':
 
             class C(object): pass
             c = C()
@@ -2722,7 +2779,7 @@ if "##class":
 
         #{'a': 1, '__module__': '__main__', '__doc__': 'doc', 'f': <function f at 0x9cb82cc>}
 
-    if "##dir":
+    if '##dir':
 
         """
         Returns a list of all attributes of an object.
@@ -4500,7 +4557,7 @@ if "##streams":
         # Iterator based `readlines`:
 
             #for l in f.xreadlines():
-            #    print l
+                #print l
 
         # This is the way to go for looping over lines one at a time.
 
@@ -4553,19 +4610,22 @@ if "##datetime":
     import datetime
     now = datetime.datetime.now()
     print 'now = ' + str(now)
-    print now - now #timedelta(0)
-    print now - datetime.timedelta(1) #one day by default
+    # timedelta(0)
+    print 'now - now = ' + str(now - now)
+    # One day.
+    print now - datetime.timedelta(1)
     print now - datetime.timedelta(
-        #years          = 1, # Not a valid argument.
-        weeks           = 2,
-        days            = 3,
-        hours           = 4,
-        minutes         = 5,
-        seconds         = 6,
-        milliseconds    = 7,
-        microseconds    = 8
+        #years       = 1, # Not a valid argument.
+        weeks        = 2,
+        days         = 3,
+        hours        = 4,
+        minutes      = 5,
+        seconds      = 6,
+        milliseconds = 7,
+        microseconds = 8
     )
-    print datetime.datetime.fromtimestamp(0) #get a datetime from a seconds after 1970 time.time()
+     #get a datetime from a seconds after 1970 time.time()
+    print datetime.datetime.fromtimestamp(0)
 
 if "##regex":
 
@@ -4693,14 +4753,14 @@ if "##os":
 
     print "os.linesep = " + os.linesep.encode('string-escape')
 
-    if "#listdir #ls":
+    if '#listdir #ls':
 
         # **Always** use Unicode input since the output gets the same encoding as this input
         # and filenames may contain non ascii chars!
 
         print 'os.listdir(u".") = ' + str(os.listdir(u'/'))
 
-    if "##unlink #rm":
+    if '##unlink #rm':
 
         path = "open.tmp"
         f = open(path, "w")
@@ -4708,7 +4768,12 @@ if "##os":
         os.unlink(path)
         assert not os.path.exists(path)
 
-    if "#mkdir #rmdir":
+    if '##touch': pass
+
+        # http://stackoverflow.com/questions/12654772/create-empty-file-using-python
+        # open('/path/to/file', 'a').close()
+
+    if '##mkdir ##rmdir':
 
         # Only works if directory is empty.
         # For recursive directory removal, see `shutil.rmtree`.
@@ -4719,7 +4784,7 @@ if "##os":
         os.rmdir(path)
         assert not os.path.exists(path)
 
-    if "##makedirs":
+    if '##makedirs':
 
         path0 = "tmp0"
         path1 = "tmp1"
@@ -4730,13 +4795,13 @@ if "##os":
         assert os.path.isdir(path)
         os.removedirs(path)
 
-    if "##getcwd #pwd #chdir #cd":
+    if '##getcwd #pwd #chdir #cd':
 
         # Get current working dir (each process has a cwd)
 
         print "os.getcwd() = " + os.getcwd()
 
-    if "##symlink":
+    if '##symlink':
 
         """
         os.symlink(name, origin)
@@ -4744,7 +4809,18 @@ if "##os":
         and origin what it points to.
         """
 
-    if "##walk ##find":
+    if '##listdir ##ls':
+
+        # List basenames in a directory, excluding `.` and `..`.
+
+        d = tempfile.mkdtemp()
+        open(os.path.join(d, 'a'), 'a').close()
+        open(os.path.join(d, 'b'), 'a').close()
+        print os.listdir(d)
+        assert sorted(os.listdir(d)) == ['a', 'b']
+        shutil.rmtree(d)
+
+    if '##walk ##find':
 
         """
         Walk all subdirectories recursively.
@@ -4833,23 +4909,23 @@ if "##os":
 
         for root, dirs, files in os.walk(u"."):
             try:
-                dirs.remove(u"prune_me")
+                dirs.remove(u'prune_me')
             except ValueError:
                 pass
             for basename in dirs + files:
                 path = os.path.join(root, basename)
                 #print path
 
-    if "##path":
+    if '##path':
 
         import os.path
 
-        if "##join":
+        if '##join':
 
             assert os.path.join('a', 'b', 'c') == 'a{s}b{s}c'.format(s=os.sep)
             os.path.join('a//', '/b')
 
-        if "##split ##splitext":
+        if '##split ##splitext':
 
             path = os.path.join('a', 'b', 'c.e')
             root, basename = os.path.split(path)
@@ -4858,7 +4934,7 @@ if "##os":
             assert basename_noext == 'c'
             assert ext == '.e'
 
-        if "##exists":
+        if '##exists':
 
             # Returns False for broken symlinks.
             # lexists returns True in that case.
@@ -4872,7 +4948,7 @@ if "##os":
             assert os.path.exists(temp)
             os.rmdir(temp)
 
-        if "##isfile":
+        if '##isfile':
 
             # Exists and is file, not directory.
 
@@ -4885,7 +4961,7 @@ if "##os":
             assert not os.path.isfile(temp)
             os.rmdir(temp)
 
-        if "##isdir":
+        if '##isdir':
 
             # Exists and is directory.
 
@@ -4908,7 +4984,7 @@ if "##os":
 
         os.path.relpath(u'/a')
 
-        if "#commonprefix":
+        if '##commonprefix':
 
             assert os.path.commonprefix([
                 '{s}a{s}b{s}c{s}d'.format(s=os.sep),
@@ -4921,9 +4997,17 @@ if "##os":
             def ischild(path1, path2):
                 return os.path.commonprefix([path1, path2]) == path2
 
-    if "##system":
+    if '##devnul.':
+
+        print 'os.devnull = ' + os.devnull
+
+    if '##system':
+
+        # https://docs.python.org/2/library/os.html#os.system
 
         # Run command from default shell.
+
+        # Return the exit status.
 
         # See subprocess for a better option.
 
@@ -5189,18 +5273,18 @@ if "##math":
 
             assert sum(vals[k] for k in  vals.keys()) == n
 
-if "##environ ##environment variables":
+if '##environ ##environment variables':
 
     import os
 
     # A dictionnary that contains all environment variables:
 
-    print "os.environ = " + str(os.environ)
+    print 'os.environ = ' + str(os.environ)
 
     # Get one from the dict:
 
-    if "PATH" in os.environ:
-        print "PATH = " + os.environ["PATH"]
+    if 'PATH' in os.environ:
+        print 'PATH = ' + os.environ['PATH']
 
     # Always check if it is defined before using it.
 
@@ -5209,9 +5293,9 @@ if "##environ ##environment variables":
     #for v in os.environ:
         #print v + ' = ' + os.environ[v]
 
-    if "##set values":
+    if '##set values':
 
-        if "Good":
+        if 'Good':
 
             os.environ['SOME_VAR'] = 'abc'
             assert os.environ['SOME_VAR'] == 'abc'
@@ -5226,12 +5310,12 @@ if "##environ ##environment variables":
 
             # Child process will not inherit it.
 
-if "##command line arguments ##argv":
+if '##command line arguments ##argv':
 
     print 'sys.argv[0]  = ' + repr(sys.argv[0])
     print 'sys.argv[1:] = ' + repr(sys.argv[1:])
 
-if "##version":
+if '##version':
 
     import sys
     print sys.version_info
