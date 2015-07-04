@@ -1,4 +1,4 @@
-# Contributing
+# CONTRIBUTING
 
 Style: follow PEP 8 and the Google Style Guide.
 

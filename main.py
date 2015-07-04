@@ -17,7 +17,7 @@ import shutil
 import tempfile
 import itertools
 
-if '##whitespace':
+if '## whitespace':
 
     # Python forces certain indentations
 
@@ -36,7 +36,7 @@ if '##whitespace':
     2
     )
 
-    if '##whitespace and functions':
+    if '## whitespace and functions':
 
         # Cannot separate `(` from function def:
 
@@ -101,7 +101,7 @@ if '##whitespace':
 
         # Anything that has `:` like `if`, `while` and `class` works like function.
 
-    if '##multiple commands on a single line':
+    if '## multiple commands on a single line':
 
         # <http://stackoverflow.com/questions/6167127/how-to-put-multiple-statements-in-one-line>
 
@@ -111,7 +111,7 @@ if '##whitespace':
 
         # Only use this for bash one liners.
 
-if '##built-in':
+if '## built-in':
 
     """
     Python has three kinds of built-ins:
@@ -147,7 +147,7 @@ if '##built-in':
         else:
             assert False
 
-if '##built-in constants':
+if '## built-in constants':
 
     """
     Python has the following built-in constants:
@@ -178,9 +178,9 @@ if '##built-in constants':
         assert False == 10
     f()
 
-if '##built-in functions':
+if '## built-in functions':
 
-    if '##help':
+    if '## help':
 
         """
         Intended for interactive usage documentation retrieval.
@@ -194,19 +194,44 @@ if '##built-in functions':
             """doc"""
         #help(f)
 
-    if '##locals':
+    if '## locals':
 
         # TODO
 
         pass
 
-    if '##globals':
+    if '## globals':
 
         # TODO
 
         pass
 
-if '##built-in types ##types':
+    # Built-in functions:
+
+    assert abs(-1) == 1
+
+    if '## max':
+
+        # Returns the first max item according to some metric:
+
+        assert max(1, -2, 0)   == 1
+        assert max([1, -2, 0]) == 1
+        assert max([1, -2, 0, 2], key=lambda x: x*x) == -2
+
+        # TODO best way to get the value of key withtout recalculating?
+
+        def f(x): return x*x
+        assert f(max([1, -2, 0, 2], key=f)) == 4
+
+    if '## exec':
+
+        # Interpret a string at given point.
+
+        a = 0
+        exec('a = 1')
+        assert a == 1
+
+if '## built-in types ## types':
 
     """
     <http://docs.python.org/3.3/reference/datamodel.html>
@@ -276,7 +301,7 @@ if '##built-in types ##types':
     assert(type(long())     == type(0L))
     assert(type(complex())  == type(1j))
 
-if '##bytearray':
+if '## bytearray':
 
     """
     Mutable version of `str`.
@@ -287,7 +312,7 @@ if '##bytearray':
     ba2[0] = ord(b'b')
     assert ba == bytearray(b'bb')
 
-if '##numbers':
+if '## numbers':
 
     # Defines an hierarchy on numbers. <http://docs.python.org/2/library/numbers.html>
 
@@ -299,7 +324,7 @@ if '##numbers':
     assert isinstance(0, numbers.Complex)
     assert not isinstance(1j, numbers.Real)
 
-    if '##int ##long ##float':
+    if '## int ## long ## float':
 
         # int, float and long are classes.
         # It is just that `1` and `1.1` are nice looking literals.
@@ -336,7 +361,7 @@ if '##numbers':
 
         assert myint(1) + myint(2) == myint(3)
 
-    if '##imaginary ##complex':
+    if '## imaginary ## complex':
 
         """
         Imaginary numbers have built-in literals of the form `Nj`.
@@ -355,284 +380,7 @@ if '##numbers':
         assert (1 + 2j).imag == 2
         assert 1j.conjugate() == -1j
 
-if '##list':
-
-    # List of any mix of types.
-
-    if '##Create new list':
-
-        # List have literals:
-
-        l = [1, 2, 'a', 'b']
-
-        # List have a global factory method that takes an iterable.
-        # Therefore they can be built from anything that is iterable:
-
-        # From tuples:
-
-        assert list((1, 2)) == [1, 2]
-
-        # From iterators:
-
-        assert list(xrange(0, 3)) == [0, 1, 2]
-
-        if '##range':
-
-            # Creates lists directly:
-
-            assert range(3) == [0, 1, 2]
-            assert range(1, 3) == [1, 2]
-            assert range(1, 6, 2) == [1, 3, 5]
-
-        if 'n copies of given element':
-
-            # <http://stackoverflow.com/questions/8528178/list-of-zeros-in-python>
-
-            # The best method for immutable objects is `*`:
-
-            assert [0] * 4 == [0, 0, 0, 0]
-
-        if '##List comprehension':
-
-            assert [i for i in xrange(4) if i != 2] == [0, 1, 3]
-
-            # Multilevel / nested: TODO parenthise this to understand it better.
-
-            assert [i for j in [1, 2] for i in [j, -j]] == [1, -1, 2, -2]
-
-        if '##map method':
-
-            assert map(lambda i: 2 * i, xrange(3)) == [0, 2, 4]
-
-        if '##+ for lists ##plus for lists':
-
-            l = range(2)
-            assert l + [2, 3] == [0, 1, 2, 3]
-            assert l == range(2)
-
-        if '##+= for lists':
-
-            """
-            Same as extend.
-
-            http://stackoverflow.com/questions/3653298/concatenating-two-lists-difference-between-and-extend
-
-            And `a = a + b` is different from `a += b`, take `b = [a]`:
-            `+=` generates a list that contains itself, `+` does not.
-            """
-
-        if '##... ##Elipses in a list that contains itself':
-
-            # Python can deal with lists that contain a refernce to itself.
-
-            # This ugly thing can only happen in dynamically typed languages:
-            # on template based languages like C++ and Java, the outter list must always be one level above:
-
-                #List<List<Integer>> l.append(List<Integer>);
-
-            a = []
-            a += [a]
-            assert str(a) == '[[...]]'
-
-        if '##slice':
-
-            l = range(4)
-            assert l[:2] == [0, 1]
-            assert l[2:] == [2, 3]
-            assert l[:-2] == [0, 1]
-            assert l[-2:] == [2, 3]
-
-            l = range(5)
-            assert l[::2]   == [0, 2, 4]
-            assert l[:3:2]  == [0, 2]
-            assert l[2::2]  == [2, 4]
-            assert l[0:3:2] == [0, 2]
-            assert l[::-1]  == [4, 3, 2, 1, 0] #invert list!
-
-            if '##ellipsis #...':
-
-                """
-                TODO
-                """
-
-        if '##sorted':
-
-            l = [2, 1]
-            assert sorted(l) == [1, 2]
-            assert l == [2, 1]
-
-        if '##remove dupes':
-
-            assert list(set([1, 2, 1])) == [1, 2]
-
-    if '##len ##size ##length':
-
-        # Get list length.
-
-        pass
-
-    if 'Modify inplace':
-
-        l = range(3)
-        l[0] = 10
-        assert l == [10, 1, 2]
-
-        if '##append':
-
-            # Append a single element to the end.
-
-            l = range(3)
-            assert l.append(3) == None
-            assert l == [0, 1, 2, 3]
-
-        if '##extend':
-
-            # Same as `+=`.
-
-            # Append all elements of a given list to another.
-
-            # Similar to `+` but in-place.
-
-            l = range(3)
-            assert l.extend([3, 4]) == None
-            assert l == [0, 1, 2, 3, 4]
-
-        l = range(3)
-        assert l.insert(0, 3) == None
-        assert l == [3, 0, 1, 2]
-
-        if '##pop':
-
-            l = range(3)
-            assert l.pop(1) == 1
-            assert l == [0, 2]
-
-            l = range(3)
-            assert l.pop() == 2
-            assert l == [0, 1]
-
-        if '##remove':
-
-            # Remove first occurence of value.
-
-            l = [0, 1, 0]
-            assert l.remove(0) == None
-            assert l == [1, 0]
-
-            # If not present, exception:
-
-            l = [0, 1]
-            try:
-                l.remove(2)
-            except ValueError:
-                pass
-            else:
-                assert False
-
-        if '##del':
-
-            """
-            Remove element from list.
-
-            Is a statement.
-
-            You *cannot* get a return value from it:
-
-                a = del l[0]
-
-            Rather insane: why is this not a list method? Why a language *statement*?
-            I'd rather use `pop(i)`.
-            """
-
-            l = range(3)
-            del l[1]
-            assert l == [0, 2]
-
-        if '##sort':
-
-            l = [2, 1, 3]
-            assert l.sort() == None
-            assert l == [1, 2, 3]
-            assert None == l.sort(reverse=True)
-            assert l == [3, 2, 1]
-
-    if '##Items are references, not copies':
-
-        l0 = [0]
-        l1 = l0
-        l1[0] = 1
-        assert l0 == [1]
-
-        l0 = [0]
-        l1 = [l0]
-        l1[0][0] = 1
-        assert l0 == [1]
-
-    if '##access':
-
-        l = [0, 1, 2]
-        assert l[0] == 0
-        assert l[1] == 1
-        assert l[2] == 2
-
-        assert l[-1] == 2
-        assert l[-2] == 1
-
-        if '##out of bounds':
-
-            l = [0, 1]
-            try:
-                l[3]
-            except IndexError:
-                pass
-            else:
-                assert False
-
-            # Use default value if out of bounds:
-
-            l = range(3)
-            i = 1
-            assert l[i] if i < len(l) else 'default' == 1
-            i = 3
-            assert l[i] if i < len(l) else 'default" == "default'
-
-    if '##concatenate ##cat':
-
-        assert [0, 2] + [1, 3] == [0, 2, 1, 3]
-
-    if '##find item':
-
-        # First match for criteria with generator expression:
-
-        assert next(pair for pair in [(1, 1), (2, 1), (2, 2)] if pair[0] == 2) == (2, 1)
-
-        # Uses the given default if not found:
-
-        assert next((pair for pair in [(1, 1), (2, 1), (2, 2)] if pair[0] == 3), None) == None
-
-        # If no default, exception:
-
-        try:
-            next(pair for pair in [(1, 1), (2, 1), (2, 1)] if pair[0] == 3) == (2, 1)
-        except StopIteration:
-            pass
-        else:
-            assert False
-
-    if '##filter':
-
-        # Leave only elements for which a function is True.
-
-        l = range(4)
-        assert filter(lambda x: x % 2 == 1, l) == [1, 3]
-        assert l == range(4)
-
-        ##ifilter
-
-            # `itertools.ifilter` for iterators.
-            # https://docs.python.org/2/library/itertools.html#itertools.ifilter
-
-if '##iterators ##yield':
+if '## iterators ## yield':
 
     """
     Iterators are more memory efficent for iterations than lists
@@ -644,7 +392,7 @@ if '##iterators ##yield':
     It is a classic space/time tradeoff.
     """
 
-    if '##create':
+    if '## create':
 
         # An iterator is just a function with a `yield` method:
 
@@ -663,7 +411,7 @@ if '##iterators ##yield':
                 if i > n:
                     raise StopIteration
 
-        if '##generator expressions':
+        if '## generator expressions':
 
             # Shorthand way to create iterators
 
@@ -681,14 +429,14 @@ if '##iterators ##yield':
 
             assert mysum(i for i in [0, 2, 5]) == 7
 
-        if '##iter':
+        if '## iter':
 
             # Converts various types to iterators.
 
             iter('abc')
             iter([1, 2, 3])
 
-    if '##next':
+    if '## next':
 
         # Will not work with `xrange`! <http://late.am/post/2012/06/18/what-the-heck-is-an-xrange>
 
@@ -715,7 +463,7 @@ if '##iterators ##yield':
         # The only way is to catch the `StopIteration` exception:
         # <http://stackoverflow.com/questions/1966591/hasnext-in-python-iterators>
 
-    if '##iterators can\'t be rewinded':
+    if '## iterators can\'t be rewinded':
 
         # Either store a list on memory or recalculate.
 
@@ -742,11 +490,11 @@ if '##iterators ##yield':
 
     if 'Built-in iterator functions':
 
-        if '##enumerate':
+        if '## enumerate':
 
             assert list(enumerate(['a', 'c', 'b']) ) == [(0, 'a'), (1, 'c'), (2, 'b'), ]
 
-        if '##reduce':
+        if '## reduce':
 
             """
             - take two leftmost, apply func
@@ -761,7 +509,7 @@ if '##iterators ##yield':
 
             assert reduce(lambda x, y: 2*x - y, [3, 1, 2]) == 8
 
-    if '##itertools':
+    if '## itertools':
 
         import itertools
 
@@ -785,7 +533,7 @@ if '##iterators ##yield':
 
         assert [i for i in itertools.chain(xrange(2), xrange(2))] == [0, 1, 0, 1]
 
-    if '##iterable combos':
+    if '## iterable combos':
 
         if 'Merge two lists of same length odd / even elements':
 
@@ -797,7 +545,7 @@ if '##iterators ##yield':
             y = [2, 3]
             assert [ x for t in zip(x,y) for x in t ] == [0, 2, 1, 3]
 
-if '##string ##str':
+if '## string ## str':
 
     """
     There are 2 commonly used classes which are informaly called *strings* in python:
@@ -810,9 +558,9 @@ if '##string ##str':
     assert isinstance(unicode(), basestring)
     assert not isinstance(bytearray(), basestring)
 
-    if '##string literals':
+    if '## string literals':
 
-        if '##Single vs double quotes':
+        if '## Single vs double quotes':
 
             # There is no semantical difference:
 
@@ -839,7 +587,7 @@ if '##string ##str':
 
             # But this differentiation harder to maintain.
 
-        if '##multiline strings ##triple quotes':
+        if '## multiline strings ## triple quotes':
 
             # Like in C, whitespace separated strings are glued together:
 
@@ -872,7 +620,7 @@ b""" == "a\nb"
         assert "\x61" == "a"
         assert "\n" == "\x0A"
 
-        if '##raw string literals ##r literals':
+        if '## raw string literals ## r literals':
 
             # Raw literals lose all backslash escape magic.
 
@@ -891,7 +639,7 @@ b""" == "a\nb"
             # Raw string literals are often used with regular expressions,
             # which often contain many literal backslashes.
 
-    if '##format strings ##precision ##decimal places':
+    if '## format strings ## precision ## decimal places':
 
         """
         Mostly like C printf.
@@ -922,97 +670,6 @@ b""" == "a\nb"
 
         assert "%(v1)s %(#)03d %(v1)s %(#)03d" % {'v1':"asdf", "#":2} == 'asdf 002 asdf 002'
 
-        if '##format method':
-
-            """
-            The percent format operator becomes deprecated in Python 3.1,
-
-            The `format` method is introduced and backported to Python 2,
-
-            On one hand, this is saner since we now have a method instead of a magic operator `%`.
-
-            On the other, C printf format strings are gone, and that is a shame.
-            Yet another format syntax to learn.
-
-            <http://www.python.org/dev/peps/pep-3101/>
-
-            Only operators `[]` and `.` are supported inside the formats.
-            """
-
-            assert '{1} {0} {1} {2[0]} {a}'.format(0, 1, [0, 1], a=2 ) == '1 0 1 0 2'
-
-            # Escape, literals:
-
-            assert '{{}}{{a}}'.format(0) == '{}{a}'
-
-            assert '{} {}'.format(0, 1) == '0 1'
-
-            # Cannot use both automatic numbering and numbered references:
-
-            try:
-                '{} {0}'.format(0)
-            except ValueError:
-                pass
-            else:
-                assert False
-
-            # Does not work like in Ruby where strings are magic: only the format method interprets anything.
-
-            a = 2
-            assert '{a}' != '2'
-
-            # Format is of the form:
-
-            #{<id>:<format-string>}
-
-            # It is C printf like, but **NOT** the same!
-
-            # Fill to minimum width:
-
-            assert '{:2d}'.format(1)  == ' 1'
-            assert '{:02d}'.format(1) == '01'
-
-            # Align left:
-
-            assert '{:<2d}'.format(1) == '1 '
-
-            # Decimal places:
-
-            assert '{:.2f}'.format(1.0)    == '1.00'
-            assert '{0:.2f}'.format(1.0)   == '1.00'
-            assert '{x:.2f}'.format(x=1.0) == '1.00'
-
-            # Format via an argument combo:
-
-            assert '{0:.{1}f}'.format(1.23456, 4) == '1.2346'
-            assert '{number:.{digits}f}'.format(number=1.23456, digits=4) == '1.2346'
-
-            if '##table printing':
-
-                # There seems to be no built-in one liner.
-
-                # Two rows built-in solution:
-
-                print 'Label value table combo:'
-                labels = ['label 0', 'very long label 1', 'l 2']
-                values = [0, 1, 2]
-                sys.stdout.write('{:<{l}}{}\n{:<{l}}{}\n{:<{l}}{}\n'.format(
-                    *[x for t in zip(labels,values) for x in t],
-                    l=len(max(labels, key=len)) + 2
-                ))
-
-                """
-                Output:
-
-                    label 0            0
-                    very long label 1  1
-                    l 2                2
-
-                Many solutions with external libraries since Python is so scientific based:
-                - http://stackoverflow.com/questions/9535954/python-printing-lists-as-tabular-data
-                - http://stackoverflow.com/questions/17279059/print-list-in-table-format-in-python
-                """
-
     # Character access is like for a list:
 
     assert 'ab'[0] == 'a'
@@ -1028,7 +685,7 @@ b""" == "a\nb"
     else:
         assert False
 
-    if '##Concatenate':
+    if '## Concatenate':
 
         # Used to be inneficient because strings are immutable, but has gotten much better it seems:
         # <http://stackoverflow.com/questions/4435169/good-way-to-append-to-a-string>
@@ -1046,15 +703,15 @@ b""" == "a\nb"
     assert 'aabbcc'.replace('bb', '0')    == 'aa0cc'
     assert 'aabbcc'.replace('b',  '0', 1) == 'aa0bcc'
 
-    if "##string import":
+    if '## string import':
 
         import string
 
-        if "##constants":
+        if '## constants':
 
             print "string.whitespace = " + string.whitespace.encode('string-escape')
 
-    if "#split":
+    if '## split':
 
         # Split string into array of strings:
 
@@ -1070,7 +727,7 @@ b""" == "a\nb"
 
         assert "0\n1\r2\r\n3".splitlines()  == ['0', '1', '2', '3']
 
-    if "##strip ##rstrip ##lstrip":
+    if '## strip ## rstrip ## lstrip':
 
         """
         Strip chars either from either beginning or end, *not* middle!
@@ -1085,7 +742,7 @@ b""" == "a\nb"
         assert "cbaba0a1b2ccba".strip("abc") == "0a1b2"
         assert "\t\n0 1 2\v \r".strip() == "0 1 2"
 
-    if "##startswith":
+    if '## startswith':
 
         assert "abc".startswith("ab") == True
         assert "abc".startswith("bc") == False
@@ -1104,7 +761,7 @@ b""" == "a\nb"
         if s.startswith(prefix):
             assert s[len(prefix):] == "cd"
 
-    if "##contains substring":
+    if '## contains substring':
         assert "bc" in "abcd"
         assert "bc" not in "abdc"
         # The empty string is contained in all others:
@@ -1126,7 +783,7 @@ b""" == "a\nb"
 
     # `string-escape` is similar to `repr`.
 
-    if "##unicode ##encodings":
+    if '## unicode ## encodings':
 
         """
         Before reading this you should understand what is ASCII, Unicode,
@@ -1164,7 +821,7 @@ b""" == "a\nb"
         This changes in Python 3 where utf-8 becomes the default encoding.
         """
 
-        if "##u backslash escapes ##unicode literals":
+        if '## u backslash escapes ## unicode literals':
 
             """
             Unicode literals are just like string literals, but they start with `u`.
@@ -1333,7 +990,7 @@ b""" == "a\nb"
 
         print u'中文'.encode('utf-8')
 
-if "##tuple":
+if '## tuple':
 
     # Immutable list of elements of any type
 
@@ -1368,7 +1025,7 @@ if "##tuple":
     assert b == 2
     assert c == 3
 
-    if "tuples are immutable":
+    if 'tuples are immutable':
 
         t = (0)
         try:
@@ -1402,21 +1059,21 @@ if "##tuple":
     assert any((True, False)) == True
     assert all((True, False)) == False
 
-if "##memoryview":
+if '## memoryview':
 
     """
     TODO
     """
 
-##map
+## map
 
     # See dict.
 
-if '##dict':
+if '## dict':
 
     # Unordered map of hashable keys and to values of any type.
 
-    if '##create':
+    if '## create':
 
         # Built-in constructor syntax:
 
@@ -1445,7 +1102,7 @@ if '##dict':
         else:
             assert False
 
-        if '##fromkeys':
+        if '## fromkeys':
 
             # <https://docs.python.org/2/library/stdtypes.html#dict.fromkeys>
 
@@ -1537,7 +1194,7 @@ if '##dict':
     assert d.setdefault(1, 3) == 3
     assert d == {1: 3}
 
-    if "##update":
+    if '## update':
 
         # Add update all keys on d0 with those of d1:
 
@@ -1554,7 +1211,7 @@ if '##dict':
         d01.update(d1)
         assert d01 == {0: 'zero2', 1: 'one', 2: 'two'}
 
-    if "Iterate / loop over dict":
+    if 'Iterate / loop over dict':
 
         # Unspecified order. Python 3 has `collections.OrderedDict`.
 
@@ -1573,7 +1230,7 @@ if '##dict':
         # Iteritems is out of Python3. Items is present in both 2 and 3 but returns a list, not an iterator.
         # 2to3 converts it automatically.
 
-if "##set":
+if '## set':
 
     """
     Unordered set of unique elements.
@@ -1651,7 +1308,7 @@ if "##set":
     else:
         assert False
 
-if "##frozenset":
+if '## frozenset':
 
     """
     Immutable version of set.
@@ -1669,12 +1326,12 @@ if "##frozenset":
 
     assert fs == set([0, 1])
 
-if "##operator":
+if '## Operator':
 
     """
     In python everything is an object.
 
-    Therefore, every operator has a correponding method.
+    There is operator overload: every operator has a correponding method
 
     In Python, methods that can become operators are prefixed and suffixed by `__`.
 
@@ -1706,15 +1363,15 @@ if "##operator":
 
     assert 2 ** 3
 
-    if "##boolean operator":
+    if '## boolean operator':
 
         assert not True         == False
         assert True and False   == False
         assert True or  False   == True
 
-if "##branching":
+if '## branching':
 
-    if "##if":
+    if '## if':
 
         if False:
             assert False
@@ -1723,7 +1380,7 @@ if "##branching":
         else:
             pass
 
-        if "##multiline condition":
+        if '## multiline condition':
 
             # Multiline conditions must have parenthesis:
 
@@ -1733,7 +1390,7 @@ if "##branching":
                 and d):
                 pass
 
-        if "##single line":
+        if '## single line':
 
             # Behaves like the C question mark `?` operator.
 
@@ -1744,7 +1401,7 @@ if "##branching":
             a = 1 if False else 2
             assert a == 2
 
-    if '##is':
+    if '## is':
 
         # `is` checks for equality of reference equality instead of using __equals__
 
@@ -1774,7 +1431,7 @@ if "##branching":
         assert not [] == False
         assert not [] is False
 
-    if "##truth value testing for objects":
+    if '## truth value testing for objects':
 
         """
         Any object can be used on an if or while.
@@ -1795,10 +1452,10 @@ if "##branching":
         - any empty mapping, for example, {}.
         """
 
-        if "":
+        if '':
             assert False
 
-        if " ":
+        if ' ':
             pass
         else:
             assert False
@@ -1827,7 +1484,7 @@ if "##branching":
         else:
             assert False
 
-    if "##while":
+    if '## while':
 
         i = 0
         while i < 10:
@@ -1848,7 +1505,7 @@ if "##branching":
             if i == 5:
                 continue
 
-    if "##for":
+    if '## for':
 
         for i in [1, 3, 2]:
             print i
@@ -1863,7 +1520,7 @@ if "##branching":
             if i == 3:
                 continue
 
-    if "##and ##or":
+    if '## and ## or':
 
         """
         And and or are actually branching instructions:
@@ -1879,9 +1536,9 @@ if "##branching":
         assert (True  or 1) == True
         assert (False or 1) == 1
 
-if "##function":
+if '## Function':
 
-    if "##arguments":
+    if '## Arguments':
 
         def f(a, b = 0, *args, **kwargs):
             """
@@ -1926,7 +1583,7 @@ if "##function":
         assert f(b = 2, a = 1)          == (1, 2, [], {} )
         assert f(a = 1, b = 2, c = 5)   == (1, 2, [], {'c':5} )
 
-        if "##Unpack argument lists ##Splat":
+        if '## Unpack argument lists ## Splat':
 
             # Splat is the Rubish term for it.
 
@@ -1985,7 +1642,7 @@ if "##function":
 
             #f(1, 2, *[3, 4], **{5:6})
 
-        if "##overload":
+        if '## overload':
 
             """there is no function overloading in python"""
 
@@ -2002,7 +1659,7 @@ if "##function":
 
             #f(1, 2, 3)
 
-        if "default values for lots of kwargs":
+        if 'default values for lots of kwargs':
 
             # If you have default values to a large number of them kwargs
             # this is a good way, which saves you from writting lots of ``gets``
@@ -2017,14 +1674,14 @@ if "##function":
 
                 f2( **kwargs )
 
-        if "variables can contain functions":
+        if 'variables can contain functions':
 
             def f(x):
                 return x + 1
             g = f
             assert g(0) == 1
 
-        if "##immutable types ##mutable types":
+        if '## immutable types ## mutable types':
 
             """
             Literals like `1` and `1.1` are objects.
@@ -2050,7 +1707,7 @@ if "##function":
             - dictionnaries
             """
 
-            if "immutable:":
+            if 'immutable:':
 
                 x = 1
                 assert id(x) == id(1)
@@ -2074,7 +1731,7 @@ if "##function":
                 f(x)
                 assert x == 1
 
-            if "mutable:":
+            if 'mutable:':
 
                 x = [1]
                 assert id(x) != id([1])
@@ -2132,10 +1789,10 @@ if "##function":
             assert x == [0, [11]]
             assert y == [1, [11]]
 
-        if "##pass by value ##pass by reference":
+        if '## Pass by value ## Pass by reference':
 
             """
-            Flamethrower battle: <stackoverflow.com/questions/986006/python-how-do-i-pass-a-variable-by-reference>
+            Flamethrower battle: http://stackoverflow.com/questions/986006/python-how-do-i-pass-a-variable-by-reference
 
             Only modifications on mutable objects inside a function have effect outside it.
             """
@@ -2177,9 +1834,9 @@ if "##function":
             g(a)
             assert a == [0, 1]
 
-    if "#return value":
+    if '## Return value':
 
-        if "##multiple return values":
+        if '## Multiple return values':
 
             """
             there is no real multiple return values,
@@ -2201,7 +1858,7 @@ if "##function":
             assert a == 1
             assert b == 2
 
-        if "##can return nothing":
+        if '## can return nothing':
 
             """
             If a function does not end on a return statement, it returns `None`.
@@ -2214,7 +1871,7 @@ if "##function":
             assert f(True)  == 1
             assert f(False) == None
 
-    if "##redefine":
+    if '## redefine':
 
         # Like any python object, you can redfine functions whenever you want.
 
@@ -2229,7 +1886,7 @@ if "##function":
         class f:
             pass
 
-    if "##functions can have attributes":
+    if '## functions can have attributes':
 
         # Function attributes have no relation to local variables.
 
@@ -2248,7 +1905,7 @@ if "##function":
 
         assert f.__call__() == 1
 
-    if "##lambda":
+    if '## lambda':
 
         """
         Lambda is a function without name
@@ -2263,7 +1920,7 @@ if "##function":
         assert f(0) == 1
         assert f(1) == 2
 
-    if "##scope":
+    if '## scope':
 
         """
         If the value of a variable was not defined inside the function,
@@ -2279,7 +1936,7 @@ if "##function":
         a = 2
         assert f(1) == False
 
-        if "##global":
+        if '## global':
 
             def global_inc_a_wrong():
                 a = 2
@@ -2337,7 +1994,7 @@ if "##function":
 
             # Compare this to what happens with nonlocal in Python 3.
 
-    if "##nested functions":
+    if '## nested functions':
 
         # This is the way to go:
 
@@ -2350,13 +2007,13 @@ if "##function":
             print 'inside outer function, ex8.var is ', ex8.var
         ex8()
 
-    if "##call function from its name on a string":
+    if '## call function from its name on a string':
 
         #http://stackoverflow.com/questions/3061/calling-a-function-from-a-string-with-the-functions-name-in-python
 
         pass
 
-if "##class":
+if '## class':
 
     """
     Python classes are designed such that some of its syntax is analogous to C++
@@ -2380,7 +2037,7 @@ if "##class":
     - bound methods
     """
 
-    if "classes are objects":
+    if 'Classes are objects':
 
         class C(object):
             i = 1
@@ -2408,7 +2065,7 @@ if "##class":
         assert f(0).j == 0
         assert f(1).j == 1
 
-    if "#everything is an object":
+    if 'Everything is an object':
 
         # All built-in types like `int`, `string` and `list`:
 
@@ -2432,13 +2089,13 @@ if "##class":
         import os
         print os.__class__
 
-    if "##__metaclass__ ##__new__":
+    if '## __metaclass__ ## __new__':
 
         """
         TODO
         """
 
-    if "##bound method ##unbound method":
+    if '## Bound method ## Unbound method':
 
         """
         <http://stackoverflow.com/questions/114214/class-method-differences-in-python-bound-unbound-and-static>
@@ -2462,7 +2119,7 @@ if "##class":
 
         # This is why methods without a `self` always fail.
 
-    if "##object":
+    if '## Object':
 
         """
         Base type of all Python built-in types.
@@ -2491,7 +2148,7 @@ if "##class":
         print 'dir(object) = ' + str(dir(object))
         print 'dir(object()) = ' + str(dir(object()))
 
-    if '##type':
+    if '## type':
 
         """
         Built-in function type does two things:
@@ -2544,7 +2201,7 @@ if "##class":
             C = type('C', (B,), {'a': 1})
             assert C.a == 1
 
-    if '##__class__':
+    if '## __class__':
 
         """
         Corresponding class object of a object.
@@ -2572,7 +2229,7 @@ if "##class":
         assert type(C()) == C
         assert C().__class__ == D
 
-    if '##isinstance':
+    if '## isinstance':
 
         """
         TODO: like type but also considers base types?
@@ -2585,7 +2242,7 @@ if "##class":
         assert isinstance(C1(), C1)
         assert isinstance(C1(), C0)
 
-    if '##attributes':
+    if '## attributes':
 
         """
         Anything you can get from an object via a dot `.`, including methods and memebers.
@@ -2632,7 +2289,7 @@ if "##class":
         C.m = m
         assert C().m() == 1
 
-        if "##haSattr":
+        if '## haSattr':
 
             class A:
                 a = 1
@@ -2647,7 +2304,7 @@ if "##class":
             assert hasattr(A(), 'f')
             assert not hasattr(A(), 'b')
 
-        if "##geAttr":
+        if '## geAttr':
 
             class C:
                 def __init__(self, i):
@@ -2658,7 +2315,7 @@ if "##class":
             assert getattr(c, "attribute2") == 2
             assert getattr(c, "notanattribute", "default") == "default"
 
-        if "##seTattr":
+        if '## seTattr':
 
             class A: pass
 
@@ -2676,7 +2333,7 @@ if "##class":
 
             assert A.a == 1
 
-    if '##__dict__':
+    if '## __dict__':
 
         """
         Contains all attributes of an object.
@@ -2684,7 +2341,7 @@ if "##class":
         Represents a base data structure for objects, and is used on the magic dot `.` attribute lookup.
         """
 
-        if "Does not contain attributes inherited through `__class__` and MRO.":
+        if 'Does not contain attributes inherited through `__class__` and MRO.':
 
             class B(object):
                 a = 1
@@ -2779,7 +2436,7 @@ if "##class":
 
         #{'a': 1, '__module__': '__main__', '__doc__': 'doc', 'f': <function f at 0x9cb82cc>}
 
-    if '##dir':
+    if '## dir':
 
         """
         Returns a list of all attributes of an object.
@@ -2796,13 +2453,13 @@ if "##class":
         import os
         print 'dir(os) = ' + str(dir(os))
 
-    if "##inspect":
+    if '## inspect':
 
         """
         Module that can do many introspective things on Python objects.
         """
 
-    if "##reflection":
+    if '## reflection':
 
         # Get meta info objects.
 
@@ -2833,13 +2490,13 @@ if "##class":
 
         # TODO: sane way to get only user defined attributes: http://stackoverflow.com/questions/4241171/inspect-python-class-attributes
 
-    if "##vars":
+    if '## vars':
 
         #list all available names in current scope and their string values:
 
         vars()
 
-    if "##old style ##new style ##classic":
+    if '## old style ## new style ## classic':
 
         """
         In Python 2 there are 2 types of classes:
@@ -2874,7 +2531,7 @@ if "##class":
         class New2(New):
             pass
 
-    if "##members":
+    if '## members':
 
         # This shows how the concept of instance member variables are usually implemented.
 
@@ -2894,7 +2551,7 @@ if "##class":
         a.member = 1
         assert a.member == 1
 
-    if "##methods":
+    if '## methods':
 
         # This shows how the concpet of instance methods variables are usually implemented.
 
@@ -2911,7 +2568,7 @@ if "##class":
 
         assert A(1).method() == 1
 
-    if "##private":
+    if '## private':
 
         """
         By convention the underline '_' indicates private varibales and methods.
@@ -2931,7 +2588,7 @@ if "##class":
         assert C()._private_member == 2
         assert C()._private_method() == 3
 
-    if "##static":
+    if '## static':
 
         class A(object):
 
@@ -2977,7 +2634,7 @@ if "##class":
         A.static = 1
         assert A.static == 1
 
-        if "##classmethod and ##staticmethod":
+        if '## classmethod and ## staticmethod':
 
             """
             The only difference between classmethod and staticmethod is that classmethod
@@ -3001,7 +2658,7 @@ if "##class":
             assert a.static_method(0) == 0
             assert A.static_method(0) == 0
 
-        if "Static variables are attributes of the class.":
+        if 'Static variables are attributes of the class.':
 
             """
             It is possible to read them as attributes of objects directly,
@@ -3064,7 +2721,7 @@ if "##class":
             assert a.static == 3
             assert b.static == 3
 
-    if "##abstract class ##pure virtual method":
+    if '## abstract class ## pure virtual method':
 
         """
         Method that must be overridden on inheritting class.
@@ -3110,7 +2767,7 @@ if "##class":
         else:
             assert False
 
-    if "##inheritance":
+    if '## inheritance':
 
         class A(object):
 
@@ -3162,7 +2819,7 @@ if "##class":
         assert A.static == 0
         assert A.static_overridden == 1
 
-        if "##super":
+        if '## super':
 
             """
             Both a:
@@ -3205,7 +2862,7 @@ if "##class":
                 assert False
 
 
-        if "##inheritance constructor combos":
+        if '## inheritance constructor combos':
 
             class B(A):
                 def __init__(
@@ -3230,7 +2887,7 @@ if "##class":
                     #call base calss constructor
                     super(B, self).__init__(named_to_modify, *args, **kwargs)
 
-        if "##__bases__":
+        if '## __bases__':
 
             """
             Tuple of direct base classes.
@@ -3242,7 +2899,7 @@ if "##class":
             class C1(C01, C00, C02): pass
             assert C1.__bases__ == (C01, C00, C02)
 
-        if "##MRO ##method resolution order ##C3 linearization":
+        if '## MRO ## method resolution order ## C3 linearization':
 
             """
             Order in which attributes (including methods) are searched for on its base classes.
@@ -3315,7 +2972,7 @@ if "##class":
             class C22(C11, C12): pass
             class C3(C21, C22): pass
 
-    if "##special attributes":
+    if '## special attributes':
 
         class A(object):
             """
@@ -3455,7 +3112,7 @@ if "##class":
             - `__get__`, `__set__` and `__delete__`
             """
 
-        if "##equality operator for classes ##__eq__":
+        if '## equality operator for classes ## __eq__':
 
             """
             Default does not compare member by member,
@@ -3472,7 +3129,7 @@ if "##class":
             c = c2
             assert c == c2
 
-            if "##compare by all members automatically do this":
+            if '## compare by all members automatically do this':
 
                 class C:
                     def __init__(self, i=0, j=1):
@@ -3493,7 +3150,7 @@ if "##class":
                 c2 = C(2)
                 assert c != c2
 
-            if "##__eq__ and None":
+            if '## __eq__ and None':
 
                 """
                 always compare to `None` with is, never with `==`, because `==` can be overwriden by `__eq__`
@@ -3510,7 +3167,7 @@ if "##class":
                 assert not a is None
                 assert a == None
 
-            if "##__ne__":
+            if '## __ne__':
 
                 # *Not* automatically deduced from __eq__.
 
@@ -3521,7 +3178,7 @@ if "##class":
                 assert C() == C()
                 assert C() != C()
 
-        if "##descriptors ##__get__ ##__set__ ##__delete__":
+        if '## descriptors ## __get__ ## __set__ ## __delete__':
 
             """
             Allow to control what the dot `.` does on access, assignment and del
@@ -3580,7 +3237,7 @@ if "##class":
             o = HasDesc()
             assert o.i != 1
 
-            if "##property":
+            if '## property':
 
                 """
                 Allows to make descriptors with a single class.
@@ -3610,7 +3267,7 @@ if "##class":
                 del o.i
                 assert o.i == 1
 
-            if "##property as decorators":
+            if '## property as decorators':
 
                 # It is very idiomatic to use property as a decorator as follows:
 
@@ -3657,7 +3314,7 @@ if "##class":
             else:
                 assert False
 
-        if "##__slots__":
+        if '## __slots__':
 
             """
             Only available in new style classes.
@@ -3687,7 +3344,7 @@ if "##class":
             else:
                 assert False
 
-        if "##operators that cannot be overloaded":
+        if '## operators that cannot be overloaded':
 
             """
             <http://stackoverflow.com/questions/3993239/python-class-override-is-behavior>
@@ -3718,7 +3375,7 @@ if "##class":
             #assert A() and A()
             #assert A() or A()
 
-        if "##automaticaly print all members of objects":
+        if '## automaticaly print all members of objects':
 
             class C:
 
@@ -3736,7 +3393,7 @@ if "##class":
             print C()
             print C(1,2)
 
-    if "##assignment operator for classes":
+    if '## assignment operator for classes':
 
         """
         Objects are mutable, so assignment throws old object away,
@@ -3758,7 +3415,7 @@ if "##class":
         a.i = 2
         assert b.i == 2
 
-    if "##copy":
+    if '## copy':
 
         # Makes copies and deepcopies of objects.
 
@@ -3776,7 +3433,7 @@ if "##class":
         assert b.i == 1
 
 
-    if "##classes can be made inside functions":
+    if '## classes can be made inside functions':
 
         def func(val):
             class A:
@@ -3788,7 +3445,7 @@ if "##class":
         print b.a
         print a.a #unaltered
 
-    if "##mixin":
+    if '## mixin':
 
         """
         Hard to say what it is in Python, people don't agree much.
@@ -3796,7 +3453,7 @@ if "##class":
         <http://stackoverflow.com/questions/533631/what-is-a-mixin-and-why-are-they-useful>
         """
 
-        if "single inheritance definition":
+        if 'single inheritance definition':
 
             import abc
 
@@ -3845,7 +3502,7 @@ if "##class":
             assert Integer(1) > Integer(0)
             assert Integer(1) >= Integer(1)
 
-        if "multiple inheritance definition":
+        if 'multiple inheritance definition':
 
             class HasMethod1(object):
                 def method(self):
@@ -3873,7 +3530,7 @@ if "##class":
             assert C_2_10().usesMethod() == 12
             assert C_2_20().usesMethod() == 22
 
-if "##docstring":
+if '## Docstring':
 
     """
     First string that comes after a function or class.
@@ -3913,435 +3570,11 @@ if "##docstring":
 
     assert f.__doc__ == 'a'
 
-if '##exception':
-
-    # They go up until somthing catches them:
-
-    def e():
-        raise Exception
-
-    def d():
-        e()
-
-    try:
-        d()
-    except:
-        pass
-    else:
-        raise Exception
-
-    """
-    If nothing catches them, they explode on stdX and stop program excecution!
-
-    What gets printed:
-
-        traceback: where the exception came from (modules, functions, lines)
-          #this is userful for debug, so you can find where the problem comes from
-
-        <Exception class>: <exception.__repr__>
-          raise Exception("repr")
-          print "cant reach here"
-    """
-
-    if '##else':
-
-        # Only execute if the exception did not happen.
-
-        try:
-            raise Exception()
-        except:
-            pass
-        else:
-            assert False
-
-        e = False
-        try:
-            pass
-        except:
-            assert False
-        else:
-            e = True
-        assert e
-
-    if '##finally':
-
-        # Always executed, wether the exception happened or not.
-
-        f = False
-        try:
-            raise Exception()
-        except:
-            pass
-        else:
-            assert False
-        finally:
-            f = True
-        assert f
-
-        f = False
-        try:
-            pass
-        except:
-            assert False
-        else:
-            pass
-        finally:
-            f = True
-        assert f
-
-    if 'What can be raised':
-
-        # Only old style classes or derived classes from exception can be raised.
-
-        # In particular, strings cannot be raised, or that raises a `TypeError` instead of the string.
-
-        # This was made possible around Python 2.5, but removed in Python 2.6.
-
-        class Old: pass
-        try:
-            raise Old()
-        except Old:
-            pass
-        else:
-            assert False
-
-        class New(object): pass
-        try:
-            raise New()
-        except TypeError:
-            pass
-        else:
-            assert False
-
-        class New(Exception): pass
-        try:
-            raise New()
-        except New:
-            pass
-        else:
-            assert False
-
-        # Since `'str'` is a new style object:
-
-        try:
-            raise 'str'
-        except TypeError:
-            pass
-        else:
-            assert False
-
-        # A lightweight alternative is to raise Exception with a custom message:
-
-        try:
-            raise Exception('str')
-        except Exception:
-            pass
-        else:
-            assert False
-
-    ###except catches derived classes only
-
-    try:
-        raise Exception()
-    except ZeroDivisionError:
-        print 'ZeroDivisionErrorOnly or derived classes'
-    except Exception:
-        print 'Exception, or its derived classes, therefore all exceptions'
-    except:
-        print 'same as above'
-
-    ###pass args to exceptions
-
-    try:
-        raise Exception(1, 2)
-        # Same as above, but more verbose and implicit. NEVER user this.
-        #raise Exception, (1, 2)
-    except Exception, e:
-        print 'e is an instance of Exception'
-        print 'Exception, e = ' + str(e)
-        print e.args[0], e.args[1]
-
-    ###reraise
-
-    # Can be used to add/modify info
-
-    # It is hard to modify and reraise i python 2
-
-    # It seems python 3 introduces the `raise from` statement which makes that much easier!
-
-    #<http://stackoverflow.com/questions/696047/re-raising-exceptions-with-a-different-type-and-message-preserving-existing-inf>
-
-    try:
-
-        raise Exception("msg")
-
-    except Exception, e:
-
-        # You lose the traceback:
-
-        #raise Exception("updated msg\n" + str(e))
-
-        # To keep the traceback:
-
-        #import traceback
-        #traceback.print_exc(
-            ##file = sys.stdout #stderr is the default
-        #)
-
-        # For more info on current exception:
-
-        print "sys.exc_info() = "
-        print sys.exc_info()
-        print "sys.exc_type() = "
-        print sys.exc_type
-        print "sys.exc_value() = "
-        print sys.exc_value
-        print "sys.exc_traceback() = "
-        print sys.exc_value
-
-        # The following forms keep the traceback:
-
-        #raise e
-        #raise
-
-    if "##built-in exceptions":
-
-        """
-        Like other built-ins, the following exceptions are always available
-        without any imports.
-
-        <http://docs.python.org/2/library/exceptions.html>
-        """
-
-        try:
-            print 1/0
-        except ZeroDivisionError:
-            print "division by zero"
-        else:
-            print "no exception"
-
-        try:
-            int("a")
-        except ValueError:
-            print "not a number"
-
-        try:
-            f = open("NONEXISTENT")
-        except IOError, (err, msg):
-            if err == 2:
-                print "does not exist", msg
-            else:
-                print "no exception"
-
-        if "##KeyboardInterrupt":
-
-            # Program got a SIGINT, generated when user presses control c on Linux terminals.
-
-            if False:
-                try:
-                    for i in itertools.count():
-                        pass
-                except KeyboardInterrupt:
-                    print "had enough of waiting"
-
-    ###custom exception
-
-    class CustomException(Exception):
-        def __init__(self, value):
-            self.parameter = value
-        def __str__(self):
-            return repr(self.parameter)
-
-    try:
-        raise CustomException("msg")
-    except CustomException, (instance):
-        print instance.parameter
-
-if "##decorator":
-
-    """
-    Decorators are syntaxical sugar syntax that allows to write functions or classes in the forms:
-
-        @decorator
-        def f():
-            pass
-
-        @decorator
-        class C:
-            pass
-
-    Where `decorator` is any callable such as a function of a class that implements `__call__`.
-
-    They are documented together with function and class definition syntax.
-    """
-
-    if "Create a function based function decorator":
-
-        def decorator(func):
-            def wrapper(i, *args, **kwargs):
-                return func(i, *args, **kwargs) + 1
-            return wrapper
-
-        # Decorator sugar
-
-        @decorator
-        def f(i):
-            return i
-
-        assert f(1) == 2
-
-        # Exact same but without decorator sugar:
-
-        def f(i):
-            return i
-
-        decorated = decorator(f)
-        assert decorated(1) == 2
-
-    if "Multiple decorators":
-
-        def decorator(func):
-            def wrapped(i):
-                return func(i) + 2
-            return wrapped
-
-        def decorator2(func):
-            def wrapped(i):
-                return func(i) * 2
-            return wrapped
-
-        @decorator
-        @decorator2
-        def f(i):
-            return i
-
-        assert f(0) == 2
-
-    if "Create a callable class based function decorator":
-
-        class Decorator:
-            def __init__(self, j):
-                self.j = j
-
-            def __call__(self, func):
-                def wrapper(i, *args, **kwargs):
-                    return func(i, *args, **kwargs) + self.j
-                return wrapper
-
-        # Decorator sugar
-
-        @Decorator(2)
-        def f(i):
-            return i
-
-        assert f(1) == 3
-
-    if "Create a function based ##class decorator":
-
-        def decorator(cls):
-            def f(self):
-                return 1
-            cls.f = f
-            return cls
-
-        @decorator
-        class C(object):
-            pass
-
-        assert C().f() == 1
-
-    if "It is only possible to decorate functions or classes, not variables.":
-
-        def d():
-            pass
-        #@d #SyntaxError
-        a = 1
-
-    if "Decorators can take multiple arguments.":
-
-        def decorator(func, j):
-            def wrapper(i, *args, **kwargs):
-                return func(i, *args, **kwargs) + j
-            return wrapper
-
-        # Decorator sugar
-
-        #@decorator
-        def f(i):
-            return i
-
-        # TODO get working
-        #assert f(1) == 3
-
-    if "Decorator must take at least one argument to not raise a TypeError.":
-
-        def d():
-            pass
-        try:
-            @d
-            def f():
-                pass
-        except TypeError:
-            pass
-        else:
-            assert False
-
-    if "Decorator functions of __call__ methods must take at exactly one argument.":
-
-        """
-        If you want to pass parameters to a decorator, make a class based decorator
-        and use its __init__ method for the arguments.
-        """
-
-        # Direct function approach fails.
-
-        def decorator(func, j):
-            def wrapper(i, *args, **kwargs):
-                return func(i, *args, **kwargs) + j
-            return wrapper
-
-        try:
-            @decorator(2)
-            def f(i):
-                return i
-        except TypeError:
-            pass
-        else:
-            assert False
-
-    if "The decorator call is only made at function / class definition.":
-
-        def decorator(func):
-            global i
-            i += 1
-            def wrapper(*args, **kwargs):
-                pass
-            return wrapper
-
-        i = 0
-        @decorator
-        def f():
-            pass
-        assert i == 1
-        f()
-        assert i == 1
-
-    if "Decorators can return anything.":
-
-        def d(g):
-            return 1
-
-        @d
-        def f():
-            pass
-
-        assert f == 1
-
-if "##with":
+if '## with':
 
     """TODO"""
 
-if "##__builtins__":
+if '## __builtins__':
 
     #TODO
 
@@ -4349,15 +3582,7 @@ if "##__builtins__":
 
     __builtins__.dir()
 
-if "##exec":
-
-    # Interpret a string at given point.
-
-    a = 0
-    exec('a = 1')
-    assert a == 1
-
-if "##streams":
+if '## streams':
 
     """
     Like in C, files and pipes are both similar objects
@@ -4372,7 +3597,7 @@ if "##streams":
     For example, search operations can be done on files, but not on stdin/out.
     """
 
-    if "##print statement":
+    if '## print statement':
 
         """
         In 2.X there is the `print` statement (not a regular function)
@@ -4382,9 +3607,9 @@ if "##streams":
         In 2.X, the `print s` is exactly the same as `sys.stdout.write(s)`.
         """
 
-    if "##stdout":
+    if '## stdout':
 
-        sys.stdout.write("stdout")
+        sys.stdout.write('stdout')
         print
 
         # Best way to print without a newline in 2.X:
@@ -4396,11 +3621,11 @@ if "##streams":
         sys.stdout.flush()
         print
 
-    if "##stderr":
+    if '## stderr':
 
-        sys.stderr.write("stderr")
+        sys.stderr.write('stderr')
 
-    if "##stdin":
+    if '## stdin':
 
         # Read from stdin until an EOF, that is until:
         #
@@ -4410,7 +3635,7 @@ if "##streams":
         if False:
             sys.stdin.read()
 
-        if "##isatty":
+        if '## isatty':
 
             #check if stdin has a pipe comming in or if its the user who is typing
 
@@ -4432,16 +3657,16 @@ if "##streams":
             # prints True is a user input terminal (no pipes) and waits for user input
             # after ^D, prints what was input by keyboard.
 
-    if "##file IO":
+    if '## file IO':
 
-        if "binary":
+        if 'binary':
 
             # Best way to open binary files:
 
-            path = os.path.join(tempfile.gettempdir(), "pythone_fileio.tmp")
-            data = "a\nb"
+            path = os.path.join(tempfile.gettempdir(), 'pythone_fileio.tmp')
+            data = 'a\nb'
             try:
-                with open(path, "w") as f:
+                with open(path, 'w') as f:
                     f.write(data)
             except IOError, e:
                 print e
@@ -4459,19 +3684,7 @@ if "##streams":
             #http://preshing.com/20110920/the-python-with-statement-by-example
             #http://effbot.org/zone/python-with-statement.htm
 
-        if '#open':
-
-            pass
-
-            # Unsafe way, but good for quick and dirty scrits.
-
-            # Read:
-
-            #f = open('f')
-            #s = f.read()
-            #f.close()
-
-        if "unicode":
+        if 'unicode':
 
             """
             If all you want to do is slurp read, then encoding manually is a fine option as shown here.
@@ -4515,7 +3728,7 @@ if "##streams":
                 raise
             os.unlink(path)
 
-            if "##codecs":
+            if '## codecs':
 
                 import codecs
 
@@ -4536,7 +3749,7 @@ if "##streams":
                 assert lines[1] == u"\u20AC\n"
                 os.unlink(path)
 
-    if "##read methods":
+    if '## read methods':
 
         # Read from handle untill EOF:
 
@@ -4577,467 +3790,7 @@ if "##streams":
 
         pass
 
-if "##time":
-
-    import time
-
-    if "##time":
-
-        # Get number of seconds since 1970:
-
-        print 'time.time() = ' + str(time.time())
-
-    if "##clock":
-
-        # Quoting the man: "This is the function to use for benchmarking Python or timing algorithms."
-
-        start_time = time.clock()
-        "-".join(str(n) for n in range(10000))
-        elapsed_time = time.clock() - start_time
-        print 'clock elapsed = {0:.6f}s'.format(elapsed_time)
-
-        # Not accurate for wall time. Does not measure time of external programs.
-
-    if "##timeit":
-
-        # Benchmark code snippets from strings. Relies internally on either time or clock.
-
-        import timeit
-        print "timeit time of all iterations= {0}s".format(timeit.timeit('"-".join(str(n) for n in range(100))', number=10000))
-
-        # From the command line:
-
-            #python -m timeit '"-".join(str(n) for n in range(100))'
-
-    if "##sleep":
-
-        """Sleep for the given number of seconds"""
-
-        #time.sleep(3)
-
-if "##datetime":
-
-    import datetime
-
-    #year month day minute sec milisec oriented time operations
-
-    import datetime
-    now = datetime.datetime.now()
-    print 'now = ' + str(now)
-    # timedelta(0)
-    print 'now - now = ' + str(now - now)
-    # One day.
-    print now - datetime.timedelta(1)
-    print now - datetime.timedelta(
-        #years       = 1, # Not a valid argument.
-        weeks        = 2,
-        days         = 3,
-        hours        = 4,
-        minutes      = 5,
-        seconds      = 6,
-        milliseconds = 7,
-        microseconds = 8
-    )
-     #get a datetime from a seconds after 1970 time.time()
-    print datetime.datetime.fromtimestamp(0)
-
-if "##regex":
-
-    import re
-
-    """
-    Perl like.
-
-    General operation:
-
-    - *string regexes* must frist be compiled into *pattern* objects. This has some overhead.
-    - compiled pattern objects can be used to find *match objects* on test strings.
-
-    ##regex methods
-
-            match() 	    get match for **THE ENTIRE**!!!!!!! string
-            search() 	    first match anywhere in the string
-            findall() 	    iterator of matching *strings*, **NOT**!!! match objects
-            finditer() 	iterator of match objects
-
-    ##match object methods
-
-            group() 	Return the string matched by the RE
-            start() 	Return the starting position of the match
-            end() 	    Return the ending position of the match
-            span() 	    Return a tuple containing the (start, end) positions of the match
-
-    ##predefined character classes
-
-        - \d [0-9]
-        - \D [^0-9]
-        - \s [ \t\n\r\f\v]
-        - \S
-        - \w [a-zA-Z0-9_].
-        - \W
-    """
-
-    if "##lookahead":
-
-        # Don't eat front part or regex
-
-        p = re.compile(r'a.')
-        assert p.sub('0', 'abaac') == '00c'
-
-        p = re.compile(r'a(?=.)')
-        assert p.sub('0', 'abaac') == '0b00c'
-
-    if "##flags":
-
-        """
-        ##DOTALL: dot matches all characters, including newlines
-        ##MULTILINE: ^ and $ also matches at \n
-        """
-
-        p = re.compile(r'a', re.IGNORECASE | re.DOTALL)
-
-    if "##sub":
-
-        p = re.compile('(a.|b.)')
-
-        # By string:
-
-        assert p.sub('0', 'a_b_abc') == '000c'
-
-        # By callable:
-
-        assert p.sub(lambda m: m.group(1)[1:], 'a_b-abc') == '_-bc'
-
-        # Count:
-
-        assert p.sub('0', 'a_b_abc', count=1) == '0b_abc'
-
-    if "##subn":
-
-        # Same as sub but also returns number of subs made:
-
-        assert p.subn('0', 'a_b_abc') == ('000c', 3)
-
-    if "##match":
-
-        #MUST MATCH FROM BEGINNING OF STRING!!!!!!
-
-        re.match(r"a.c", "abc")
-
-        r = re.compile(r"a.c")
-        r.match("abc")
-        #matches
-        r.match("0abc")
-        #DOES NOT MATCH!!!! MUST MATCH FROM BEGINNING OF STRING!!! use search for that
-
-    if "##search":
-
-        r.search("0abc")
-        #works
-
-        r.search("abcaBc")
-        #. == b, stops at first match. to find all matches, use finditer
-
-    if "##finditer":
-
-        matches = list(r.finditer("abcaBc"))
-        #a list of all matches
-
-    if "##split":
-
-        re.split(r'[ab]+', '0abba1aaaaa2')
-        #[0, 1, 2]
-
-##file operations
-
-    # Mostly under ``os``.
-
-if "##os":
-
-    # Wrappers for os specific stuff.
-    # Lots of important file and directory operations.
-
-    import os
-
-    # Path separator ('/' linux/mac '\' on windows):
-
-    print "os.sep = " + os.sep.encode('string-escape')
-
-    # System newline separtor ('\n' Linux, '\r' Mac, '\n\r' Windows):
-
-    print "os.linesep = " + os.linesep.encode('string-escape')
-
-    if '#listdir #ls':
-
-        # **Always** use Unicode input since the output gets the same encoding as this input
-        # and filenames may contain non ascii chars!
-
-        print 'os.listdir(u".") = ' + str(os.listdir(u'/'))
-
-    if '##unlink #rm':
-
-        path = "open.tmp"
-        f = open(path, "w")
-        assert os.path.isfile(path)
-        os.unlink(path)
-        assert not os.path.exists(path)
-
-    if '##touch': pass
-
-        # http://stackoverflow.com/questions/12654772/create-empty-file-using-python
-        # open('/path/to/file', 'a').close()
-
-    if '##mkdir ##rmdir':
-
-        # Only works if directory is empty.
-        # For recursive directory removal, see `shutil.rmtree`.
-
-        path = "dir.tmp"
-        os.mkdir(path)
-        assert os.path.isdir(path)
-        os.rmdir(path)
-        assert not os.path.exists(path)
-
-    if '##makedirs':
-
-        path0 = "tmp0"
-        path1 = "tmp1"
-        path2 = "tmp2"
-        path = os.path.join(path0, path1, path2)
-
-        os.makedirs(path)
-        assert os.path.isdir(path)
-        os.removedirs(path)
-
-    if '##getcwd #pwd #chdir #cd':
-
-        # Get current working dir (each process has a cwd)
-
-        print "os.getcwd() = " + os.getcwd()
-
-    if '##symlink':
-
-        """
-        os.symlink(name, origin)
-        Where name is the place the symlinke will be created at,
-        and origin what it points to.
-        """
-
-    if '##listdir ##ls':
-
-        # List basenames in a directory, excluding `.` and `..`.
-
-        d = tempfile.mkdtemp()
-        open(os.path.join(d, 'a'), 'a').close()
-        open(os.path.join(d, 'b'), 'a').close()
-        print os.listdir(d)
-        assert sorted(os.listdir(d)) == ['a', 'b']
-        shutil.rmtree(d)
-
-    if '##walk ##find':
-
-        """
-        Walk all subdirectories recursively.
-
-        Out of the box options:
-
-        - up down or down up
-        - onerror callback function
-        - followlinks or not
-
-        For input like:
-
-            for root, dirs, files in os.walk(u"tests"):
-                print root
-                print dirs
-                print files
-                print
-
-        The output is of the form:
-
-            directory path
-            [basename of directories inside it]
-            [basename of files inside it]
-
-        It loops over all directories.
-
-        **Be paranoid and always use unicode `u"."` in Python 2.7**, since the output has the same encoding as that input,
-        and paths are primary examples of things that may contain unicode characters.
-        """
-
-        # Get relative paths to all non-directory files:
-
-        for root, dirs, files in os.walk(u"."):
-            for basename in files:
-                path = os.path.join(root, basename)
-                #print path
-
-        # Get relative paths to all directories:
-
-        for root, dirs, files in os.walk(u"."):
-            for basename in dirs:
-                path = os.path.join(root, basename)
-                #print path
-
-        # Does not include current directory dot `.` nor upper directory two dots `..`.
-
-        # Get relative paths to all files and directories:
-
-        for root, dirs, files in os.walk(u"."):
-            for basename in dirs + files:
-                path = os.path.join(root, basename)
-                #print path
-
-        # To do all of Bash `find` filtering, jus use regular ifs. Sanity!
-
-        for root, dirs, files in os.walk(u"."):
-            for basename in dirs + files:
-                path = os.path.join(root, basename)
-                if os.path.splitext(path)[1] == ".pdf":
-                    #print path
-                    pass
-
-        # The order and choice of directories which will be descended into is determined by `dirs`.
-
-        # If you modify if in-place, you can alter the descent order! Typical applications include:
-
-        # - `sort` to fix descent order
-
-            # Only sorts each level and the descent order:
-
-            # - files come after directories
-            # - shallow come before deep
-
-        for root, dirs, files in os.walk(u"."):
-            dirs.sort()
-            files.sort()
-            for basename in dirs + files:
-                path = os.path.join(root, basename)
-                #print path
-
-            # For a full sort, the only way is to put all paths in a list and sort the list.
-
-            # That is less efficient because 2n log 2n > 2(n log n and rarely necessary.
-
-        # - `remove` to prune any directories with a given basename:
-
-        for root, dirs, files in os.walk(u"."):
-            try:
-                dirs.remove(u'prune_me')
-            except ValueError:
-                pass
-            for basename in dirs + files:
-                path = os.path.join(root, basename)
-                #print path
-
-    if '##path':
-
-        import os.path
-
-        if '##join':
-
-            assert os.path.join('a', 'b', 'c') == 'a{s}b{s}c'.format(s=os.sep)
-            os.path.join('a//', '/b')
-
-        if '##split ##splitext':
-
-            path = os.path.join('a', 'b', 'c.e')
-            root, basename = os.path.split(path)
-            basename_noext, ext = os.path.splitext(basename)
-            assert root == os.path.join('a', 'b')
-            assert basename_noext == 'c'
-            assert ext == '.e'
-
-        if '##exists':
-
-            # Returns False for broken symlinks.
-            # lexists returns True in that case.
-
-            temp = tempfile.NamedTemporaryFile()
-            assert os.path.exists(temp.name)
-            temp.close()
-            assert not os.path.exists(temp.name)
-
-            temp = tempfile.mkdtemp()
-            assert os.path.exists(temp)
-            os.rmdir(temp)
-
-        if '##isfile':
-
-            # Exists and is file, not directory.
-
-            temp = tempfile.NamedTemporaryFile()
-            assert os.path.isfile(temp.name)
-            temp.close()
-            assert not os.path.isfile(temp.name)
-
-            temp = tempfile.mkdtemp()
-            assert not os.path.isfile(temp)
-            os.rmdir(temp)
-
-        if '##isdir':
-
-            # Exists and is directory.
-
-            temp = tempfile.NamedTemporaryFile()
-            assert not os.path.isdir(temp.name)
-            temp.close()
-
-            temp = tempfile.mkdtemp()
-            assert os.path.isdir(temp)
-            os.rmdir(temp)
-            assert not os.path.isdir(temp)
-
-        os.path.islink('/a')
-
-        ##Absolute path:
-
-        print "os.path.abspath(u'.') = " + os.path.abspath(u'.')
-
-        # Absolute path resolving links recursively:
-
-        os.path.relpath(u'/a')
-
-        if '##commonprefix':
-
-            assert os.path.commonprefix([
-                '{s}a{s}b{s}c{s}d'.format(s=os.sep),
-                '{s}a{s}b{s}e{s}d'.format(s=os.sep)
-            ]) == '{s}a{s}b{s}'.format(s=os.sep)
-
-            def isparent(path1, path2):
-                return os.path.commonprefix([path1, path2]) == path1
-
-            def ischild(path1, path2):
-                return os.path.commonprefix([path1, path2]) == path2
-
-    if '##devnul.':
-
-        print 'os.devnull = ' + os.devnull
-
-    if '##system':
-
-        # https://docs.python.org/2/library/os.html#os.system
-
-        # Run command from default shell.
-
-        # Return the exit status.
-
-        # See subprocess for a better option.
-
-        pass
-
-if "##glob":
-
-    """
-    Searches directories using POSIX glob patterns.
-
-    Applications:
-
-    - list files at a given level: os.glob('*/*/*')
-    """
-
-if "##shutil":
+if '## shutil':
 
     """
     High level file operations based on `os`.
@@ -5045,7 +3798,7 @@ if "##shutil":
 
     import shutil
 
-    if "##rmtree ##rm -rf":
+    if '## rmtree ## rm -rf':
 
         # Recursive directory removal like rm -rf:
 
@@ -5060,305 +3813,48 @@ if "##shutil":
         shutil.rmtree(temp)
         assert not os.path.exists(temp)
 
-    if "##copyfile ##cp":
+    if '## copyfile ## cp':
 
         # Not a base utility since it can be done naively with with open read write.
 
         #shutil.copyfile(src, dst)
         pass
 
-if "##tempfile":
+if '## sys':
 
-    # Create temporary files.
+    if '## command line arguments ## argv':
 
-    #<http://www.doughellmann.com/PyMOTW/tempfile/>
+        print 'sys.argv[0]  = ' + repr(sys.argv[0])
+        print 'sys.argv[1:] = ' + repr(sys.argv[1:])
 
-    import tempfile
+    if '## version':
 
-    # The filename is given by dir + prefix + random + suffix.
-    #
-    # - dir defaults to gettempdir()
-    # - prefix defaults to gettempprefix()
-    #
-    # Does not return a string, but an object.
-    # Use `.name` to get the path string.
+        import sys
+        print sys.version_info
 
-    temp = tempfile.NamedTemporaryFile(
-        #dir = '/tmp',
-        prefix = 'prefix_',
-        suffix = '_suffix',
-    )
+        # Sample output:
 
-    try:
-        print 'temp:', temp
-        print 'temp.name:', temp.name
-        temp.write("asdf")
-        temp.flush()
-    finally:
-        # File is deleted on close!
-        temp.close()
+        #sys.version_info(major=2, minor=7, micro=4, releaselevel='final', serial=0)
 
-    # Make a temporary directory instead of file.
-    # Returns a path string.
+        if sys.version_info[0] == 2:
 
-    directory_name = tempfile.mkdtemp(
-        dir = '/tmp',
-        prefix = 'prefix_',
-        suffix = '_suffix',
-    )
-    print directory_name
-    shutil.rmtree(directory_name)
+            pass
 
-    # The default directory that will hold all of the temporary files:
+            # Python 2.x code
 
-    print 'gettempdir():', tempfile.gettempdir()
+        # Get version of module installed with pip:
 
-    # The basename prefix for new file and directory names:
+            #pkg_resources.get_distribution("blogofile").version
 
-    print 'gettempprefix():', tempfile.gettempprefix()
+        # PEP 8 recommends that modules define `__version__`, but many packages don't do that.
+        #http://legacy.python.org/dev/peps/pep-0008/#version-bookkeeping
 
-if "##logging":
-
-    # Standard way to output error messages.
-
-    # Advantages:
-
-    # - has many useful built-in error formats
-    # - has a level system
-    # - easy to change where logs go, e.g. a file.
-
-    # <http://docs.python.org/2/howto/logging.html>
-
-    # TODO log all at once
-
-    if "## defult logger":
-
-        import logging
-
-        logging.basicConfig(
-            # Log to a file. Default is sys.stderr.
-            # This can only take file path strings.
-            # To log to stdout, use:
-            #filename = 'example.log',
-            #filemode = 'w'
-
-            # Minimum log level that will get printed.
-            # Often taken as a CLI parameter.
-            level = logging.DEBUG,
-            #level = logging.INFO,
-            #level = logging.WARNING,
-            #level = logging.ERROR,
-            #level = logging.CRITICAL,
-
-            format = '  %(levelname)s %(name)s %(asctime)s %(message)s',
-
-            # Format for asctime
-            datefmt = '%m/%d/%Y %I:%M:%S %p',
-        )
-        sys.stderr.write("logging:\n")
-        logging.debug('debug')
-        logging.info('info')
-        logging.warning('warning')
-        logging.error('error')
-        logging.critical('critical')
-        try:
-            raise Exception
-        except:
-            logging.exception('inside exception. also prints exception stack')
-
-    if "##custom loggers":
-
-        # Create logger
-        logger = logging.getLogger('logger_name')
-        logger.setLevel(logging.DEBUG)
-
-        # Create console handler and set level to debug
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.DEBUG)
-
-        # Create formatter
-        formatter = logging.Formatter('  %(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-        # Add formatter to ch
-        ch.setFormatter(formatter)
-
-        # Add ch to logger
-        logger.addHandler(ch)
-
-        # Usage:
-        sys.stderr.write("custom logger:\n")
-        logger.debug('debug')
-        logger.info('info')
-        logger.warn('warn')
-        logger.error('error')
-        logger.critical('critical')
-
-    # TODO: log all / a certain level to stdout
-
-if "##math":
-
-    # Built-in functions:
-
-    assert abs(-1) == 1
-
-    if "##max":
-
-        # Returns the first max item according to some metric:
-
-        assert max(1, -2, 0)   == 1
-        assert max([1, -2, 0]) == 1
-        assert max([1, -2, 0, 2], key=lambda x: x*x) == -2
-
-        # TODO best way to get the value of key withtout recalculating?
-
-        def f(x): return x*x
-        assert f(max([1, -2, 0, 2], key=f)) == 4
-
-    if '##math module':
-
-        import math
-
-        assert abs(math.sin(0) - 0.0) < 0.01
-        assert abs(math.cos(0) - 1.0) < 0.01
-        assert abs(math.exp(0) - 1.0) < 0.01
-
-        if "##sqrt":
-
-            assert abs(math.sqrt(4) - 2.0 ) < 0.01
-
-            try:
-                math.sqrt(-1)
-            except ValueError:
-                pass
-            else:
-                assert False
-
-        assert abs(math.pi     - 3.14) < 0.01
-        assert abs(math.exp(0) - 1.0 ) < 0.01
-        assert abs(math.exp(1) - 2.71) < 0.01
-        assert math.floor( 1.5 ) == 1
-
-    if "##random":
-
-        import random
-
-        if "##uniform":
-
-            # Real on interval:
-
-            n = 1000
-            su = 0
-            l = 0
-            r = 1
-            for i in xrange(n):
-                rand = random.uniform(l,r)
-                #print rand
-                assert rand >= l and rand <= r
-                su += random.uniform(0,1)
-
-            # Check average:
-
-            assert su/float( (r - l) ) - n < 1
-
-        if "##randint":
-
-            # Uniform int on interval.
-
-            print random.randint(0,3)
-
-        if "##choice":
-
-            # Take one element at random from an iterable.
-
-            assert random.choice([0, 1]) in [0, 1]
-
-        if "##sample":
-
-            # Takes n *different* elements at random from iterable. Returns an iterable.
-
-            vals = {1:0, 2:0, 3:0}
-            n = 2
-            for i in random.sample(vals.keys(), 2):
-                assert i in vals.keys()
-                vals[i] += 1
-
-            for i in vals.keys():
-                assert vals[i] == 0 or vals[i] == 1
-
-            assert sum(vals[k] for k in  vals.keys()) == n
-
-if '##environ ##environment variables':
-
-    import os
-
-    # A dictionnary that contains all environment variables:
-
-    print 'os.environ = ' + str(os.environ)
-
-    # Get one from the dict:
-
-    if 'PATH' in os.environ:
-        print 'PATH = ' + os.environ['PATH']
-
-    # Always check if it is defined before using it.
-
-    # Loop over them all:
-
-    #for v in os.environ:
-        #print v + ' = ' + os.environ[v]
-
-    if '##set values':
-
-        if 'Good':
-
-            os.environ['SOME_VAR'] = 'abc'
-            assert os.environ['SOME_VAR'] == 'abc'
-
-            # Subprocess will inherit this, for example those opened with `Popen`.
-
-        # if "Bad":
-
-            # Does *not* work!:
-
-            #os.environ = {'a':'b'}
-
-            # Child process will not inherit it.
-
-if '##command line arguments ##argv':
-
-    print 'sys.argv[0]  = ' + repr(sys.argv[0])
-    print 'sys.argv[1:] = ' + repr(sys.argv[1:])
-
-if '##version':
-
-    import sys
-    print sys.version_info
-
-    # Sample output:
-
-    #sys.version_info(major=2, minor=7, micro=4, releaselevel='final', serial=0)
-
-    if sys.version_info[0] == 2:
+    if '## exit':
 
         pass
 
-        # Python 2.x code
+        # If no call is made to sys.exit, exit code is 0.
 
-    # Get version of module installed with pip:
-
-        #pkg_resources.get_distribution("blogofile").version
-
-    # PEP 8 recommends that modules define `__version__`, but many packages don't do that.
-    #http://legacy.python.org/dev/peps/pep-0008/#version-bookkeeping
-
-if "##exit status":
-
-    pass
-
-    # If no call is made to sys.exit, exit code is 0.
-
-    #sys.exit()
-    #sys.exit(0)
-    #sys.exit(1)
-
-print "ALL ASSERTS PASSED"
+        #sys.exit()
+        #sys.exit(0)
+        #sys.exit(1)
