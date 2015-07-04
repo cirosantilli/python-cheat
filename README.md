@@ -1,5 +1,7 @@
 # Python Cheat ![logo](logo.png)
 
+[![Build Status](https://travis-ci.org/cirosantilli/python-cheat.svg?branch=master)](https://travis-ci.org/cirosantilli/python-cheat)
+
 Python information and cheatsheets.
 
 Stdlib and third party libraries are covered.
