@@ -17,8 +17,9 @@ TODO log all at once
 """
 
 import logging
+import sys
 
-if '## Defult logger':
+if '## Default logger':
 
     logging.basicConfig(
         # Log to a file. Default is sys.stderr.
