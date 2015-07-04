@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-NumPy and SciPy cheat.
+## NumPy and SciPy
 
 Current best math package for Python.
 
@@ -16,7 +16,7 @@ Pip may not work because of missing binary dependencies.
     sudo pip install numpy
     sudo pip install scipy
 
-#NumPy vs SciPy
+## NumPy vs SciPy
 
 SciPy uses and extends NumPy (think LAPACK BLAS).
 
@@ -24,7 +24,7 @@ It offers all functions in NumPy and many more conveient ones through the single
 
 Since NumPy is quite low level, just use SciPy all the time and avoid confusion.
 
-#Sources
+## Sources
 
 - <http://www.scipy.org/Tentative_NumPy_Tutorial>
 - <www.scipy.org/PerformancePython>

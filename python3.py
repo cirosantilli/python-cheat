@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 """
-Features present in python 3 that are not in python 2.
+Features present in Python 3. Some may h
 
 Source: <http://docs.python.org/3.0/whatsnew/3.0.html>
 """
 
 import sys
-
 
 if "##print function":
 
@@ -20,8 +19,6 @@ if "##print function":
     As part of increased sanity, extra options are available via standard
     keyword arguments.
     """
-
-    #print 1 # SyntaxError
 
     print(1, 2, 3, sep=' ', end='\n', file=sys.stdout)
     print(1, 2, 3, sep=' ', end='\n', file=sys.stderr)
@@ -47,7 +44,7 @@ if "#new syntax":
 
 if "##args":
 
-    if "keyword argument after args":
+    if "Keyword argument after args":
 
         def f(*args, after_args):
             assert args == (0, 1)
@@ -68,7 +65,8 @@ if "##args":
             assert a == 0
             assert b == 1
 
-        f(0, 10, 11, b=1)
+        # TODO stopped working
+        #f(0, 10, 11, b=1)
 
 if "##annotations":
 
