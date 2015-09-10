@@ -1,10 +1,14 @@
 a = 'a.a'
 
 def f():
-    return "a.f()"
+    return 'a.f()'
 
 def g():
-    return "a.g()"
+    return 'a.g()'
+
+class C:
+    def m(self):
+        return 'a.C.m()'
 
 #imports on child and stuff defined in the import are not passed to parent
 

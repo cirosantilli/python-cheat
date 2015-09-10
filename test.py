@@ -17,6 +17,7 @@ scripts = [
     'environ',
     'exception',
     'format_method',
+    'format_operator',
     'hello_world',
     'list',
     'logging_cheat',
@@ -26,6 +27,8 @@ scripts = [
     'path_cheat',
     'random_cheat',
     're_cheat',
+    'set',
+    'string_cheat',
     'time_cheat',
     'tempfile_cheat',
 ]

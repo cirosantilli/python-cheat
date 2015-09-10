@@ -64,15 +64,25 @@ if '## isdir':
     os.rmdir(temp)
     assert not os.path.isdir(temp)
 
-os.path.islink('/a')
+if '## islink':
 
-# Absolute path:
+    # Detect if given path is a symbolic link.
 
-print('os.path.abspath(u\'.\') = ' + os.path.abspath(u'.'))
+    # TODO example.
 
-# Absolute path resolving links recursively:
+    os.path.islink('/a')
 
-os.path.relpath(u'/a')
+if '## abspath':
+
+    # Absolute path:
+
+    print('os.path.abspath(u\'.\') = ' + os.path.abspath(u'.'))
+
+if '## relpath':
+
+    # Absolute path resolving links recursively:
+
+    os.path.relpath(u'/a')
 
 if '## commonprefix':
 
