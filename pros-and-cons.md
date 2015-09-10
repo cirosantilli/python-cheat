@@ -15,6 +15,11 @@ Python is great for small / medium projects:
 
     Good when writing smaller scripts because it means much less typing.
 
+-   domains it dominates for scripting:
+
+    - scientific: 
+    - binary executable analysis automation for hackers: http://www.amazon.com/dp/1593271921/ , https://github.com/aquynh/capstone , IDA Pro https://www.hex-rays.com/products/ida/support/idapython_docs/
+
 ## Cons
 
 -   dynamic typing:

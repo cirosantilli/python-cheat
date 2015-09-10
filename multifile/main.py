@@ -3,11 +3,12 @@
 import os
 import sys
 
-if "##__init__ ##module":
+if '##__init__ ##module':
 
     # A *module* is either:
 
     # - a `.py` or `.pyc` file
+
     # - dir with and `__init__.py`
 
         # `__init__.py` code is executed when the module is loaded,
@@ -17,20 +18,21 @@ if "##__init__ ##module":
     # It is not possible to distinguish between both except by looking at <#__file__>
 
     import a
-    assert a.f() == "a.f()"
+    assert a.f() == 'a.f()'
+    assert a.C().m() == 'a.C.m()'
 
     import d
-    assert d.f() == "d.f()"
+    assert d.f() == 'd.f()'
 
-if "##module search path":
+if '##module search path':
 
     # View current python module search path:
 
     print sys.path
 
-    if "##append to module search path":
+    if '##append to module search path':
 
-        if "##environment variable":
+        if '##environment variable':
 
             # Simplest way to change path for all system.
 
@@ -46,7 +48,7 @@ if "##module search path":
             #- has higher precedence than installation default paths (`/usr/lib/pythonX.X/`)
             #- has lower precedence than stuff installed with `pip` or `setup.py`: `/usr/local/lib/python2.7/dist-packages/`
 
-        if "##site package":
+        if '##site package':
 
             pass
 
@@ -177,9 +179,9 @@ if "##import":
         #can also be used to import module contents:
 
         from a import f
-        assert f() == "a.f()"
+        assert f() == 'a.f()'
 
-        if "##star ##*":
+        if '##star ##*':
 
             # Never use this except for bad practice.
 
@@ -192,22 +194,22 @@ if "##import":
             # Can also be used to import module contents:
 
             from a import *
-            assert f() == "a.f()"
-            assert g() == "a.g()"
+            assert f() == 'a.f()'
+            assert g() == 'a.g()'
 
             # If module is a dir, imports both its:
 
             from d import *
-            assert f() == "d.f()"
-            assert a2.f() == "d.a2.f()"
-            assert d2.f() == "d.d2.f()"
+            assert f() == 'd.f()'
+            assert a2.f() == 'd.a2.f()'
+            assert d2.f() == 'd.d2.f()'
 
             # Will import nothing, since a has no submodules.
 
-        if "##as":
+        if '##as':
 
             from a import f as g
-            assert g() == "a.f()"
+            assert g() == 'a.f()'
 
             # ERROR:
 
@@ -223,7 +225,7 @@ if "##import":
                 d2,
             )
 
-    if "Stuff defined in import overrides definitions of importer scope":
+    if 'Stuff defined in import overrides definitions of importer scope':
 
         # First define some names on current scope:
 
@@ -239,7 +241,7 @@ if "##import":
         assert a.a == 'a.a'
         assert a.f() == 'a.f()'
 
-    if "You can reassign what modules symbols mean":
+    if 'You can reassign what modules symbols mean':
 
         """
         Once imported, a module is just another dict like namespace,
@@ -266,7 +268,7 @@ if "##import":
         else:
             assert False
 
-    if "Uncaught ##exceptions at imported blow up at importer":
+    if 'Uncaught ##exceptions at imported blow up at importer':
 
         try:
             import raise_exception
@@ -275,28 +277,28 @@ if "##import":
         else:
             assert False
 
-    if "##__import__":
+    if '##__import__':
 
         '''
         Backend for the `import` statement.
 
         Import module with name that cannot be variable, e.g. hyphens in executables:
 
-            test_mod = __import__("test-mod")
+            test_mod = __import__('test-mod')
         '''
 
-if "Magic methods don't work":
+if 'Magic methods dont work':
 
     try:
-        assert a() == "a.__call__()"
+        assert a() == 'a.__call__()'
     except TypeError:
         pass
     else:
         assert False
 
-if "##submodules":
+if '##submodules':
 
-    if "Submodule vs attribute":
+    if 'Submodule vs attribute':
 
         # *never define in your __init__ file an attribute which has the same name as a module*
 
@@ -308,7 +310,7 @@ if "##submodules":
         import d
         #assert d.a == 'd.a'
 
-    if "##importing a submodule also imports parent":
+    if '##importing a submodule also imports parent':
 
         d = 1
 
@@ -324,7 +326,7 @@ if "##submodules":
         import d.a2
         #assert d.a == 'd.a'
 
-if "##Inform end user that package is missing.":
+if '##Inform end user that package is missing.':
 
     """
     try:
@@ -334,11 +336,11 @@ if "##Inform end user that package is missing.":
         sys.exit(1)
     """
 
-if "##module attributes":
+if '##module attributes':
 
     # https://docs.python.org/2/reference/datamodel.html#the-standard-type-hierarchy
 
-    if "##__file__ ##file":
+    if '##__file__ ##file':
 
         """
         Contains the full path of a file.
@@ -350,7 +352,7 @@ if "##module attributes":
         Possible reason: modules are always loaded from files,
         while scripts may exist in RAM only:
 
-           #echo "print __file__" | python
+           #echo 'print __file__' | python
         """
 
         # Check if a module is in path and if yes print its path:
@@ -358,11 +360,11 @@ if "##module attributes":
         try:
             import os
         except:
-            print "not found"
+            print 'not found'
         else:
             print os.__file__
 
-    if "##__name__":
+    if '##__name__':
 
         # If file was imported, TODO.
 
@@ -379,7 +381,7 @@ if "##module attributes":
 
         assert __name__ == '__main__'
 
-if "##symlink":
+if '##symlink':
 
     # Acts exactly as files that have the same content as their destination.
 
@@ -394,14 +396,14 @@ if "##symlink":
     assert d.aln.a == 'a'
     assert os.path.splitext( d.aln.__file__ )[0] == os.path.join( os.path.dirname( a.__file__ ), 'd', 'aln' )
 
-if "##execfile":
+if '##execfile':
 
     # Copy contents of file and exec them here
 
-    # Same as `exec(read("file.py"))`
+    # Same as `exec(read('file.py'))`
 
     defined_in_execed = 0
-    execfile("execed.py")
+    execfile('execed.py')
     assert defined_in_execed == 1
 
     # Paths are either absolute or relative to `os.getcwd()`!
@@ -411,7 +413,7 @@ if "##execfile":
     # Always prefer: `from module import var1, var2`,
     # so that you keep control of what is being imported.
 
-if "##imp":
+if '##imp':
 
     # Do explicit import / find in path operations.
 

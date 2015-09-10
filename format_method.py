@@ -3,7 +3,7 @@
 import sys
 
 """
-## Format method
+## format method
 
 The percent format operator becomes deprecated in Python 3.1,
 
@@ -14,9 +14,12 @@ On one hand, this is saner since we now have a method instead of a magic operato
 On the other, C printf format strings are gone, and that is a shame.
 Yet another format syntax to learn.
 
-<http://www.python.org/dev/peps/pep-3101/>
+http://www.python.org/dev/peps/pep-3101/
 
 Only operators `[]` and `.` are supported inside the formats.
+
+TODO vs `format()` built-in?
+http://stackoverflow.com/questions/16683518/why-does-python-have-a-format-function-as-well-as-a-format-method
 """
 
 assert '{1} {0} {1} {2[0]} {a}'.format(0, 1, [0, 1], a=2 ) == '1 0 1 0 2'

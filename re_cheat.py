@@ -12,21 +12,14 @@ General operation:
 - *string regexes* must frist be compiled into *pattern* objects. This has some overhead.
 - compiled pattern objects can be used to find *match objects* on test strings.
 
-##regex methods
+## Regex methods
 
-        match() 	    get match for **THE ENTIRE**!!!!!!! string
-        search() 	    first match anywhere in the string
-        findall() 	    iterator of matching *strings*, **NOT**!!! match objects
-        finditer() 	iterator of match objects
+    match() get match for **THE ENTIRE**!!!!!!! string
+    search() first match anywhere in the string
+    findall() iterator of matching *strings*, **NOT**!!! match objects
+    finditer() iterator of match objects
 
-##match object methods
-
-        group() 	Return the string matched by the RE
-        start() 	Return the starting position of the match
-        end() 	    Return the ending position of the match
-        span() 	    Return a tuple containing the (start, end) positions of the match
-
-##predefined character classes
+## Predefined character classes
 
     - \d [0-9]
     - \D [^0-9]
@@ -38,74 +31,123 @@ General operation:
 
 import re
 
-if '## Lookahead':
+if '## Syntax':
 
-    # Don't eat front part or regex
+    if '## Lookahead':
 
-    p = re.compile(r'a.')
-    assert p.sub('0', 'abaac') == '00c'
+        # Don't eat front part or regex
 
-    p = re.compile(r'a(?=.)')
-    assert p.sub('0', 'abaac') == '0b00c'
+        p = re.compile(r'a.')
+        assert p.sub('0', 'abaac') == '00c'
 
-if '## flags':
+        p = re.compile(r'a(?=.)')
+        assert p.sub('0', 'abaac') == '0b00c'
 
-    """
-    ##DOTALL: dot matches all characters, including newlines
-    ##MULTILINE: ^ and $ also matches at \n
-    """
+if '## re module':
 
-    p = re.compile(r'a', re.IGNORECASE | re.DOTALL)
+    if '## compile':
 
-if '## sub':
+        """
+        Return a RegexObject object.
 
-    p = re.compile('(a.|b.)')
+        Caches the regex parsing to make it faster.
 
-    # By string:
+        Always use this unless you will long match once.
 
-    assert p.sub('0', 'a_b_abc') == '000c'
+        Contains basically the same methods as the `re` module.
+        """
 
-    # By callable:
+        p = re.compile(r'a.c')
+        assert p.match('abc')
 
-    assert p.sub(lambda m: m.group(1)[1:], 'a_b-abc') == '_-bc'
+    if '## flags':
 
-    # Count:
+        """
+        ##DOTALL: dot matches all characters, including newlines
+        ##MULTILINE: ^ and $ also matches at newlines
+        """
 
-    assert p.sub('0', 'a_b_abc', count=1) == '0b_abc'
+        assert re.match(r'a', 'A', re.IGNORECASE)
 
-if '## subn':
+    if '## sub':
 
-    # Same as sub but also returns number of subs made:
+        # Replce what was matched.
 
-    assert p.subn('0', 'a_b_abc') == ('000c', 3)
+        p = re.compile('(a.|b.)')
 
-if '## match':
+        # By string:
 
-    #MUST MATCH FROM BEGINNING OF STRING!!!!!!
+        assert p.sub('0', 'a_b_abc') == '000c'
 
-    re.match(r"a.c", "abc")
+        # By callable:
 
-    r = re.compile(r"a.c")
-    r.match("abc")
-    #matches
-    r.match("0abc")
-    #DOES NOT MATCH!!!! MUST MATCH FROM BEGINNING OF STRING!!! use search for that
+        assert p.sub(lambda m: m.group(1)[1:], 'a_b-abc') == '_-bc'
 
-if '## search':
+        # Count:
 
-    r.search("0abc")
-    #works
+        assert p.sub('0', 'a_b_abc', count=1) == '0b_abc'
 
-    r.search("abcaBc")
-    #. == b, stops at first match. to find all matches, use finditer
+    if '## subn':
 
-if '## finditer':
+        # Same as sub, but also returns number of subs made:
 
-    matches = list(r.finditer("abcaBc"))
-    #a list of all matches
+        assert p.subn('0', 'a_b_abc') == ('000c', 3)
 
-if '## split':
+    if '## match':
 
-    re.split(r'[ab]+', '0abba1aaaaa2')
-    #[0, 1, 2]
+        re.match(r'a.c', 'abc')
 
+        assert re.match(r'a.c', 'abc')
+
+        # Must match from beginning of string!
+        # Consider re.search instead.
+        # http://stackoverflow.com/questions/28840903/python-regex-match-middle-of-string
+
+        assert re.match(r'a.c', '0abc') is None
+
+    if '## search':
+
+        """
+        Like match, but also matches in the middle.
+        """
+
+        assert re.search(r'a.c', '0abc')
+        # Works.
+
+        assert re.search(r'a.c', 'abcaBc')
+        # . == b, stops at first match. to find all matches, use finditer
+
+    if '## finditer':
+
+        # A list of all non-overlapping match objects.
+
+        matches = list(re.finditer(r'a.c', 'abcaBc'))
+
+    if '## split':
+
+        assert re.split(r'[ab]+', '0abba1aaaaa2') == ['0', '1', '2']
+
+"""
+## Match object
+
+## MatchObject
+
+https://docs.python.org/2/library/re.html#re.MatchObject
+
+Impossible to access this class: http://stackoverflow.com/questions/4835352/how-to-subclass-the-matchobject-in-python ...
+
+Important methods: TODO examples
+
+    group() Return the string matched by the RE
+    start() Return the starting position of the match
+    end() Return the ending position of the match
+    span() Return a tuple containing the (start, end) positions of the match
+"""
+
+"""
+## RegexObject
+
+Returned by compile.
+
+https://docs.python.org/2/library/re.html#re.RegexObject
+"""
