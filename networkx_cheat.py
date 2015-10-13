@@ -18,7 +18,7 @@ Install:
 
 import networkx as nx
 
-if "##dijkstra":
+if '##dijkstra':
 
     edge_weights = [
         (0, 2, 1), (1, 1, 2), (1, 3, 1), (1, 4, 2), (2, 1, 7),

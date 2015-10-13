@@ -24,7 +24,7 @@ stdout, stderr = process.communicate(stdin)
 assert stdout == 'stdout:\nstdin1\nstdin2\n'
 assert stderr == 'stderr:\narg 1\narg 2\n'
 
-# Wait for process to end and get exit statut:
+# Wait for process to end and get exit status:
 exit_status = process.wait()
 assert exit_status == 0
 

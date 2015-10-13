@@ -3,9 +3,9 @@
 """
 Natural language processing toolkit.
 
-Homepage: <http://www.nltk.org/>
+Homepage: http://www.nltk.org/
 
-Source: <https://github.com/nltk/nltk>
+Source: https://github.com/nltk/nltk
 
 Install:
 

@@ -9,7 +9,7 @@ networkx
 numpydoc
 srtmerge
 sympy
-# This seems really promissing for parsing:
+# This seems really promising for parsing.
 #pyparsing
 termcolor
 virtualenv

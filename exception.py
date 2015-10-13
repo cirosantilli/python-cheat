@@ -6,7 +6,7 @@
 
 import sys
 
-# They go up until somthing catches them:
+# They go up until something catches them:
 
 def e():
     raise Exception
@@ -22,12 +22,12 @@ else:
     raise Exception
 
 """
-If nothing catches them, they explode on stdX and stop program excecution!
+If nothing catches them, they explode on stdX and stop program execution!
 
 What gets printed:
 
     traceback: where the exception came from (modules, functions, lines)
-        #this is userful for debug, so you can find where the problem comes from
+        #this is useful for debug, so you can find where the problem comes from
 
     <Exception class>: <exception.__repr__>
         raise Exception("repr")
@@ -56,7 +56,7 @@ if '## else':
 
 if '## finally':
 
-    # Always executed, wether the exception happened or not.
+    # Always executed, whether the exception happened or not.
 
     f = False
     try:
@@ -80,120 +80,139 @@ if '## finally':
         f = True
     assert f
 
-if 'What can be raised':
+if '## raise':
 
-    # Only old style classes or derived classes from exception can be raised.
+    # Parenthesis or not:
+    # http://stackoverflow.com/questions/16706956/is-there-a-difference-between-raising-an-exception-and-exception
 
-    # In particular, strings cannot be raised, or that raises a `TypeError` instead of the string.
+    if 'What can be raised':
 
-    # This was made possible around Python 2.5, but removed in Python 2.6.
+        # Only old style classes or derived classes from exception can be raised.
 
-    class Old: pass
+        # In particular, strings cannot be raised, or that raises a `TypeError` instead of the string.
+
+        # This was made possible around Python 2.5, but removed in Python 2.6.
+
+        class Old: pass
+        try:
+            raise Old()
+        except Old:
+            pass
+        else:
+            assert False
+
+        class New(object): pass
+        try:
+            raise New()
+        except TypeError:
+            pass
+        else:
+            assert False
+
+        class New(Exception): pass
+        try:
+            raise New()
+        except New:
+            pass
+        else:
+            assert False
+
+        # Since `'str'` is a new style object:
+
+        try:
+            raise 'str'
+        except TypeError:
+            pass
+        else:
+            assert False
+
+        # A lightweight alternative is to raise Exception with a custom message:
+
+        try:
+            raise Exception('str')
+        except Exception:
+            pass
+        else:
+            assert False
+
+    if '## Custom exception':
+
+        class CustomException(Exception):
+            def __init__(self, value):
+                self.parameter = value
+            def __str__(self):
+                return repr(self.parameter)
+        try:
+            raise CustomException('msg')
+        except CustomException, (instance):
+            print instance.parameter
+
+if '## except':
+
+    # Except catches derived classes only:
+
     try:
-        raise Old()
-    except Old:
-        pass
-    else:
-        assert False
-
-    class New(object): pass
-    try:
-        raise New()
-    except TypeError:
-        pass
-    else:
-        assert False
-
-    class New(Exception): pass
-    try:
-        raise New()
-    except New:
-        pass
-    else:
-        assert False
-
-    # Since `'str'` is a new style object:
-
-    try:
-        raise 'str'
-    except TypeError:
-        pass
-    else:
-        assert False
-
-    # A lightweight alternative is to raise Exception with a custom message:
-
-    try:
-        raise Exception('str')
+        raise Exception()
+    except ZeroDivisionError:
+        print 'ZeroDivisionErrorOnly or derived classes'
     except Exception:
-        pass
-    else:
-        assert False
+        print 'Exception, or its derived classes, therefore all exceptions'
+    except:
+        print 'same as above'
 
-###except catches derived classes only
+if '## Pass arguments to exceptions':
 
-try:
-    raise Exception()
-except ZeroDivisionError:
-    print 'ZeroDivisionErrorOnly or derived classes'
-except Exception:
-    print 'Exception, or its derived classes, therefore all exceptions'
-except:
-    print 'same as above'
+    try:
+        raise Exception(1, 2)
+        # Same as above, but more verbose and implicit. NEVER user this.
+        #raise Exception, (1, 2)
+    except Exception, e:
+        print 'e is an instance of Exception'
+        print 'Exception, e = ' + str(e)
+        print e.args[0], e.args[1]
 
-###pass args to exceptions
+if '## reraise':
 
-try:
-    raise Exception(1, 2)
-    # Same as above, but more verbose and implicit. NEVER user this.
-    #raise Exception, (1, 2)
-except Exception, e:
-    print 'e is an instance of Exception'
-    print 'Exception, e = ' + str(e)
-    print e.args[0], e.args[1]
+    # Can be used to add/modify info
 
-###reraise
+    # It is hard to modify and reraise i python 2
 
-# Can be used to add/modify info
+    # It seems python 3 introduces the `raise from` statement which makes that much easier!
 
-# It is hard to modify and reraise i python 2
+    #<http://stackoverflow.com/questions/696047/re-raising-exceptions-with-a-different-type-and-message-preserving-existing-inf>
 
-# It seems python 3 introduces the `raise from` statement which makes that much easier!
+    try:
 
-#<http://stackoverflow.com/questions/696047/re-raising-exceptions-with-a-different-type-and-message-preserving-existing-inf>
+        raise Exception('msg')
 
-try:
+    except Exception, e:
 
-    raise Exception('msg')
+        # You lose the traceback:
 
-except Exception, e:
+        #raise Exception("updated msg\n" + str(e))
 
-    # You lose the traceback:
+        # To keep the traceback:
 
-    #raise Exception("updated msg\n" + str(e))
+        #import traceback
+        #traceback.print_exc(
+            ##file = sys.stdout #stderr is the default
+        #)
 
-    # To keep the traceback:
+        # For more info on current exception:
 
-    #import traceback
-    #traceback.print_exc(
-        ##file = sys.stdout #stderr is the default
-    #)
+        print 'sys.exc_info() = '
+        print sys.exc_info()
+        print 'sys.exc_type() = '
+        print sys.exc_type
+        print 'sys.exc_value() = '
+        print sys.exc_value
+        print 'sys.exc_traceback() = '
+        print sys.exc_value
 
-    # For more info on current exception:
+        # The following forms keep the traceback:
 
-    print 'sys.exc_info() = '
-    print sys.exc_info()
-    print 'sys.exc_type() = '
-    print sys.exc_type
-    print 'sys.exc_value() = '
-    print sys.exc_value
-    print 'sys.exc_traceback() = '
-    print sys.exc_value
-
-    # The following forms keep the traceback:
-
-    #raise e
-    #raise
+        #raise e
+        #raise
 
 if '## built-in exceptions':
 
@@ -234,16 +253,3 @@ if '## built-in exceptions':
                     pass
             except KeyboardInterrupt:
                 print "had enough of waiting"
-
-## Custom exception.
-
-class CustomException(Exception):
-    def __init__(self, value):
-        self.parameter = value
-    def __str__(self):
-        return repr(self.parameter)
-
-try:
-    raise CustomException("msg")
-except CustomException, (instance):
-    print instance.parameter

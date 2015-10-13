@@ -4,7 +4,7 @@
 #http://www.diveintopython.net/unit_testing/index.html
 
 import sys
-import unittest 
+import unittest
 
 class SomeInput:
     pass
@@ -53,12 +53,13 @@ class SomeTest(unittest.TestCase):
 
     ##tests have 3 possible outcomes
 
-    #- OK       The test passes.
-    #- FAIL     The test does not pass, and raises an AssertionError exception.
+    #-  OK: The test passes.
 
-        #this is raised by unit test `assert*` methods as well as the built in `assert`.
+    #-  FAIL: The test does not pass, and raises an AssertionError exception.
 
-    #- ERROR    The test raises an exception other than AssertionError.
+        # This is raised by unit test `assert*` methods as well as the built in `assert`.
+
+    #-  ERROR: The test raises an exception other than AssertionError.
 
     def test_pass(self):
         """
@@ -187,9 +188,9 @@ if __name__ == '__main__':
     ##runTest
 
     #the default is to:
-    
+
     #- call setUpClass
-    
+
     #- search for every method in the class that
     #starts with the string `test` then call in order the class':
 
