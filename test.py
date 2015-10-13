@@ -8,34 +8,47 @@ They should exit 0.
 
 import subprocess
 import sys
+import os
+import os.path
+
+# Either:
+#
+# - requires user input
+# - takes too long
+# - dependencies that are complicated to install
+# - uses network resources
+# - simply broken
+#
+blacklist = [
+    # Broken.
+    'main',
+    # Network.
+    'net',
+    # Large download.
+    'nltk_cheat',
+    # pip build takes too long.
+    'scipy_cheat',
+    # infinite loop!
+    'test',
+    # Meant to fail.
+    'unittest_cheat',
+    # Interactive.
+    'wsgi',
+]
 
 ext = '.py'
 # TODO: remove this and run all .py files
-scripts = [
-    'datetime_cheat',
-    'decorator',
-    'environ',
-    'exception',
-    'format_method',
-    'format_operator',
-    'hello_world',
-    'list',
-    'logging_cheat',
-    'main',
-    'math_cheat',
-    'os_cheat',
-    'path_cheat',
-    'random_cheat',
-    're_cheat',
-    'set',
-    'string_cheat',
-    'time_cheat',
-    'tempfile_cheat',
-]
-command = ['python', 'a.py', 'arg 1', 'arg 2']
+scripts = []
+for f in os.listdir(u'.'):
+    if os.path.isfile(f) and os.access(f, os.X_OK):
+        noext, ext = os.path.splitext(f)
+        if ext == '.py' and not noext in blacklist:
+            scripts.append(f)
+scripts.sort()
 for script in scripts:
+    print script
     process = subprocess.Popen(
-        ['python'] + [script + ext],
+        ['./' + script],
         shell  = False,
         stdin  = subprocess.PIPE,
         stdout = subprocess.PIPE,

@@ -2,6 +2,7 @@
 
 """
 ## os
+
 Wrappers for os specific stuff.
 
 Lots of important file and directory operations.
@@ -19,18 +20,18 @@ if '## sep':
 
 if '## linesep':
 
-    # System newline separtor ('\n' Linux, '\r' Mac, '\n\r' Windows):
+    # System newline separator ('\n' Linux, '\r' Mac, '\n\r' Windows):
 
     print('os.linesep = ' + os.linesep.encode('string-escape'))
 
-if '#listdir #ls':
+if '## listdir ## ls':
 
     # **Always** use Unicode input since the output gets the same encoding as this input
-    # and filenames may contain non ascii chars!
+    # and filenames may contain non ASCII chars!
 
     print('os.listdir(u".") = ' + str(os.listdir(u'/')))
 
-if '## unlink #rm':
+if '## unlink ## rm':
 
     path = "open.tmp"
     f = open(path, "w")

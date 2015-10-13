@@ -31,9 +31,9 @@ if '## Create new list':
         assert range(1, 3) == [1, 2]
         assert range(1, 6, 2) == [1, 3, 5]
 
-    if 'n copies of given element':
+    if 'N copies of given element ## Repeat an element N times':
 
-        # <http://stackoverflow.com/questions/8528178/list-of-zeros-in-python>
+        # http://stackoverflow.com/questions/8528178/list-of-zeros-in-python
 
         # The best method for immutable objects is `*`:
 
@@ -96,11 +96,51 @@ if '## Create new list':
         assert l[0:3:2] == [0, 2]
         assert l[::-1]  == [4, 3, 2, 1, 0] #invert list!
 
-        if '## ellipsis #...':
+        if '## ellipsis ## ...':
 
             """
             TODO
             """
+
+        if '## slice':
+
+            # There is also a slice object that represents slices
+            # and can be used as index.
+
+            l = range(5)
+            s = slice(0, 3, 2)
+            assert l[s] == [0, 2]
+            assert s.start == 0
+            assert s.stop == 3
+            assert s.step == 2
+
+            # This is how it really works:
+
+            class C(object):
+                def __getitem__(self, k):
+                    return k
+
+            # Single argument is passed directly.
+            assert C()[0] == 0
+
+            # Multiple indices generate a tuple.
+            assert C()[0, 1] == (0, 1)
+
+            # Slice notation generates a slice object.
+            assert C()[1:2:3] == slice(1, 2, 3)
+
+            # If you omit any part of the slice notation, it becomes None.
+            assert C()[:] == slice(None, None, None)
+            assert C()[::] == slice(None, None, None)
+            assert C()[1::] == slice(1, None, None)
+            assert C()[:2:] == slice(None, 2, None)
+            assert C()[::3] == slice(None, None, 3)
+
+            # Tuple with a slice object:
+            assert C()[:, 1] == (slice(None, None, None), 1)
+
+            # Ellipsis class object.
+            assert C()[...] == Ellipsis
 
     if '## sorted':
 

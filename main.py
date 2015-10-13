@@ -545,75 +545,6 @@ if '## iterators ## yield':
             y = [2, 3]
             assert [ x for t in zip(x,y) for x in t ] == [0, 2, 1, 3]
 
-if '## tuple':
-
-    # Immutable list of elements of any type
-
-    # Special constructor notation:
-
-    t = (1, 2, 3)
-
-    # Global factory method from list:
-
-    assert tuple([1, 2, 3]) == (1, 2, 3)
-
-    # Doest not exist:
-
-        #t = tuple(1, 2, 3)
-
-    t2 = (4, 5, 6)
-    t3 = (4, 5, 1)
-    tb = (False, False, True)
-    tm = (1, 1.1, True, "asdf")
-
-    # Index access:
-
-    t = (1, 2, 3)
-    assert t[0] == 1
-    assert t[1] == 2
-    assert t[2] == 3
-
-    # Unpack:
-
-    a, b, c = (1, 2, 3)
-    assert a == 1
-    assert b == 2
-    assert c == 3
-
-    if 'tuples are immutable':
-
-        t = (0)
-        try:
-            t[0] = "a"
-        except TypeError:
-            pass
-        else:
-            assert False
-
-    # Concatenate:
-
-    assert (0, 1) + (2, 3) == (0, 1, 2, 3)
-
-    t = (0, 1)
-    assert t * 2  == (0, 1, 0, 1)
-    assert 2 * t  == (0, 1, 0, 1)
-
-    # Compare: does alphabetical like compare from left to right.
-
-    assert (0, 1)  == (0, 1)
-    assert (0, 1)  < (1, 2)
-    assert (0, 10) < (1, 1)
-    # TODO why:
-    #assert (0, 1)  > (1)
-
-    # The list global functions also work on tuples:
-
-    assert len((0,1)) == 2
-    assert max((0,1)) == 1
-    assert min((0,1)) == 0
-    assert any((True, False)) == True
-    assert all((True, False)) == False
-
 if '## memoryview':
 
     """
@@ -3153,7 +3084,7 @@ if '## streams':
                 print e
                 raise
             try:
-                with open(path, "r") as f:
+                with open(path, 'r') as f:
                     assert f.read() == data
             except IOError, e:
                 print e
@@ -3232,7 +3163,7 @@ if '## streams':
 
     if '## read methods':
 
-        # Read from handle untill EOF:
+        # Read from handle until EOF:
 
             #sys.stdin.read()
             #f.read()

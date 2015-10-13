@@ -155,9 +155,12 @@ if '## split':
 
     assert '0 1\t \n2'.split() == ['0', '1', '2']
 
-    # Split at ``[\n\r]+`` regex:
+    if '## splitlines':
 
-    assert '0\n1\r2\r\n3'.splitlines()  == ['0', '1', '2', '3']
+        # Split at `(\n\r?|\r)` regex, *and* exclude the last empty string that split
+        # would generate if there was a trailing newline.
+
+        assert '0\n1\r2\r\n3\n'.splitlines()  == ['0', '1', '2', '3']
 
 if '## strip ## rstrip ## lstrip':
 
@@ -173,6 +176,16 @@ if '## strip ## rstrip ## lstrip':
 
     assert 'cbaba0a1b2ccba'.strip('abc') == '0a1b2'
     assert '\t\n0 1 2\v \r'.strip() == '0 1 2'
+
+    if '## chomp':
+
+        """
+        chomp is a Perl function that takes one newline off the end.
+
+        Therefore it is not equivalent to chomp!
+
+        Best way to do it: http://stackoverflow.com/a/19531239/895245
+        """
 
 if '## startswith':
 
