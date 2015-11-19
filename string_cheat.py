@@ -142,6 +142,13 @@ if '## string module':
 
         print 'string.whitespace = ' + string.whitespace.encode('string-escape')
 
+if '## join':
+
+        assert '0'.join(['a', 'b', 'c']) == 'a0b0c'
+
+    # Why not a method of list?
+    # http://stackoverflow.com/questions/493819/python-join-why-is-it-string-joinlist-instead-of-list-joinstring
+
 if '## split':
 
     # Split string into array of strings:

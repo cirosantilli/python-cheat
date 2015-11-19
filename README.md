@@ -20,12 +20,15 @@ Stdlib and third party libraries are covered.
 1.  Language
     1.  [Exception](exception.py)
     1.  [Decorator](decorator.py)
+    1.  [Iterator](iterator.py)
     1.  Data types
         1.  [String](string_cheat.py)
             1. [format()](format_method.py)
             1. [Format operator %](format_operator.py)
         1.  [list](list.py)
+        1.  [dict](dict.py)
         1.  [set](set.py)
+        1.  [frozenset](frozenset.py)
     1.  [Multi-file operations](multifile/): `import`, modules, `imp`
 1.  Standard library
     1.  [os](os_cheat.py)

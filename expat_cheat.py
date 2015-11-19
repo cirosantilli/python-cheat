@@ -9,17 +9,17 @@ Harder to use if you need node wise operations,
 but very fast and memory efficient as it does not need to read the entire file at once.
 
 Python has many other XML parsing methods:
-<http://stackoverflow.com/questions/1912434/how-do-i-parse-xml-in-python>
+http://stackoverflow.com/questions/1912434/how-do-i-parse-xml-in-python
 """
 
 import os.path
-from xml.parsers import expat
+import xml.parsers.expat
 
 class Parser:
 
     def __init__(self):
-        self._result = 'begin\n'
-        self._parser = expat.ParserCreate()
+        self._output = ''
+        self._parser = xml.parsers.expat.ParserCreate()
 
         # Set what function does what.
         self._parser.StartElementHandler  = self.tagOpen
@@ -29,42 +29,44 @@ class Parser:
         # Find attributes of matching opening tag of a closing tag.
         self._attr_stack = []
 
-    def feed(self, data):
+    def feed(self, data, isfinal):
         """
-        Set data to process.
-        """
-        self._parser.Parse(data, 0)
+        Pass XML data string to process.
 
-    def close(self):
-        """
-        Called after input is over.
-        """
-        #self._parser.Parse("", 1)   # end of data
-        #del self._parser            # get rid of circular references
-        self._result += 'end\n'
+        Can be called multiple times with different pieces of a given XML.
 
-    def result(self):
+        isfinal == True iff this is th last call.
+
+        For input from file use instead:
+
+            self._parser.ParseFile(open('path.xml', 'r'))
         """
-        Returns the processed input.
+        self._parser.Parse(data, isfinal)
+
+    def output(self):
         """
-        return self._result
+        Return the processed input.
+        """
+        return self._output
 
     def tagOpen(self, tag, attrs):
-        self._result += 'open: ' + tag + ' ' + str(attrs) + '\n'
+        self._output += 'open: ' + tag + ' ' + str(attrs) + '\n'
         self._attr_stack.append(attrs)
 
     def tagData(self, data):
-        self._result+= 'data: ' + repr(data) + '\n'
+        self._output+= 'data: ' + repr(data) + '\n'
 
     def tagClose(self, tag):
-        self._result += 'close: ' + tag + ' ' + str(self._attr_stack[-1]) + '\n'
+        self._output += 'close: ' + tag + ' ' + str(self._attr_stack[-1]) + '\n'
         del self._attr_stack[-1]
 
-xml_data = """
+xml_string0 = """
 <t a="v" a2="v2">
     d
     d2
     <t2 a21="v" a22="v2">
+"""
+xml_string1 = """
         d3
         d4
     </t2>
@@ -73,21 +75,8 @@ xml_data = """
 </t>
 """
 
-# Get input from file:
-#file = open(argv[1],'r')
-#xml_data = file.read()
-#file.close()
-
 # Parse.
 p = Parser()
-p.feed(xml_data)
-p.close()
-output = p.result()
-
-print output
-
-# Save outpt to a file:
-#output_path = os.path.join(home_dir,'a.html')
-#file = open(output_path,'w')
-#file.write(output)
-#file.close()
+p.feed(xml_string0, False)
+p.feed(xml_string1, True)
+print p.output()
