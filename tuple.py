@@ -11,7 +11,8 @@
 t = (1, 2, 3)
 t = 1, 2, 3
 
-# For a single element, a trailing comma is needed to differentiate from numeric expressions:
+# For a single element, a trailing comma is needed
+# to differentiate from numeric expressions:
 
 assert (1) == 1
 assert type((1,)) == tuple

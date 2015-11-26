@@ -26,6 +26,7 @@ if '## Default logger':
         # This can only take file path strings.
         # To log to stdout, use:
         #filename = 'example.log',
+        # Mode defaults to `a`, which appends to old log.
         #filemode = 'w'
 
         # Minimum log level that will get printed.
@@ -36,7 +37,8 @@ if '## Default logger':
         #level = logging.ERROR,
         #level = logging.CRITICAL,
 
-        format = '  %(levelname)s %(name)s %(asctime)s %(message)s',
+        # Default does not contain time, so you very likely want to override this.
+        format = '  %(levelname)s %(asctime)s %(message)s',
 
         # Format for asctime
         datefmt = '%m/%d/%Y %I:%M:%S %p',

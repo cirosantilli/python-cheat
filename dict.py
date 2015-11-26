@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-#j# dict
+## dict
 
 ## Map
 
@@ -24,7 +24,7 @@ if '## create':
 
     assert dict(zero=0, one=1) == {'zero': 0, 'one': 1}
 
-    # Dict comprehension:
+    # dict comprehension:
 
     assert {key: value for (key, value) in [(1, 2), (3, 4)]} == {1: 2, 3: 4}
 
@@ -154,14 +154,27 @@ if 'Iterate / loop over dict':
 
     assert sorted([i for i in {1:-1, 2:-2}]) == [1, 2]
 
-    # Keys value pairs ##iteritems:
+    if '##iteritems':
 
-    assert sorted([(i,j) for i,j in {1:-1, 2:-2}.iteritems()]) == [(1, -1), (2, -2)]
+        # Keys value pairs:
+
+        assert sorted([(i,j) for i,j in {1:-1, 2:-2}.iteritems()]) == [(1, -1), (2, -2)]
 
     # Iteritems sorted by key. Must pull all into memory first.
 
     assert [(i,j) for i,j in sorted({2:-2, 1:-1}.iteritems())] == [(1, -1), (2, -2)]
 
-    # Iteritems is out of Python3. Items is present in both 2 and 3 but returns a list, not an iterator.
-    # 2to3 converts it automatically.
+    # Iteritems is out of Python3. Items is present in both 2 and 3
+    # but returns a list, not an iterator. 2to3 converts it automatically.
 
+if '## filter':
+
+    """
+    Only keys in a list:
+    http://stackoverflow.com/questions/6827834/how-to-filter-a-dict-to-contain-only-keys-in-a-given-list
+
+    Arbitrary function:
+    http://stackoverflow.com/questions/2844516/python-filter-a-dictionary
+
+    Comprehensions are the only way it seems.
+    """

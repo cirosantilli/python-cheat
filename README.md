@@ -42,5 +42,8 @@ Stdlib and third party libraries are covered.
     1.  [math](math_cheat.py)
     1.  [logging](logging_cheat.py)
     1.  [tempfile](tempfile_cheat.py)
+1.  [sqlite](sqlite.py)
+1.  [Interactive friendly](interactive-friendly.md)
+    1. [ipython](ipython.ipy)
 1.  [Bibliography](bibliography.md)
 1.  [CONTRIBUTING](CONTRIBUTING.md)
