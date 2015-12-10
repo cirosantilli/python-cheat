@@ -10,6 +10,11 @@ if '## time()':
 
     # Get number of seconds since 1970:
 
+    # Returns a float, thus potentially allowing greater precision,
+    # but that depends on system support.
+
+    # UTC: http://stackoverflow.com/questions/13890935/does-pythons-time-time-return-the-local-or-utc-timestamp
+
     print('time.time() = ' + str(time.time()))
 
 if '## clock':
