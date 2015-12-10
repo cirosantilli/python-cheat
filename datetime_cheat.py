@@ -8,8 +8,55 @@ Year month day minute sec milisec oriented time operations.
 
 import datetime
 
-now = datetime.datetime.now()
-print('now = ' + str(now))
+if '## datetime':
+
+    now = datetime.datetime.now()
+    print('now = ' + str(now))
+    print('now.tzinfor = ' + str(now.tzinfo))
+
+    # Get a datetime from a seconds since Epoch.
+    # This is first passed to your timezone by default,
+    # since timestamps are usually absolute, but datetimes are relative.
+    # So it is likely to be 1970-01-01 offset by a few hours.
+    print('fromtimestamp(0) = ' + str(datetime.datetime.fromtimestamp(0)))
+
+    # This is guaranteed to be 1970-01-01
+    print('utcfromtimestamp(0) = ' + str(datetime.datetime.utcfromtimestamp(0)))
+
+    if 'Applications':
+
+        if '# Midnight':
+
+            # http://stackoverflow.com/questions/8361099/django-python-date-time-set-to-midnight
+
+            today_midnight = datetime.datetime(year=now.year, month=now.month, day=now.day)
+            tomorrow_midnight = today_midnight + datetime.timedelta(days=1)
+            print('today midnight    = ' + str(today_midnight))
+            print('tomorrow midnight = ' + str(tomorrow_midnight))
+
+    if 'UTC':
+
+        print('utcnow = ' + str(datetime.datetime.utcnow()))
+        assert type(datetime.datetime.utcnow()) == datetime.datetime
+
+if '## date':
+
+    # Only up to day precision.
+
+    print('today = ' + str(datetime.date.today()))
+
+    # From datetime (OK, this assert *could* fail
+    # if you're into learning Python at midnight):
+
+    assert datetime.date.today() == datetime.datetime.now().date()
+
+    # UTC today:
+    # http://stackoverflow.com/questions/27587127/convert-datetime-date-today-to-utc-time
+    # convert from utcnow.
+
+    # How many days between two dates:
+
+    assert (datetime.date(2000, 2, 1) - datetime.date(2000, 1, 1,)).days == 31
 
 if '## timedelta':
 
@@ -37,5 +84,8 @@ if '## timedelta':
         microseconds = 8
     )))
 
-    # Get a datetime from a seconds since Epoch.
-    print('epoch = ' + str(datetime.datetime.fromtimestamp(0)))
+if '## naive ## offset':
+
+    """
+    TODO. create one of each.
+    """

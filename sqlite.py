@@ -15,18 +15,13 @@ Results can only be fetched once, and then the next ones are fetched.
 
 TODO example of multiple fetchone.
 
-### Fetch type
-
-By default strings are retrieved for every type:
-
-- http://stackoverflow.com/questions/14047303/how-to-make-fetch-methods-return-original-types-like-int-instead-of-only-strings
-- http://stackoverflow.com/questions/1829872/read-datetime-back-from-sqlite-as-a-datetime-in-python
-
 ### commit
 
 Saves to queries disk.
 
 Beware: this slows things down a lot if you are doing bulk queries!
+
+TODO ever needed for :memory:?
 """
 
 import datetime
@@ -84,6 +79,31 @@ if '## row_factory':
     assert type(row['i']) is int
     connection.close()
 
+if '## cursor':
+
+    """
+    The second execute on a cursor erases previous results.
+    """
+
+    connection = sqlite3.connect(':memory:')
+    cursor = connection.cursor()
+    cursor.execute('SELECT 1')
+    cursor.execute('SELECT 2')
+    assert cursor.fetchone()[0] is 2
+    assert cursor.fetchone() is None
+    connection.close()
+
+    if '## Query without cursor':
+
+        """
+        sqlite3 has some convenience methods so that you
+        don't need to create an useless cursor for simple queries.
+        """
+
+        connection = sqlite3.connect(':memory:')
+        assert next(connection.execute('SELECT 1'))[0] is 1
+        connection.close()
+
 if '## NULL':
 
     """
@@ -101,7 +121,7 @@ if '## execute on large tables':
 
     """
     execute SELECT statements don' bring all the data to memory,
-    so it can be run on huge databases.
+    so it can be run on huge databases. TODO: how is that possible?
 
     It does take a long time however, if you don't have an index.
     There is of course no solution to that except creating the index.
@@ -141,7 +161,25 @@ if '## DATE ## DATETIME ## TIMESTAMP':
         assert row == (today, unicode(now), now)
         connection.close()
 
-if '## Memory database':
+if '## Memory database #:memory:':
+
+    """
+    A database with name :memory: only exists in memory.
+
+    Each connection creates a new separate database.
+    """
+
+    connection1 = sqlite3.connect(':memory:')
+    connection2 = sqlite3.connect(':memory:')
+    cursor1 = connection1.cursor()
+    cursor2 = connection2.cursor()
+    cursor1.execute('CREATE TABLE t (i INT)')
+    connection1.commit()
+    # This works. Therefore `t` did not exist. So this is a separate DB.
+    cursor2.execute('CREATE TABLE t (i INT)')
+    connection2.commit()
+    connection1.close()
+    connection2.close()
 
     """
     How to bootstrap in memory from DB file and write it back to the file afterwards:
@@ -150,19 +188,156 @@ if '## Memory database':
     - http://stackoverflow.com/questions/31191727/moving-back-and-forth-between-an-on-disk-database-and-a-fast-in-memory-database?lq=1
     """
 
-    # TODO example.
-
-if 'iterate search results':
+if '# Iterate search results':
 
     """
-    for row in c.execute('SELECT * FROM stocks ORDER BY price'):
-        print row
+    execute returns the cursor.
+
+    Cursors are iterable over the set of rows.
+
+        for row in c.execute('SELECT * FROM stocks ORDER BY price'):
+            print row
+
+    Can deal with large result sets, so it must be actually doing several queries in the backend?
     """
 
     connection = sqlite3.connect(':memory:')
     cursor = connection.cursor()
-    print type(cursor.execute('SELECT '))
-    row = cursor.fetchone()
-    assert row[0] is None
+    execute_return = cursor.execute('SELECT 1 UNION ALL SELECT 2')
+    assert type(execute_return) is sqlite3.Cursor
+    assert list(execute_return) == [(1,), (2,)]
     connection.close()
 
+if '# Transactions # Locking # timeout':
+
+    """
+    - https://docs.python.org/2/library/sqlite3.html#sqlite3.connect
+    - https://docs.python.org/2/library/sqlite3.html#sqlite3-controlling-transactions
+
+    Interesting quote:
+
+    > When a database is accessed by multiple connections, and one of the processes modifies the database,
+    the SQLite database is locked until that transaction is committed.
+    The timeout parameter specifies how long the connection should wait
+    for the lock to go away until raising an exception.
+    The default for the timeout parameter is 5.0 (five seconds).
+    """
+
+    if '# Locking error example with double insert':
+
+        connection1 = sqlite3.connect(db_path, timeout=0)
+        connection2 = sqlite3.connect(db_path, timeout=0)
+        cursor1 = connection1.cursor()
+        cursor2 = connection2.cursor()
+        cursor1.execute('DROP TABLE IF EXISTS t')
+        cursor1.execute('CREATE TABLE t (i INT)')
+        connection1.commit()
+        # Implicitly starts a transaction.
+        cursor1.execute('INSERT INTO t VALUES (1)')
+        try:
+            # Cannot start a new transaction while the other one is going on.
+            cursor2.execute('INSERT INTO t VALUES (1)')
+        except sqlite3.OperationalError:
+            pass
+        else:
+            raise
+        # Finish the transaction.
+        connection1.commit()
+        # This time it is fine, because we have already finished the previous one.
+        cursor2.execute('INSERT INTO t VALUES (1)')
+        connection1.close()
+        connection2.close()
+
+    if '# Locking error example with SELECT + INSERT':
+
+        connection1 = sqlite3.connect(db_path, timeout=0)
+        connection2 = sqlite3.connect(db_path, timeout=0)
+        cursor1 = connection1.cursor()
+        cursor2 = connection2.cursor()
+        cursor1.execute('DROP TABLE IF EXISTS t')
+        cursor1.execute('CREATE TABLE t (i INT)')
+        # If we comment this out and use an empty database, then no exception occurs. TODO Why?
+        cursor1.executemany('INSERT INTO t VALUES (?)', [(1,), (2,)])
+        connection1.commit()
+        # TODO why does this SELECT lead to the lock error?
+        cursor1.execute('SELECT * FROM t')
+        # TODO why does this make no difference? What should I do to fix things now?
+        connection1.commit()
+        cursor2.execute('INSERT INTO t VALUES (1)')
+        # TODO why do we blow up at the commit, instead of execute as in the INSERT INSERT example?
+        try:
+            connection2.commit()
+        except sqlite3.OperationalError:
+            pass
+        else:
+            raise
+        connection1.close()
+        connection2.close()
+
+if 'iterate updating search results':
+
+    """
+    This is an oversimplified example:
+    we could do this with a single update query of course.
+
+    TODO how?
+
+    - multiple connections gives: database is locked
+    - multiple cursors with a single connection messes things up in a way I don't understand
+    """
+
+    # One connection and multiple cursors.
+
+    connection = sqlite3.connect(':memory:')
+    cursor1 = connection.cursor()
+    cursor2 = connection.cursor()
+    cursor1.execute('CREATE TABLE t (i INT)')
+    cursor1.executemany('INSERT INTO t VALUES (?)', [(1,), (2,)])
+    connection.commit()
+    for row in cursor1.execute('SELECT * FROM t'):
+        # On a real example, we do a very time consuming operation here.
+        cursor2.execute('UPDATE t SET i = ? WHERE i = ?', (row[0] + 10, row[0]))
+        # Because the operation is time consuming, we would like to commit here,
+        # before doing the time consuming operation many more times.
+        # Why can't we do this?
+        connection.commit()
+    # Committing here instead would works:
+    #connection.commit()
+    # TODO This assert should pass but fails. Why?
+    #assert list(cursor1.execute('SELECT * FROM t ORDER BY i ASC')) == [(11,), (12,)]
+    connection.close()
+
+    # Two connections.
+
+    connection1 = sqlite3.connect(db_path, timeout=0)
+    connection2 = sqlite3.connect(db_path, timeout=0)
+    cursor1 = connection1.cursor()
+    cursor2 = connection2.cursor()
+    cursor1.execute('DROP TABLE IF EXISTS t')
+    cursor1.execute('CREATE TABLE t (i INT)')
+    cursor1.executemany('INSERT INTO t VALUES (?)', [(1,), (2,)])
+    connection1.commit()
+    for row in cursor1.execute('SELECT * FROM t'):
+        cursor2.execute('UPDATE t SET i = ? WHERE i = ?', (row[0] + 10, row[0]))
+        # TODO Raises database is locked. I have minimized this elsewhere.
+        #connection2.commit()
+    #assert list(cursor1.execute('SELECT * FROM t ORDER BY i ASC')) == [(11,), (12,)]
+    connection1.close()
+    connection2.close()
+
+    # Get all the data out first.
+
+    connection = sqlite3.connect(db_path, timeout=0)
+    cursor = connection.cursor()
+    cursor.execute('DROP TABLE IF EXISTS t')
+    cursor.execute('CREATE TABLE t (i INT)')
+    cursor.executemany('INSERT INTO t VALUES (?)', [(1,), (2,)])
+    connection.commit()
+    cursor.execute('SELECT * FROM t')
+    rows = cursor.fetchall()
+    for row in rows:
+        cursor.execute('UPDATE t SET i = ? WHERE i = ?', (row[0] + 10, row[0]))
+        connection.commit()
+    assert list(cursor.execute('SELECT * FROM t ORDER BY i ASC')) == [(11,), (12,)]
+    connection.close()
+    connection.close()

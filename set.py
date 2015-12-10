@@ -45,18 +45,18 @@ assert set([1, 2]) == set((1, 2))
 # Add new element:
 
 s = {1, 2}
-assert s.add(3) == None
+assert s.add(3) is None
 assert s == {1, 2, 3}
 
 # If already present, do nothing:
 
-s.add(2)
+assert s.add(2) is None
 assert s == {1, 2, 3}
 
 # Remove an element:
 
 s = {1, 2}
-assert s.remove(2) == None
+assert s.remove(2) is None
 assert s == {1}
 
 # If not present, raises `KeyError`:
