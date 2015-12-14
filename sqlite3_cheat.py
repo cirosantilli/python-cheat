@@ -79,6 +79,20 @@ if '## row_factory':
     assert type(row['i']) is int
     connection.close()
 
+    """
+    # print(row) is different than print(str(row))
+
+        Either a horrible API choice, or a bug:
+        http://stackoverflow.com/questions/7920284/how-can-printing-an-object-result-in-different-output-than-both-str-and-repr
+
+        Consider instead:
+
+            print(row)
+    """
+
+    #print row
+    #print(str(row))
+
 if '## cursor':
 
     """
