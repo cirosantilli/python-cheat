@@ -314,6 +314,14 @@ if '## filter':
     assert filter(lambda x: x % 2 == 1, l) == [1, 3]
     assert l == range(4)
 
+    ## filter in-place
+
+        # Either reassign, or comprehension:
+        # http://stackoverflow.com/questions/3013449/list-filtering-list-comprehension-vs-lambda-filter
+
+        # For lists of objects they say it is best to assign all alements to the existing list instead: l[:] = []
+        # http://stackoverflow.com/questions/1207406/remove-items-from-a-list-while-iterating-in-python
+
     ##ifilter
 
         # `itertools.ifilter` for iterators.

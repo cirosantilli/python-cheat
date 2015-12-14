@@ -580,6 +580,13 @@ if '## branching':
             if i == 3:
                 continue
 
+        """
+        # Modify list while itearting it
+
+            Just don't do it. Make a copy instead. There is no decent efficient way like in Java:
+            http://stackoverflow.com/questions/1207406/remove-items-from-a-list-while-iterating-in-python/34238688#34238688
+        """
+
     if '## and ## or':
 
         """
@@ -1884,7 +1891,7 @@ if '## class':
             """
             Both a:
 
-            - built-in type (seldom used directly)
+            -   built-in type (seldom used directly)
 
             -   method that can only be used inside classes, commonly used to call
                 constructors of base classes
@@ -2669,6 +2676,26 @@ if '## streams':
         This will make the interface more standard and support more options.
 
         In 2.X, the `print s` is exactly the same as `sys.stdout.write(s)`.
+
+        ## Parenthesis and the print statement
+
+            The fact that it is a statement, means that:
+
+                print (object, object)
+
+            prints a *tuple*, and it may differ from:
+
+                print (object)
+
+            which prints just object, since `tuple.str()`
+            does `repr()` on their contents, not `str()`.
+
+        ## print vs str
+
+            print converts objects with str.
+
+            Well, unless you make an insane C API like sqlite3.Row:
+            http://stackoverflow.com/questions/7920284/how-can-printing-an-object-result-in-different-output-than-both-str-and-repr
         """
 
     if '## stdout':
