@@ -26,9 +26,11 @@ if '## uniform':
 
 if '## randint':
 
-    # Uniform int on interval.
+    # Uniform int on interval inclusive.
 
-    print(random.randint(0, 3))
+    n = random.randint(0, 3)
+    assert n >= 0
+    assert n <= 3
 
 if '## choice':
 

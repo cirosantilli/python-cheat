@@ -1898,7 +1898,7 @@ if '## class':
                 TODO what does it return? How does it work?
                 http://www.artima.com/weblogs/viewpost.jsp?thread=236275
 
-            Base class constructors are not called automatically:
+            Base class constructors are *not* called automatically!
             http://stackoverflow.com/questions/3782827/why-arent-pythons-superclass-init-methods-automatically-invoked
             """
 

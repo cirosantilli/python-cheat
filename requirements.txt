@@ -1,5 +1,6 @@
 # Packages required to run files in this repository and utils which I like.
 Pygments
+PySocks
 Sphinx
 Unidecode
 distribute

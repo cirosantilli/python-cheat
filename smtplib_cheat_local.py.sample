@@ -1,0 +1,7 @@
+server = 'smtp.gmx.com'
+# -  gmail: for username@gmail.com use 'username'
+# -  gmx: for username@gmx.com use 'username@gmx.com' itself.
+#    Must use domain likely because they offer multiple domains.
+user = 'bugOsvazLy@gmx.com'
+password = 'mTDCjqgRxq'
+recipient = 'ciro.santilli@gmail.com'

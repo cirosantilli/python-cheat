@@ -1,14 +1,18 @@
 # Virtualenv
 
-Allows you to run programs in an environment where Python aspects are controlled
-This includes the possibility to control:
+Allows you to run programs in a controlled Python environment:
 
 - python interpreter version
 - version of each installed python module
 
-This allows to control environments so that program behavior is reproducible. This is fundamental for example for PaaS services, where you want to be sure that your local tests reflect what happens on the server.
+It is therefore a virtualization method for Python aspects of the program, and helps ensure that every developer of a project runs the same environment.
 
-Virtualenv can only control Python aspects. If you need even more control over the system, the only way is to use a fully blown virtual machine like VirtualBox. Virtualenv is faster and more convenient if you only need to control Python characteristics.
+`pip` is unlike most other more modern languages which have two separate utilities:
+
+- an interpreter virtualizer (RVM, NVM)
+- a package manager capable of doing local packages (Bundler, NPM)
+
+virtualenv does not seem to install Python: it only uses what you specify: <http://stackoverflow.com/questions/11889932/specify-python-version-for-virtualenv-in-requirements-txt> which should be a `pythonX.Y` executable in your path.
 
 Install virtualenv with pip:
 
@@ -22,39 +26,40 @@ Create a new environment that will use the `python2.7` interpreter:
 
     virtualenv -p python2.7 --distribute venv2.7
 
-`--distribute` is recommended as this flags tells Virtualenv to use
-`distribute` instead of `setuptools` which is better as of 2013.
+`--distribute` is recommended as this flags tells Virtualenv to use `distribute` instead of `setuptools` which is better as of 2013.
 
 If `-p` is not given, the version used to run `virtualenv` is used instead.
 
-The executable `python2.7` must be in your path.
-
-This will create a directory named `venv2.7` and will put all everything in there including the python interpreter binary we will be using, and modules installed via `pip`. Take your time to look into that directory and see how it is all there!
-
 Create a new environment that will use the `python3.3` interpreter:
 
-    virtualenv -p python3.3 --distribute venv2.7
+    virtualenv -p python3.3 --distribute venv3.3
 
 To activate the 2.7 environment we must source:
 
     . venv2.7/bin/activate
 
-This should change our `PS1` variable a little to indicate that we are now in the virtual environment to something like:
+This has the following effects:
 
-    (venv2.7)~/python
-    ciro@ciro
+-   `pip` now refers to a local `pip` of the environment under `venv2.7`, as can be seen by:
 
-Note how this is not like `git`: if we change directory we are still in the virtual environment, because we actually sourced something into our current shell
+        readlink -f "$(which pip)"
 
-    cd ..
-    cd -
+    `pip install` only installs packages locally to this environment.
+
+-   `python` now refers to TODO what? The symlink chain ends in a python under `venv2.7`. Where did that interpreter come from?
+
+-   `PS1` was changed, so that every shell lines starts with:
+
+        (venv2.7)~/path/to/myproject
+        user@host
+
+Note how this is not like `git`: if we change directory we are still in the virtual environment, because we actually sourced something into our current shell.
 
 When you want to exit do:
 
     deactivate
 
-This has been defined by the source command and undoes it.
-But don't do that yet.
+This has been defined by the activate source command and undoes it. But don't do that yet.
 
 Check out that our Python version really is the one we wanted:
 
@@ -92,6 +97,15 @@ Once you've have enough fun, just do:
 
 And we are back to the normal world.
 
-## Sources
+## git and virtualenv
+
+You should gitignore the local environment: <http://stackoverflow.com/questions/6590688/is-it-bad-to-have-my-virtualenv-directory-inside-my-git-repository>
+
+Use `pip freeze` to get the packages I need into a `requirements.txt` and track that instead.
+
+TODO: how to automatically specify which Python version is to be used? Like `.rvm` file for Ruby?
+
+## Bibliography
 
 - <http://simononsoftware.com/virtualenv-tutorial/>
+- <http://stackoverflow.com/questions/2812471/is-there-a-python-equivalent-of-rubys-rvm>

@@ -20,7 +20,6 @@ class SummingThread(threading.Thread):
          for i in self.values:
              self.total += i
 
-
 thread1 = SummingThread([1, 2, 3])
 thread2 = SummingThread([4, 5, 6])
 thread1.start()

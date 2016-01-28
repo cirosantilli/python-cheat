@@ -22,8 +22,6 @@ import os.path
 blacklist = [
     # Broken.
     'main',
-    # Network.
-    'net',
     # Large download.
     'nltk_cheat',
     # pip build takes too long.
@@ -32,6 +30,8 @@ blacklist = [
     'test',
     # Meant to fail.
     'unittest_cheat',
+    # Networking.
+    'urllib2_cheat',
     # Interactive.
     'wsgi',
 ]

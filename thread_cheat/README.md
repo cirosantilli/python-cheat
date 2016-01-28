@@ -1,3 +1,3 @@
 # Multi threading
 
-1. [Thread](thread_cheat.py)
+1. [threading](threading_cheat.py)
