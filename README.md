@@ -2,9 +2,7 @@
 
 [![Build Status](https://travis-ci.org/cirosantilli/python-cheat.svg?branch=master)](https://travis-ci.org/cirosantilli/python-cheat)
 
-Python information and cheatsheets.
-
-Stdlib and third party libraries are covered.
+Python minimal examples. Asserts used wherever possible.
 
 1.  Featured
     1. [main.py](main.py): major cheat
@@ -36,10 +34,6 @@ Stdlib and third party libraries are covered.
         1. [C from Python](c_from_py/)
         1. [Python from C](python_from_c/)
 1.  Standard library
-    1.  [os](os_cheat.py)
-        1.  [environ](environ.py)
-        1.  [path](path_cheat.py)
-    1.  [Multi-threading](thread_cheat/)
     1.  [argparse](argparse_cheat.py)
     1.  [curses](curses_cheat/)
     1.  [datetime](datetime_cheat.py)
@@ -47,8 +41,13 @@ Stdlib and third party libraries are covered.
     1.  [fileinput](fileinput/)
     1.  [logging](logging_cheat.py)
     1.  [math](math_cheat.py)
+    1.  [Multi-threading](thread_cheat/)
+    1.  [os](os_cheat.py)
+        1.  [environ](environ.py)
+        1.  [path](path_cheat.py)
     1.  [random](random_cheat.py)
     1.  [re](re_cheat.py)
+    1.  [smtplib](smtplib_cheat.py)
     1.  [sqlite3](sqlite3.py)
     1.  [subprocess](subprocess_cheat/)
     1.  [tempfile](tempfile_cheat.py)
@@ -56,8 +55,9 @@ Stdlib and third party libraries are covered.
     1.  [time](time_cheat.py)
     1.  [tk](tk.py)
     1.  [unittest](unittest_cheat.py)
+    1.  [urllib2](urllib2_cheat.py)
     1.  [wsgi](wsgi.py)
-1.  Third party tools
+1.  Third party
     1.  [trac](trac.md)
     1.  [SciPy](scipy_cheat.py)
     1.  [SimPy](simpy_cheat.py)

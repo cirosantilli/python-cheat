@@ -18,6 +18,7 @@ TODO log all at once
 
 import logging
 import sys
+import time
 
 if '## Default logger':
 
@@ -82,3 +83,30 @@ if '## Custom loggers':
     logger.critical('critical')
 
 # TODO: log all / a certain level to stdout
+
+if '## Align':
+
+    """
+    http://stackoverflow.com/questions/7771912/how-to-right-align-level-field-in-python-logging-formatter
+    http://stackoverflow.com/questions/20618570/python-logging-formatter-is-there-any-way-to-fix-the-width-of-a-field-and-jus
+
+    For the level name, use: `%(levelname)8s`
+    """
+
+if '## UTC time':
+
+    # http://stackoverflow.com/questions/6321160/python-logging-how-to-set-time-to-gmt
+
+    logging.debug('not UTC')
+    logging.Formatter.converter = time.gmtime
+    logging.debug('UTC')
+
+if '## Threading':
+
+    """
+    logging is thread safe:
+    http://stackoverflow.com/questions/2973900/is-pythons-logging-module-thread-safe?lq=1
+
+    You will likely want to log the thread name on every log write:
+    http://stackoverflow.com/a/2357652/895245
+    """
