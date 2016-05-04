@@ -28,6 +28,8 @@ Since NumPy is quite low level, just use SciPy all the time and avoid confusion.
 
 - <http://www.scipy.org/Tentative_NumPy_Tutorial>
 - <www.scipy.org/PerformancePython>
+- <https://github.com/rougier/numpy-100>
+- <https://github.com/scipy-lectures/scipy-lecture-notes>
 """
 
 import math
