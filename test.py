@@ -26,6 +26,8 @@ blacklist = [
     'nltk_cheat',
     # pip build takes too long.
     'scipy_cheat',
+    # Networking.
+    'smtplib_cheat',
     # infinite loop!
     'test',
     # Meant to fail.
