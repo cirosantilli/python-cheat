@@ -17,3 +17,21 @@ The main interpreter implementations are:
 <http://programmers.stackexchange.com/questions/186889/why-was-python-written-with-the-gil>
 
 <https://wiki.python.org/moin/GlobalInterpreterLock>
+
+## Bytecode
+
+### pyc
+
+TODO: Cpython implementation detail?
+
+<https://www.quora.com/What-is-Python-byte-code>
+
+Can differ between minor versions: <http://stackoverflow.com/questions/10547099/python-2-and-3-are-the-bytecode-pyo-pyc-backward-compatible>
+
+Only for loading modules faster, not running: <http://stackoverflow.com/questions/3878479/python-pyc-files-main-file-not-compiled>
+
+### pyd
+
+### pyo
+
+<http://stackoverflow.com/questions/8822335/what-do-the-python-file-extensions-pyc-pyd-pyo-stand-for>

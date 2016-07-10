@@ -105,6 +105,10 @@ if '## re module':
 
         assert re.match(r'a.c', '0abc') is None
 
+        # Does not however have to match until the end:
+
+        assert re.match(r'a.c', 'abc0')
+
     if '## search':
 
         """

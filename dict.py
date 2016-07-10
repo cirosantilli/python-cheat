@@ -135,7 +135,7 @@ if '## update':
 
     d0 = {0: 'zero', 1: 'one'}
     d1 = {0: 'zero2', 2: 'two'}
-    d0.update(d1)
+    assert d0.update(d1) is None
     assert d0 == {0: 'zero2', 1: 'one', 2: 'two'}
 
     # Create a new dict that is the union of two other dicts:
@@ -143,7 +143,7 @@ if '## update':
     d0 = {0: 'zero', 1: 'one'}
     d1 = {0: 'zero2', 2: 'two'}
     d01 = d0.copy()
-    d01.update(d1)
+    assert d01.update(d1) is None
     assert d01 == {0: 'zero2', 1: 'one', 2: 'two'}
 
 if 'Iterate / loop over dict':

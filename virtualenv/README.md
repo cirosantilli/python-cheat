@@ -2,7 +2,7 @@
 
 Allows you to run programs in a controlled Python environment:
 
-- python interpreter version
+- python interpreter version. Does not seem to be able to compile / install new interpreters, you must do that yourself, unlike other package managers like NPM.
 - version of each installed python module
 
 It is therefore a virtualization method for Python aspects of the program, and helps ensure that every developer of a project runs the same environment.
@@ -18,6 +18,8 @@ Install virtualenv with pip:
 
     sudo pip install --upgrade virtualenv
 
+## Create
+
 The typical usage for virtualenv is to create a new one inside the project you are working on:
 
     cd python-project
@@ -26,6 +28,16 @@ Create a new environment that will use the `python2.7` interpreter:
 
     virtualenv -p python2.7 --distribute venv2.7
 
+This creates a directory called `venv2.7`. This directory will contain all the details of this local Python installation.
+
+In most projects, you should use a `.venv` directory and gitignore it.
+
+`.env` is a bad name choice as it conflicts with environment variable deploy settings, e.g. on Heroku. 
+
+A `python2.7` executable must exist in your `PATH`, or else the creation fails. Or you can specify the full path as:
+
+    virtualenv -p /usr/bin/python2.7 --distribute venv2.7
+
 `--distribute` is recommended as this flags tells Virtualenv to use `distribute` instead of `setuptools` which is better as of 2013.
 
 If `-p` is not given, the version used to run `virtualenv` is used instead.
@@ -33,6 +45,8 @@ If `-p` is not given, the version used to run `virtualenv` is used instead.
 Create a new environment that will use the `python3.3` interpreter:
 
     virtualenv -p python3.3 --distribute venv3.3
+
+## Use
 
 To activate the 2.7 environment we must source:
 
@@ -67,7 +81,7 @@ Check out that our Python version really is the one we wanted:
 
 Check out all the distribute installed programs:
 
-    pip freeze
+    pip freeze >requirementx.txt
 
 There should be very few in the list, much less than all of those we have previously installed. This means that we have a very clean environment for our new project to run on! Amongst the few present, `distribute` should be there since we will be using it to install the other dependencies.
 
@@ -103,7 +117,24 @@ You should gitignore the local environment: <http://stackoverflow.com/questions/
 
 Use `pip freeze` to get the packages I need into a `requirements.txt` and track that instead.
 
-TODO: how to automatically specify which Python version is to be used? Like `.rvm` file for Ruby?
+## Specify Python version
+
+How to automatically specify which Python version is to be used? Like `.rvm` file for Ruby?
+
+Heroku uses a `runtime.txt` file for that: <https://devcenter.heroku.com/articles/python-support#supported-python-runtimes> but it is not a widespread convention.
+
+### relocatable
+
+- <http://stackoverflow.com/questions/6628476/renaming-a-virtualenv-folder-without-breaking-it>
+- <http://stackoverflow.com/questions/7153113/virtualenv-relocatable-does-it-really-work>
+- <http://stackoverflow.com/questions/32407365/can-i-move-a-virtualenv>
+- <http://stackoverflow.com/questions/6820109/what-parts-of-a-virtualenv-need-to-be-changed-to-relocate-it>
+
+If you move the virtualenv directory, it breaks! Lol.
+
+`--relocatable` is a half baked creation time flag that half works.
+
+This might be why using `virtualenvwrapper` is a good idea.
 
 ## Bibliography
 

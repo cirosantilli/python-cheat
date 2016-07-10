@@ -47,7 +47,6 @@ Python minimal examples. Asserts used wherever possible.
         1.  [path](path_cheat.py)
     1.  [random](random_cheat.py)
     1.  [re](re_cheat.py)
-    1.  [smtplib](smtplib_cheat.py)
     1.  [sqlite3](sqlite3.py)
     1.  [subprocess](subprocess_cheat/)
     1.  [tempfile](tempfile_cheat.py)
@@ -55,8 +54,11 @@ Python minimal examples. Asserts used wherever possible.
     1.  [time](time_cheat.py)
     1.  [tk](tk.py)
     1.  [unittest](unittest_cheat.py)
-    1.  [urllib2](urllib2_cheat.py)
-    1.  [wsgi](wsgi.py)
+    1.  Networking
+        1.  [SimpleHTTPServer](simplehttpserver_cheat.py)
+        1.  [smtplib](smtplib_cheat.py)
+        1.  [urllib2](urllib2_cheat.py)
+        1.  [wsgi](wsgi.py)
 1.  Third party
     1.  [trac](trac.md)
     1.  [SciPy](scipy_cheat.py)

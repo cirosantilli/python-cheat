@@ -20,20 +20,35 @@ if '## create':
 
     # An iterator is just a function with a `yield` method:
 
-    def count():
-        """this is already built-in"""
+    def mycount():
         i = 0
-        yield i
-        i = i+1
+        while True:
+            yield i
+            i = i + 1
+    c = mycount()
+    assert next(c) == 0
+    assert next(c) == 1
+    assert next(c) == 2
 
     # Raise exception when over:
 
-        def myxrange(n):
-            i = 0
+    def myxrange(n):
+        i = 0
+        while True:
             yield i
             i = i+1
             if i > n:
                 raise StopIteration
+    x = myxrange(2)
+    assert next(x) == 0
+    assert next(x) == 1
+    assert next(x) == 2
+    try:
+        next(x)
+    except StopIteration:
+        pass
+    else:
+        assert False
 
     if '## generator expressions':
 
@@ -55,14 +70,16 @@ if '## create':
 
     if '## iter':
 
-        # Converts various types to iterators.
+        # Converts various types to iterators,
+        # in particular generator expressions.
 
         iter('abc')
         iter([1, 2, 3])
 
 if '## next':
 
-    # Will not work with `xrange`! <http://late.am/post/2012/06/18/what-the-heck-is-an-xrange>
+    # Will not work with `xrange`!
+    # http://late.am/post/2012/06/18/what-the-heck-is-an-xrange
 
     #next(xrange(1))
 
