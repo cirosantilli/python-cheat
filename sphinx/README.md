@@ -1,16 +1,12 @@
 # Sphinx
 
-HTML/PDF documentation from rest markdown.
+HTML/PDF documentation from rst markup.
 
 May use docstrings with a default extension.
 
 It is used on the python official documentation
 
-The automatic doc finding/generation is not yet very good IMHO, but the rest works good.
-
-## Install
-
-    sudo pip install sphinx
+The automatic doc finding / generation is not yet very good IMHO, but the rest works well.
 
 ## Directory structure structure
 
@@ -18,12 +14,12 @@ This simulates a real project, with documentation in `doc/`, and `mod` and `mod2
 
 ### Build
 
+    cd doc
     make html
 
 I added a make `firefox` rule to the `Makefile` to make it easier to test:
 
-    firefox: html
-        firefox $(BUILDDIR)/html/index.html
+    make firefox
 
 And also automated `sphinx-autodoc` generation on my `Makefile`.
 

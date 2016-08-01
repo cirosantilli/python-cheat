@@ -243,6 +243,11 @@ if 'Modify inplace':
         assert None == l.sort(reverse=True)
         assert l == [3, 2, 1]
 
+        # Key.
+        l = [-1.0, 0.5, 2]
+        assert None == l.sort(key=lambda x:x*x)
+        assert l == [0.5, -1.0, 2]
+
 if '## Items are references, not copies':
 
     l0 = [0]

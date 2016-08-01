@@ -20,6 +20,8 @@ Python minimal examples. Asserts used wherever possible.
     1.  [Decorator](decorator.py)
     1.  [Iterator](iterator.py)
     1.  Data types
+        1.  Built-in types
+            1. [Number](number.py)
         1.  [String](string_cheat.py)
             1. [format()](format_method.py)
             1. [Format operator %](format_operator.py)
@@ -33,8 +35,11 @@ Python minimal examples. Asserts used wherever possible.
     1.  Cross-language
         1. [C from Python](c_from_py/)
         1. [Python from C](python_from_c/)
+    1.  [Operators](operators.py)
 1.  Standard library
     1.  [argparse](argparse_cheat.py)
+    1.  [bisect](bisect_cheat.py)
+    1.  [collections](collection_cheat.py)
     1.  [curses](curses_cheat/)
     1.  [datetime](datetime_cheat.py)
     1.  [expat](expat_cheat.py)

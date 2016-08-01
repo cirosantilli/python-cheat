@@ -6,15 +6,15 @@ def f(name, state=None):
 
     LaTeX math: :math:`a^2 + \alpha`.
 
-    refers to a function: :func:`f2`
+    Function link: :func:`f2`
 
-    refers to a function: :class:`C`
+    Class link: :class:`C`
 
-    refers to a function on another relative module: :func:`.a.f`
+    Relative module function link: :func:`.a.f`
 
-    cannot have headers here
+    Cannot have headers here.
 
-    othernormal `reST <http://docutils.sourceforge.net/rst.html>`_
+    Othernormal `reST <http://docutils.sourceforge.net/rst.html>`_
 
     - l1
     - l2
@@ -54,4 +54,16 @@ def f2():
     pass
 
 class C():
-    pass
+    """
+    :ivar i: instance variable
+    :vartype i: int
+
+    :var v: TODO variable? TODO shows the same as the others in 1.2.2.
+    :vartype v: int
+
+    :cvar c: class variable. TODO shows the same as the others in 1.2.2.
+    :vartype c: int
+    """
+
+    def __init__( self ):
+        self.i = 0

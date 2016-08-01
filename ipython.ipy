@@ -1,24 +1,22 @@
 #!/usr/bin/env ipython
 
-#must use ipy extension, or ipython uses regular python with python file
+# Must use ipy extension, or ipython uses regular python with python file
 
-##review
+## Review
 
-#pythonlike shell
+# pythonlike shell
 
-#advantages:
+# advantages:
 
-#- all programming contructs are sane (python)
-#- easier to call system shell
-#- autocompletion
-#- some bash built-ins like cd
-#- quick documentation with ?
+# - all programming contructs are sane (python)
+# - easier to call system shell
+# - autocompletion
+# - some bash built-ins like cd
+# - quick documentation with ?
 
-#still some important features missing.
+## Regular python
 
-##regular python
-
-#all of normal python works
+# All of normal python works.
 
 a = 1
 print a
@@ -32,7 +30,7 @@ def f2(a,b):
     """
     print a + b
 
-##tab completion
+## Tab completion
 
 #works even for python objects in current scope.
 
@@ -48,138 +46,148 @@ def f2(a,b):
 
 f2?
 
-##magic
+if '##magic':
 
-#call python functions with less typing
+    #call python functions with less typing
 
-#only work at start of strings
+    #only work at start of strings
 
-#avoid typing parenthesis and commas:
+    #avoid typing parenthesis and commas:
 
-/f2 1,2
-/f2 1 2
+    /f2 1,2
+    /f2 1 2
 
-#are the same as `f2(1,2)`
+    #are the same as `f2(1,2)`
 
-#any space is converted to a comma:
+    #any space is converted to a comma:
 
-    #/f2 1, 2
+        #/f2 1, 2
 
-#is the same as f2(1,,2)
+    #is the same as f2(1,,2)
 
-#also autoquote:
+    #also autoquote:
 
-,f2 ab cd
+    ,f2 ab cd
 
-#same as `f2('ab','cd')`
+    #same as `f2('ab','cd')`
 
-,f2 12 34
+    ,f2 12 34
 
-#same as `f2('12','34')`. They are not number anymore but strings!
+    #same as `f2('12','34')`. They are not number anymore but strings!
 
-#autoquote as single argument:
+    #autoquote as single argument:
 
-;f a b
+    ;f a b
 
-#same as `f('a b')`
+    #same as `f('a b')`
 
-#you can only have single argument functions in this mode
+    #you can only have single argument functions in this mode
 
-#TODO how to get their return values?
+    #TODO how to get their return values?
 
-##shell
+    ##shell
 
-!echo a
-!echo a | cat
+    !echo a
+    !echo a | cat
 
-!echo A > a.tmp
-!cat a.tmp
-!rm a.tmp
+    !echo A > a.tmp
+    !cat a.tmp
+    !rm a.tmp
 
-#it really runs inside your shell:
+    #it really runs inside your shell:
 
-!echo *
+    !echo *
 
-#TODO how to avoid running in a shell? (python pipes for example)
+    #TODO how to avoid running in a shell? (python pipes for example)
 
-###get stdout err
+    ###get stdout err
 
-a = !echo abc
-assert a[0] == 'abc'
+    a = !echo abc
+    assert a[0] == 'abc'
 
-a = !echo abc 1>&2
-assert a[0] == 'abc'
+    a = !echo abc 1>&2
+    assert a[0] == 'abc'
 
-#TODO how to separate stdout and stderr? I would love to write:
+    #TODO how to separate stdout and stderr? I would love to write:
 
-#out, err = !somecommand
+    #out, err = !somecommand
 
-a = !echo 'ab\ncd'
-assert a == ['ab','cd']
+    a = !echo 'ab\ncd'
+    assert a == ['ab','cd']
 
-#other expressions besides equality don't work:
+    #other expressions besides equality don't work:
 
-    #a = [1] + !echo ab
+        #a = [1] + !echo ab
 
-###pass python variable
+    ###pass python variable
 
-a = 'ab cd'
-!echo $a
+    a = 'ab cd'
+    !echo $a
 
-###strings are python strings
+    ###strings are python strings
 
-a = !echo 'ab\ncd'
-assert a == ['ab','cd'] 
+    a = !echo 'ab\ncd'
+    assert a == ['ab','cd'] 
 
-###exit status
+    ###exit status
 
-!false
-assert _exit_code == 1
+    !false
+    assert _exit_code == 1
 
-#but does not work when you capture stdout/stderr:
+    #but does not work when you capture stdout/stderr:
 
-!false
-a = !true
-assert _exit_code == 1
+    !false
+    a = !true
+    assert _exit_code == 1
 
-#TODO how to do this?
+    #TODO how to do this?
 
-#simply does not change.
+    #simply does not change.
 
-##rehashx
+    ##rehashx
 
-#once used, you don't need '!' anymore
+    #once used, you don't need '!' anymore
 
-#TODO it works in interactive, why not here?
+    #TODO it works in interactive, why not here?
 
-%rehashx
+    %rehashx
 
-#echo b
+    #echo b
 
-##startup files
+    ##startup files
 
-#based on profiles
+    #based on profiles
 
-#to create default profile:
+    #to create default profile:
 
-    #ipython profile create
+        #ipython profile create
 
-#to create a named profile:
+    #to create a named profile:
 
-    #ipython profile create $name
+        #ipython profile create $name
 
-#to locate your profiles folder (does not exist before the first profile create):
+    #to locate your profiles folder (does not exist before the first profile create):
 
-    #ipython locate
+        #ipython locate
 
-#inside location dirs are organized as follows:
+    #inside location dirs are organized as follows:
 
-    #profile_<name>/startup
+        #profile_<name>/startup
 
-#anything under `startup` will be run at startup for the given profile
+    #anything under `startup` will be run at startup for the given profile
 
-#start ipython with an specific profile:
+    #start ipython with an specific profile:
 
-    #ipython --profile $name
+        #ipython --profile $name
 
-#if ommitted `name=default`.
+    #if ommitted `name=default`.
+
+    ## %edit
+
+        # Open a given function on Vim, and run it after it is edited:
+
+            #%edit myfunction
+
+        # To just see the source, use:
+
+            #myfunction??
