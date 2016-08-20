@@ -17,6 +17,7 @@ if "Basic usage":
     parser.add_argument('a')
     parser.add_argument('b')
     args = parser.parse_args()
+    print type(args)
     # Same:
     #args = parser.parse_args(sys.argv)
     assert args.a == '0'
@@ -49,6 +50,10 @@ if "##Automatic option names.":
 
     - removes leading '-'
     - transforms middle '-' to '_'
+
+    **NOT** done on positional arguments!
+    `dest=` also fails, and you just have to `getattr` those:
+    http://stackoverflow.com/questions/12834785/having-options-in-argparse-with-a-dash#comment30212495_20250435
     """
 
     # In case of name conflicts, it becomes simply impossible to access one of the variables.
@@ -123,6 +128,8 @@ if "##Optional args":
     args = parser.parse_args([])
     assert args.a == None
 
+    # boolean flags: see store_true and action.
+
 if "##default":
 
     parser = argparse.ArgumentParser()
@@ -181,6 +188,20 @@ if "##type":
     assert args.a == 1.0
 
     # boolean: see store_true and action.
+
+    if "##file type":
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            'a',
+            type=argparse.FileType('r'),
+            default=1,
+        )
+        args = parser.parse_args([__file__])
+        # Cannot be opened.
+        # args = parser.parse_args(['asdf'])
+        assert type( args.a ) == file
+        args.a.close()
 
 if "##nargs":
 
