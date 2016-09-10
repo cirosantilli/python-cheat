@@ -804,16 +804,18 @@ if '## constants':
 
     # http://docs.scipy.org/doc/scipy/reference/constants.html
 
-    assert array_equal(scipy.constants.pi, math.pi)
+    assert array_equal(sp.constants.pi, math.pi)
 
 if '## stats':
+
+    # print(stats.norm.rvs(loc=5,scale=10,size=500))
 
     if '## pearsonr':
 
         # https://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient
 
         assert array_equal(
-            scipy.stats.pearsonr(
+            sp.stats.pearsonr(
                 [1, 2, 3],
                 [2, 4, 6],
             )[0],
@@ -821,7 +823,7 @@ if '## stats':
         )
 
         assert array_equal(
-            scipy.stats.pearsonr(
+            sp.stats.pearsonr(
                 [1, 2, 3],
                 [-2, -4, -6],
             )[0],

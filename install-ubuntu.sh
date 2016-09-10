@@ -2,10 +2,17 @@
 
 sudo apt-get install -y aptitude
 
+sudo apt-get install \
+  libfreetype6-dev \
+  libpng-dev \
+  liblapack-dev \
+  libblas-dev \
+  gfortran \
+  python-dev
+
 # TODO install with virtualenv
 sudo aptitude install -y python-pip
 
-sudo aptitude install -y python-dev
 sudo aptitude install -y python-scipy
 
 # For some reason this is really hard to install.
