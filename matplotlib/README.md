@@ -101,3 +101,7 @@ use only separate `kwargs` in non-interactive programs since this is more manage
 
     plt.plot([0,1,2,3], [0,1,4,9], color='r', linestyle='--'  )
     save_svg_clear('r--kwargs')
+
+## pylab
+
+Part of matplotlib: <http://stackoverflow.com/questions/12987624/confusion-between-numpy-scipy-matplotlib-and-pylab>

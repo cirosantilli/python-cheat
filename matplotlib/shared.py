@@ -23,15 +23,15 @@ import imp
 import matplotlib.pyplot as plt
 
 #global params:
-out_dir = "out"
-out_ext = "svg"
+out_dir = 'out'
+out_ext = 'svg'
 
 class DefaultParameters:
     """
     Encapsulates all the default plot parameters
     """
 
-def plot( plt, params ):
+def plot(plt, params):
     """plot on an empty plt object
 
     :param plt: a clean ``matplotlib.pyplot`` object
@@ -45,12 +45,16 @@ if __name__ == '__main__':
     path = sys.argv[1]
     name = os.path.split(os.path.splitext(path)[0])[1]
     try:
-        plotter = imp.load_source( name, path )
+        plotter = imp.load_source(name, path)
     except IOError:
         print path
         print name
         raise
     else:
-        plotter.plot( plt, DefaultParameters )
-        plt.savefig( os.path.join( out_dir, name + '.' + out_ext ) , format=out_ext, bbox_inches='tight' )
+        plotter.plot(plt, DefaultParameters)
+        plt.savefig(
+            os.path.join( out_dir, name + '.' + out_ext),
+            format=out_ext,
+            bbox_inches='tight'
+        )
         plt.clf()

@@ -1,17 +1,8 @@
 #!/usr/bin/env bash
-
-sudo apt-get install -y aptitude
-
-# TODO install with virtualenv
-sudo aptitude install -y python-pip
-
-sudo aptitude install -y python-dev
-sudo aptitude install -y python-scipy
-
-# For some reason this is really hard to install.
-sudo aptitude install -y python-matplotlib
-sudo aptitude install -y python-sip
-# Update NumPy version
-sudo pip install -y numpy
-
-sudo pip install -r requirements.txt
+set -ex
+sudo apt-get update
+sudo apt-get install -y python-dev virtualenv
+# --distribute: http://stackoverflow.com/questions/35780537/error-no-module-named-markerlib-when-installing-some-packages-on-virtualenv
+virtualenv -p python2.7 .venv --distribute
+. .venv/bin/activate
+pip install -r requirements.txt

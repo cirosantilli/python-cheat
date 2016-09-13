@@ -5,17 +5,6 @@
 
 Current best math package for Python.
 
-## Install
-
-On Ubuntu 12.04:
-
-    sudo aptitude install python-scipy
-
-Pip may not work because of missing binary dependencies.
-
-    sudo pip install numpy
-    sudo pip install scipy
-
 ## NumPy vs SciPy
 
 SciPy uses and extends NumPy (think LAPACK BLAS).
@@ -26,10 +15,10 @@ Since NumPy is quite low level, just use SciPy all the time and avoid confusion.
 
 ## Sources
 
-- <http://www.scipy.org/Tentative_NumPy_Tutorial>
-- <www.scipy.org/PerformancePython>
-- <https://github.com/rougier/numpy-100>
-- <https://github.com/scipy-lectures/scipy-lecture-notes>
+- http://www.scipy.org/Tentative_NumPy_Tutorial
+- www.scipy.org/PerformancePython
+- https://github.com/rougier/numpy-100
+- https://github.com/scipy-lectures/scipy-lecture-notes
 """
 
 import math
@@ -98,15 +87,15 @@ if '## data types':
     """
 
     assert sp.array_equal(
-        sp.array([1, 2, 3], dtype = sp.int_),
+        sp.array([1, 2, 3], dtype=sp.int_),
         sp.int_([1, 2, 3])
     )
 
     # Different types evaluate to equal sp.arrays
 
     assert sp.array_equal(
-        sp.array([1, 2, 3], dtype = sp.int_  ),
-        sp.array([1, 2, 3], dtype = sp.float_)
+        sp.array([1, 2, 3], dtype=sp.int_  ),
+        sp.array([1, 2, 3], dtype=sp.float_)
     )
 
     # Get type

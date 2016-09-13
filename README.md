@@ -4,15 +4,14 @@
 
 Python minimal examples. Asserts used wherever possible.
 
-1.  Featured
-    1. [main.py](main.py): major cheat
+1. [Getting started](getting-started.md)
 1.  Introduction
-    1. [Getting started](getting-started.md)
     1. [Implementations](implementations.md)
     1. [python utility](python-utility.md)
     1. [Style guides](style-guides.md)
     1. [Pros and cons](pros-and-cons.md)
     1. [How to hack Python projects](how-to-hack-python-projects.md)
+1. [main.py](main.py): major cheat
 1.  Meta
     1. [test.py](test.py)
 1.  Language
@@ -61,13 +60,15 @@ Python minimal examples. Asserts used wherever possible.
         1.  [wsgi](wsgi.py)
 1.  Third party
     1.  [trac](trac.md)
-    1.  [SciPy](scipy_cheat.py)
-    1.  [SimPy](simpy_cheat.py)
-    1.  [matplotlib](matplotlib/)
     1.  [pip](pip.md)
     1.  [sphinx](sphinx/)
     1.  [virtualenv](virtualenv/)
     1.  [waf](waf/)
+    1.  Scientific
+        1.  [SciPy](numpy_cheat.py)
+        1.  [SciPy](scipy_cheat.py)
+        1.  [matplotlib](matplotlib/)
+        1.  [SimPy](simpy_cheat.py)
     1.  [Interactive friendly](interactive-friendly.md)
         1. [ipython](ipython.ipy)
 1.  [Bibliography](bibliography.md)

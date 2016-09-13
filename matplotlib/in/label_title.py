@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-
-def plot( plt, params ):
+def plot(plt, params):
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('title')
-    plt.plot([0,1])
+    plt.plot([0, 1, 4, 9])

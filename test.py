@@ -25,6 +25,7 @@ blacklist = [
     # Large download.
     'nltk_cheat',
     # pip build takes too long.
+    'numpy_cheat',
     'scipy_cheat',
     # Networking.
     'smtplib_cheat',
