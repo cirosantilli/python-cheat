@@ -399,38 +399,6 @@ if '## indexing':
         # sp.array([3, 1])
     # )
 
-if '## slicing':
-
-    x = sp.array([
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-    ])
-
-    assert sp.array_equal(
-        x[:, 0],
-        [0, 3, 6]
-    )
-
-    assert sp.array_equal(
-        x[0, :],
-        [0, 1, 2]
-    )
-
-    assert sp.array_equal(
-        x[0:3:2, 0:3:2],
-        [
-            [0, 2],
-            [6, 8]
-        ]
-    )
-
-if '## broadcasting':
-
-    """
-    Means to decide the right operation based on input types.
-    """
-
 if '## sum':
 
     # Arrays of same size:

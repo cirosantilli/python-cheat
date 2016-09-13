@@ -10,10 +10,12 @@ decides which line each (x, y) point belongs to.
 import os
 import numpy
 def plot(plt, params):
-    a = numpy.loadtxt(os.path.splitext(__file__)[0] + '.dat', skiprows=1)
+    a = numpy.loadtxt(
+        os.path.splitext(__file__)[0] + '.dat',
+        skiprows=1
+    )
     keys = list(set(a[:, 0]))
     for key in keys:
         v = a[a[:, 0] == key, :]
         plt.plot(v[:, 1], v[:, 2], label=int(key))
     plt.legend(loc='upper left')
-

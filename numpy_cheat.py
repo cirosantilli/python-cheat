@@ -13,11 +13,61 @@ def dist2(a, a2):
 
 def array_equal(a, a2, err=10e-6, dist=dist2):
     """
-    True iff two sp.arrays are equal within a given `err` precision for given `dist` distance.
+    True iff two numpy.arrays are equal within a given `err` precision for given `dist` distance.
     """
     return dist(a, a2) < err
 
 if '## ndarray':
+
+    if '## slicing':
+
+        x = numpy.array([
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+        ])
+
+        assert numpy.array_equal(
+            x[:, 0],
+            [0, 3, 6]
+        )
+
+        assert numpy.array_equal(
+            x[0, :],
+            [0, 1, 2]
+        )
+
+        assert numpy.array_equal(
+            x[0:3:2, 0:3:2],
+            [
+                [0, 2],
+                [6, 8],
+            ]
+        )
+
+        # Pairwise list!
+        assert numpy.array_equal(
+            x[[0, 1], [1, 2]],
+            [1, 5]
+        )
+
+        # Submtraix.
+        assert numpy.array_equal(
+            x[[[0], [1]], [1, 2]],
+            [
+                [1, 2],
+                [4, 5],
+            ]
+        )
+
+        # Transposed.
+        assert numpy.array_equal(
+            x[[0, 1], [[1], [2]]],
+            [
+                [1, 4],
+                [2, 5],
+            ]
+        )
 
     if '## Split by value of column':
 
@@ -25,68 +75,51 @@ if '## ndarray':
         http://stackoverflow.com/questions/21757680/python-separate-matrix-by-column-values
         """
 
-        # Known values.
         a = numpy.array([
             [0, 1,  1],
             [1, 1, -1],
-            [0, 2,  2],
-            [1, 2, -2]
-        ])
-        a0 = a[a[:, 0] == 0, :]
-        a1 = a[a[:, 0] == 1, :]
-        assert numpy.array_equal(
-            a0,
-            numpy.array([
-                [0, 1, 1],
-                [0, 2, 2]
-            ])
-        )
-        assert numpy.array_equal(
-            a1,
-            numpy.array([
-                [1, 1, -1],
-                [1, 2, -2]
-            ])
-        )
-
-        a = numpy.array([
-            [1, 0, 0],
-            [2, 0, 0],
-            [1, 1, 1],
-            [2, 1, 1],
-            [1, 2, 2],
-            [2, 2, 4],
-        ])
-        i = numpy.array([1, 2])
-        b = a[numpy.array([True, False, True, False, True, False]), :]
-        b = a[numpy.array([True, False, True, False, True, False]), i]
-        print(b)
-        print(b[:, i])
-
-        # Unknown key values.
-        a = numpy.array([
-            [0, 1,  1],
-            [1, 1, -1],
-            [2, 1,  2],
             [0, 2,  2],
             [1, 2, -2],
-            [2, 2,  4],
             [0, 3,  3],
             [1, 3, -3],
-            [2, 3,  6],
         ])
-        keys = list(set(a[:, 0]))
-        for key in keys:
-            print(a[a[:, 0] == key, [1, 2]])
+        aa = numpy.array([
+            [
+                [0, 1,  1],
+                [0, 2,  2],
+                [0, 3,  3],
+            ],
+            [
+                [1, 1, -1],
+                [1, 2, -2],
+                [1, 3, -3],
+            ],
+        ])
 
-        a = numpy.array([
-            [1, 0, 0],
-            [2, 0, 0],
-            [1, 1, 1],
-            [2, 1, 1],
-            [1, 2, 2],
-            [2, 2, 4],
-        ])
-        keys = list(set(a[:, 0]))
-        for key in keys:
-            print(a[a[:, 0] == key, [1, 2]])
+        if '## Known keys':
+
+            assert numpy.array_equal(
+                a[a[:, 0] == 0, :],
+                numpy.array([
+                    [0, 1, 1],
+                    [0, 2, 2],
+                    [0, 3, 3],
+                ])
+            )
+            assert numpy.array_equal(
+                a[a[:, 0] == 1, :],
+                numpy.array([
+                    [1, 1, -1],
+                    [1, 2, -2],
+                    [1, 3, -3],
+                ])
+            )
+
+        if '## Unknown values':
+
+            keys = list(set(a[:, 0]))
+            for key in keys:
+                assert numpy.array_equal(
+                    a[a[:, 0] == key, :],
+                    aa[key],
+                )
