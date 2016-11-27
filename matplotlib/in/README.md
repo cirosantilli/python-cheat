@@ -11,10 +11,13 @@ If you want to generate more than one plot per file, put the file that will do t
 1.  Line style
     1.  [Line points](line_points.py)
     1.  [Tick](tick.py)
+    1.  [prop_cycle](prop_cycle.py)
 1.  Subplots
     1.  [Subplots](subplots.py)
     1.  [Subplots add](subplots_add.py)
 1.  [Two lines](two_lines.py)
+    1.  [Plot matrix](plot_matrix.py)
+    1.  [Plot matrix x](plot_matrix_x.py)
     1.  [Legend outside](legend_outside.py)
 1.  Data from files
     [plotfile](plotfile.py)

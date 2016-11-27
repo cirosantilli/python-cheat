@@ -22,7 +22,6 @@ Since NumPy is quite low level, just use SciPy all the time and avoid confusion.
 """
 
 import math
-import StringIO
 
 import scipy as sp
 import scipy.constants
@@ -310,67 +309,6 @@ if '## shape':
         sp.arange(6)
     )
 
-if '## file io':
-
-    # TODO: examples
-
-    """
-    a = sp.zeros((2, 3))
-
-    # Space separated.
-    sp.savetxt("a.tmp", a)
-
-    sp.savetxt("b.tmp", delimiter = ", ")
-
-    # single width format
-    sp.savetxt("c.tmp", delimiter = 3)
-
-    # multi width format
-    sp.savetxt("d.tmp", delimiter = (4, 3, 2))
-
-    # strip trailing/starting whitespace
-    sp.savetxt("e.tmp", autostrip = True)
-
-    # stop reading line when # is found
-    sp.savetxt("f.tmp", comments = '# ')
-
-    # skip first line, and last two lines
-    sp.savetxt("g.tmp", skip_header = 1, skip_footer = 2)
-
-    # only use first and last columns
-    sp.savetxt("h.tmp", usecols = (0, -1))
-
-    # same, give names
-    sp.savetxt("b.tmp", names = "a, b, c", usecols = ("a", "c"))
-
-    b = genfromtxt("a.tmp")
-
-    b = loadtxt("a.tmp")
-    """
-
-    if 'loadtxt':
-
-        assert array_equal(
-            sp.loadtxt(StringIO.StringIO("0 1\n2 3")),
-            [
-                [0, 1],
-                [2, 3],
-            ]
-        )
-
-        assert array_equal(
-            sp.loadtxt(
-                StringIO.StringIO("0 1\n2 3"),
-                usecols = (1,)
-            ),
-            [
-                [1, 3],
-            ]
-        )
-
-        # It is slow for large files:
-        # http://stackoverflow.com/questions/18259393/numpy-loading-csv-too-slow-compared-to-matlab
-
 if '## indexing':
 
     x = sp.arange(5.1)
@@ -393,7 +331,7 @@ if '## indexing':
     # TODO:
 
     x = sp.arange(5.1)
-    x.shape = (2,3)
+    x.shape = (2, 3)
     # assert sp.array_equal(
         # x[ sp.array([[1,0], [0,1]]) ],
         # sp.array([3, 1])
@@ -431,34 +369,6 @@ if '## sum':
     assert array_equal(
         sp.arange(5.1) + 1,
         sp.arange(1,6.1)
-    )
-
-    # Over all elements:
-
-    assert array_equal(
-        sp.sum([
-            [0, 1],
-            [2, 3]
-        ]),
-        6
-    )
-
-    # Some dimensions only:
-
-    assert array_equal(
-        sp.sum([[0, 1], [2, 3]], axis = 0),
-        sp.array([2, 4])
-    )
-
-    assert array_equal(
-        sp.sum(
-            [
-                [0, 1],
-                [2, 3]
-            ],
-            axis = 1
-        ),
-        [1, 5]
     )
 
 if '## multiplication':
@@ -505,7 +415,7 @@ if '## multiplication':
 if '## vectorize':
 
     # vectorize a function that was meant for scalar use
-    # making it more efficient? TODO confirm.
+    # making it more efficient? TODO confirm. How?
 
     def add(a, b):
         return a + b

@@ -6,4 +6,6 @@ import itertools
 def plot(plt, default_params):
     fig, axs = plt.subplots(2, 2)
     for x, y in itertools.product([0, 1], [0, 1]):
-        axs[x, y].plot([x, y])
+        ax = axs[x, y];
+        ax.plot([x, y])
+        ax.set_title('{} {}'.format(x, y))

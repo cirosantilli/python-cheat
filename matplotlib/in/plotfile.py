@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 """
+Plot data from file.
+
 - http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.plotfile
 - http://stackoverflow.com/questions/11248812/matplotlib-basic-plotting-from-text-file
 - http://stackoverflow.com/questions/13545388/plot-data-from-csv-file-with-matplotlib
