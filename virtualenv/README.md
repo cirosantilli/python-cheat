@@ -36,7 +36,7 @@ Create a new environment that will use the `python3.3` interpreter:
 
 To activate the 2.7 environment we must source:
 
-    . venv2.7/bin/activate
+    . venv3.5/bin/activate
 
 This has the following effects:
 

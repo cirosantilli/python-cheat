@@ -16,6 +16,8 @@ Python minimal examples. Asserts used wherever possible.
 1.  Meta
     1. [test.py](test.py)
 1.  Language
+    1.  [class](class.py)
+        1. [Special methods](special_methods.py)
     1.  [Exception](exception.py)
     1.  [Decorator](decorator.py)
     1.  [Iterator](iterator.py)
@@ -55,6 +57,7 @@ Python minimal examples. Asserts used wherever possible.
     1.  [smtplib](smtplib_cheat.py)
     1.  [sqlite3](sqlite3.py)
     1.  [subprocess](subprocess_cheat/)
+    1.  [sys](sys_cheat.py)
     1.  [tempfile](tempfile_cheat.py)
     1.  [termcolor](termcolor_cheat.py)
     1.  [time](time_cheat.py)

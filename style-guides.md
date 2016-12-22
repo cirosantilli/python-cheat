@@ -1,7 +1,6 @@
 # Style guides
 
--   [PEP 8](https://www.python.org/dev/peps/pep-0008) for most of the language,
-    and [PEP 257](https://www.python.org/dev/peps/pep-0257) for docstrings.
+-   [PEP 8](https://www.python.org/dev/peps/pep-0008) for most of the language, and [PEP 257](https://www.python.org/dev/peps/pep-0257) for docstrings.
 
     Official recommendations.
 

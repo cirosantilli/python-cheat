@@ -3,10 +3,6 @@
 """
 ## Iterator
 
-## yield
-"""
-
-"""
 Iterators are more memory efficent for iterations than lists
 since there is no need to store the entire sequence!
 
@@ -16,103 +12,212 @@ you are going to use it more than once
 It is a classic space/time tradeoff.
 """
 
-if '## create':
+if '## __getitem__':
 
-    # An iterator is just a function with a `yield` method:
+    # The thing used for dictionnary lookup.
 
-    def count():
-        """this is already built-in"""
-        i = 0
-        yield i
-        i = i+1
+    class C(object):
+        def __getitem__(self, index):
+            return index + 1
+    assert C()[0] == 1
+    assert C()[1] == 2
 
-    # Raise exception when over:
+    # For loops use it if `__iter__` is not present, ans passes index to it.
 
-        def myxrange(n):
-            i = 0
-            yield i
-            i = i+1
-            if i > n:
+    class C(object):
+        def __init__(self):
+            self.l = [1, 2, 3]
+        def __getitem__(self, index):
+            if index < len(self.l):
+                return self.l[index]
+            else:
+                # TODO which exceptions can be used? All of the following work:
                 raise StopIteration
+                raise IndexError
+    l = []
+    c = C()
+    for d in c:
+        l.append(d)
+    assert l == [1, 2, 3]
 
-    if '## generator expressions':
+if '__iter__':
 
-        # Shorthand way to create iterators
+    """
+    If present:
 
-        it = (i for i in xrange(10))
-        for i in it:
-            print i
+    - gets called by for loop instead of __getitem__
+    - the object is called an iterable object
+    """
 
-        # Parenthesis can be ommited for single argument func call:
+    class C(object):
+        def __init__(self):
+            self.l = [1, 2, 3]
+            self.i = 0
+        def next(self):
+            if self.i < 3:
+                ret = self.l[self.i]
+                self.i += 1
+                return ret
+            else:
+                raise StopIteration
+        def __iter__(self):
+            return self
+        def __getitem__(self, index):
+            # Never called in this example.
+            raise Exception
+    l = []
+    c = C()
+    for d in c:
+        l.append(d)
+    assert l == [1, 2, 3]
 
-        def mysum(vals):
-            total = 0
-            for val in vals:
-                total += val
-            return total
+    if '# len() of iterable':
 
-        assert mysum(i for i in [0, 2, 5]) == 7
+        # http://stackoverflow.com/questions/3345785/getting-number-of-elements-in-an-iterator-in-pythonhttp://stackoverflow.com/questions/3345785/getting-number-of-elements-in-an-iterator-in-pythonhttp://stackoverflow.com/questions/3345785/getting-number-of-elements-in-an-iterator-in-python
 
-    if '## iter':
+        # __iter__ and next() Does not imply len().
+        # len(C())
 
-        # Converts various types to iterators.
+        # Best method:
 
-        iter('abc')
-        iter([1, 2, 3])
+        assert sum(1 for _ in C()) == 3
+
+    if '# Must return an "iterator type"':
+
+        """
+        # Iterator type
+
+        A type that has a `next` method.
+        """
+
+        class C(object):
+            def __iter__(self):
+                return 13
+        try:
+            iter(C())
+        except TypeError:
+            pass
+        else:
+            assert False
 
 if '## next':
 
-    # Will not work with `xrange`! <http://late.am/post/2012/06/18/what-the-heck-is-an-xrange>
+    """
+    Calls the `next` method of the class. __next__ in python 3.
 
-    #next(xrange(1))
+    An iterator is an object that defines this method.
 
-    i = iter(xrange(2))
-    assert next(i) == 0
-    assert i.next() == 1
+    There is no has_next method.
+    The only way is to catch the `StopIteration` exception:
+    http://stackoverflow.com/questions/1966591/hasnext-in-python-iterators
+    """
+
+    class C(object):
+        def __init__(self):
+            self.l = [1, 2, 3]
+            self.i = 0
+        def next(self):
+            if self.i < 3:
+                ret = self.l[self.i]
+                self.i += 1
+                return ret
+            else:
+                raise StopIteration
+    c = C()
+    assert next(c) == 1
+    assert next(c) == 2
+    assert next(c) == 3
     try:
-        next(i)
+        next(c)
     except StopIteration:
         pass
     else:
         assert False
 
-    # Use default value if over:
+    # Not iterable.
 
-    it = iter(xrange(1))
-    assert next(it) == 0
-    assert next(it, 3) == 3
-    assert next(it, 3) == 3
+    c = C()
+    try:
+        for d in c:
+            pass
+    except TypeError:
+        pass
+    else:
+        assert False
 
-    # There is no has_next method.
-    # The only way is to catch the `StopIteration` exception:
-    # <http://stackoverflow.com/questions/1966591/hasnext-in-python-iterators>
+if 'Generators':
 
-if '## iterators can\'t be rewinded':
+    """
+    Object that:
+    - is returned by yield
+    - has literal of form "(i for i in ble)"
+    - implements __iter__ (and is thus iterable)
+    """
 
-    # Either store a list on memory or recalculate.
+    if '## yield':
 
-    # Recalculate:
+        """
+        Syntax sugar magic.
 
-    it = iter('asdf')
-    for i in it:
-        print 'first'
-        print i
-    it = iter('asdf')
-    for i in it:
-        print 'second'
-        print i
+        Function is magically pre-parsed, and now returns a generator.
 
-    # Store on memory:
+        When yield calls, function is put into magic suspended state.
 
-    it = list(iter('asdf'))
-    for i in it:
-        print 'first'
-        print i
-    for i in it:
-        print 'second'
-        print i
+        A generator object implements __iter__ and can be used in for loop.
+        """
+
+        def f():
+            l = [1, 2, 3]
+            i = 0
+            while i < len(l):
+                ret = l[i]
+                i += 1
+                yield ret
+        l = []
+        mygenerator = f()
+        for d in mygenerator:
+            l.append(d)
+        assert l == [1, 2, 3]
+
+        if '# send (yield)':
+
+            """
+            http://stackoverflow.com/questions/19302530/python-generator-send-function-purpose
+            """
+
+    if '## generator expression':
+
+        """
+        Quick way to make generators.
+
+        TODO: no generator constructor?
+        """
+
+        genexpr = (i for i in [1, 2, 3])
+        l = []
+        mygenerator = f()
+        for d in mygenerator:
+            l.append(d)
+        assert l == [1, 2, 3]
+
+        def f():
+            yield 1
+        genexpr_f = f()
+        assert type(genexpr) == type(genexpr_f)
+
+    if 'No random access':
+
+        genexpr = (i for i in [1, 2, 3])
+        try:
+            genexpr[0]
+        except TypeError:
+            pass
+        else:
+            assert False
 
 if 'Built-in iterator functions':
+
+    # Random stuff, might as well be in itertools.
 
     if '## enumerate':
 
@@ -150,8 +255,15 @@ if '## itertools':
 
     # Cartesian product:
 
-    for i, j in itertools.product(xrange(3), xrange(3)):
-        print i, j
+    l = [x for x in itertools.product(xrange(2), xrange(3))]
+    assert l == [
+        (0, 0),
+        (0, 1),
+        (0, 2),
+        (1, 0),
+        (1, 1),
+        (1, 2),
+    ]
 
     # Join two iterators:
 
