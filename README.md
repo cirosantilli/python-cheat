@@ -52,6 +52,7 @@ Python minimal examples. Asserts used wherever possible.
     1.  [os](os_cheat.py)
         1.  [environ](environ.py)
         1.  [path](path_cheat.py)
+    1.  [pickle](pickle_cheat.py)
     1.  [random](random_cheat.py)
     1.  [re](re_cheat.py)
     1.  [smtplib](smtplib_cheat.py)

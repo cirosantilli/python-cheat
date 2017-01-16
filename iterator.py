@@ -245,12 +245,6 @@ if '## itertools':
     """
     Hardcore iterator patterns.
     http://docs.python.org/2/library/itertools.html#recipes
-
-    Most important ones:
-
-    - imap: map for iterators
-    - izip: count to infinity
-    - count: count to infinity
     """
 
     # Cartesian product:
