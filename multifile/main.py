@@ -287,6 +287,13 @@ if "##import":
             test_mod = __import__('test-mod')
         '''
 
+    if '##circular import':
+
+        """
+        Modules are only evaluated once in import.
+        So this can lead cannot import errors.
+        """
+
 if 'Magic methods dont work':
 
     try:

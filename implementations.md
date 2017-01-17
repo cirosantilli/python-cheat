@@ -22,7 +22,7 @@ The main interpreter implementations are:
 
 ### pyc
 
-TODO: Cpython implementation detail?
+TODO: CPython implementation detail?
 
 <https://www.quora.com/What-is-Python-byte-code>
 

@@ -61,6 +61,10 @@ assert set(d.items()) == set([(1, 'one'), (2, 'two')])
 d = {1: 'one', 2: 'two'}
 assert set(d.keys()) == set([1, 2])
 
+# Why a list is returned by keys() instead of set():
+# http://stackoverflow.com/questions/13886129/why-does-pythons-dict-keys-return-a-list-and-not-a-set
+# set() didn't exist yet!
+
 # To string:
 
 print "dict str() = "
@@ -148,7 +152,7 @@ if '## update':
 
 if 'Iterate / loop over dict':
 
-    # Unspecified order. Python 3 has `collections.OrderedDict`.
+    # Unspecified order. Python 3 has `collections.OrderedDict` (backported to 2.7).
 
     # Keys only:
 

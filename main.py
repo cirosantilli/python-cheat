@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
+TODO: split this up into smaller files.
+
 Major cheat on the Python language and stdlibs.
 
 Contains every test that does not:
@@ -311,123 +313,6 @@ if '## bytearray':
     ba2 = ba
     ba2[0] = ord(b'b')
     assert ba == bytearray(b'bb')
-
-if '## numbers':
-
-    # Defines an hierarchy on numbers. <http://docs.python.org/2/library/numbers.html>
-
-    import numbers
-
-    assert isinstance(0, numbers.Integral)
-    assert isinstance(0, numbers.Rational)
-    assert isinstance(0, numbers.Real)
-    assert isinstance(0, numbers.Complex)
-    assert not isinstance(1j, numbers.Real)
-
-    if '## int ## long ## float':
-
-        # int, float and long are classes.
-        # It is just that `1` and `1.1` are nice looking literals.
-
-        assert (1).__add__(1) == 2
-        assert 1L.__add__(1L) == 2L
-        assert 1.1.__add__(1.1) == 2.2
-
-        # It is not possible to omit parenthesis because the lexer would treate
-        # the `1.` as a float causing an ambiguity.
-
-        #a = 1.__add__(1) # SyntaxError
-
-        # A less readable alternative is to use a space:
-
-        assert 1 .__add__(1) == 2
-
-        # As any built-in class, they have global constructor functions:
-
-        assert 1 == int(1)
-        assert 1 == long(1L)
-        assert 1.1 == float(1.1)
-
-        # The constructors also support construction from any numeric type
-        # or strings:
-
-        assert 1 == int(1.5)
-        assert 1.1 == float('1.1')
-
-        # Each of them has a class with the same name:
-
-        class myint(int):
-            pass
-
-        assert myint(1) + myint(2) == myint(3)
-
-    if '## imaginary ## complex':
-
-        """
-        Imaginary numbers have built-in literals of the form `Nj`.
-        """
-
-        assert 1j * 1j == -1
-
-        assert 1 + 2j == complex(1, 2)
-
-        j = 2
-        assert 1j * 1j == -1
-        assert j * j   == 4
-
-        assert 1j * 1j == -1
-        assert (1 + 2j).real == 1
-        assert (1 + 2j).imag == 2
-        assert 1j.conjugate() == -1j
-
-if '## memoryview':
-
-    """
-    TODO
-    """
-
-if '## Operator':
-
-    """
-    In python everything is an object.
-
-    There is operator overload: every operator has a correponding method
-
-    In Python, methods that can become operators are prefixed and suffixed by `__`.
-
-    For example:
-
-    - `==` and `__eq__()`
-    - `+` and `__add__()`
-    - `**` and `__pow__()`
-    - `//` and `__TODO__()`
-
-    Built-in classes like `int` simply implement those methods.
-    """
-
-    assert 0 == 0
-
-    assert 2 * 3 == 6
-
-    # C like division arithmetic:
-
-    assert 1 / 2        == 0
-    assert 1 / 2.0      == 0.5
-    assert 1 / float(2) == 0.5
-
-    # Floor division:
-
-    assert 9.0 // 2.0 == 4
-
-    # pow:
-
-    assert 2 ** 3
-
-    if '## boolean operator':
-
-        assert not True         == False
-        assert True and False   == False
-        assert True or  False   == True
 
 if '## branching':
 
@@ -785,18 +670,6 @@ if '## Function':
                 y = 2
                 assert x == 1
                 assert id(y) == id(2)
-
-                # Unlike `=`, for immutable types `x += 1` makes `x` point to another address.
-                x = 1
-                x += 1
-                assert id(x) == id(2)
-
-                def f(y):
-                    # Same as y = x
-                    y += 1
-                x = 1
-                f(x)
-                assert x == 1
 
             if 'mutable:':
 
@@ -2909,25 +2782,465 @@ if '## shutil':
         #shutil.copyfile(src, dst)
         pass
 
-if '## sys':
 
-    if '## command line arguments ## argv':
+    if '## Return value':
 
-        print 'sys.argv[0]  = ' + repr(sys.argv[0])
-        print 'sys.argv[1:] = ' + repr(sys.argv[1:])
+        if '## Multiple return values':
 
-    if '## version':
+            """
+            there is no real multiple return values,
+
+            but you can return a single tuple of values and open it
+
+            this is one of the major motivations for tuples existing in the language
+            """
+
+            def f():
+                """
+                returns multiple arguments
+                """
+                return 1, 2
+                #SAME:
+                    #return (1, 2)
+
+            a, b = f()
+            assert a == 1
+            assert b == 2
+
+        if '## can return nothing':
+
+            """
+            If a function does not end on a return statement, it returns `None`.
+            """
+
+            def f(b):
+                if b:
+                    return 1
+
+            assert f(True)  == 1
+            assert f(False) == None
+
+    if '## redefine':
+
+        # Like any python object, you can redfine functions whenever you want.
+
+        def f():
+            return 0
+
+        def f():
+            return 1
+
+        assert f() == 1
+
+        class f:
+            pass
+
+    if '## functions can have attributes':
+
+        # Function attributes have no relation to local variables.
+
+        def f():
+            c = 1
+            return c
+        f.c = 2
+        assert f() == 1
+        assert f.c == 2
+
+        # View all the function attributes:
+
+        print 'dir(f) = ' + str(dir(f))
+
+        # The most important attribute is `__call__` which allows us to call the function:
+
+        assert f.__call__() == 1
+
+    if '## lambda':
+
+        """
+        Lambda is a function without name
+
+        Lambda functions can only contain a single expression.
+
+        This means in particular that they cannot contain assigments,
+        so they are very limited.
+        """
+
+        f = lambda x: x + 1
+        assert f(0) == 1
+        assert f(1) == 2
+
+    if '## scope':
+
+        """
+        If the value of a variable was not defined inside the function,
+        the value in the currently executing scope is taken.
+        """
+
+        def f(b):
+            return a == b
+
+        a = 1
+        assert f(1) == True
+
+        a = 2
+        assert f(1) == False
+
+        if '## global':
+
+            def global_inc_a_wrong():
+                a = 2
+
+            def global_inc_a():
+                global a
+                a = a + 1
+
+            a = 1
+            global_inc_a_wrong()
+            assert a == 1
+            global_inc_a()
+            assert a == 2
+
+            # If the variable was not yet defined on global scope,
+            # it then gets defined once the function is called
+            # and the assignement occurs:
+
+            def global_def():
+                global defined_in_global_def
+                #This will define the variable on global scope:
+                defined_in_global_def = 1
+
+            try:
+                print defined_in_global_def
+            except NameError:
+                pass
+            else:
+                assert False
+
+            global_def()
+
+            print defined_in_global_def
+
+            # Global means *global*, and *not* inside another function:
+
+            def outer():
+                x = 1
+                def inner():
+
+                    #This x is not the same as the first one,
+                    #but one on a global scope
+                    global x
+
+                    x = 2
+
+                #Here we do not see the global x,
+                #but the one inside outer:
+                inner()
+                assert x == 1
+
+            #Here we see the global x defined inside inner:
+            outer()
+            assert x == 2
+
+            # Compare this to what happens with nonlocal in Python 3.
+
+    if '## nested functions':
+
+        # This is the way to go:
+
+        def ex8():
+            ex8.var = 'foo'
+            def inner():
+                ex8.var = 'bar'
+                print 'inside inner, ex8.var is ', ex8.var
+            inner()
+            print 'inside outer function, ex8.var is ', ex8.var
+        ex8()
+
+    if '## call function from its name on a string':
+
+        #http://stackoverflow.com/questions/3061/calling-a-function-from-a-string-with-the-functions-name-in-python
+
+        pass
+
+if '## Docstring':
+
+    """
+    First string that comes after a function or class.
+
+    It is possible to access them at runtime.
+
+    This can be used by documentation generators.
+
+    Their recommended style guide is documented at: <https://www.python.org/dev/peps/pep-0257/>
+
+    Basically: use triple double quoted docstrings, either one-liners or multi-liners.
+
+    For non-docstring string literals, use the same quote type as you use for single quoted strings.
+    """
+
+    # Good:
+
+    def f():
+        """One liner."""
+
+    assert f.__doc__ == 'One liner.'
+
+    # Good:
+
+    def f():
+        """
+        Multi liner.
+        """
+
+    print repr(f.__doc__)
+    assert re.match('\n *Multi liner.\n *', f.__doc__)
+
+    # Bad style, but also works:
+
+    def f():
+        'a'
+
+    assert f.__doc__ == 'a'
+
+if '## with':
+
+    """TODO"""
+
+if '## __builtins__':
+
+    #TODO
+
+    #direct acess to all builtin functions:
+
+    __builtins__.dir()
+
+if '## streams':
+
+    """
+    Like in C, files and pipes are both similar objects
+    meaning that you can do many operations to them transparently
+    such as read/write
+
+    The stdin, stdout and stderr streams are always open by default.
+
+    There are however, as in POSIX, some operations may be only
+    available to certain types of streams.
+
+    For example, search operations can be done on files, but not on stdin/out.
+    """
+
+    if '## print statement':
+
+        """
+        In 2.X there is the `print` statement (not a regular function)
+        which will be replaced by the print function in 3.X.
+        This will make the interface more standard and support more options.
+
+        In 2.X, the `print s` is exactly the same as `sys.stdout.write(s)`.
+
+        ## Parenthesis and the print statement
+
+            The fact that it is a statement, means that:
+
+                print (object, object)
+
+            prints a *tuple*, and it may differ from:
+
+                print (object)
+
+            which prints just object, since `tuple.str()`
+            does `repr()` on their contents, not `str()`.
+
+        ## print vs str
+
+            print converts objects with str.
+
+            Well, unless you make an insane C API like sqlite3.Row:
+            http://stackoverflow.com/questions/7920284/how-can-printing-an-object-result-in-different-output-than-both-str-and-repr
+        """
+
+    if '## stdout':
+
+        sys.stdout.write('stdout')
+        print
+
+        # Best way to print without a newline in 2.X:
+
+        # Many shells don't show input immediately until the next newline. To force that use flush.
 
         import sys
-        print sys.version_info
+        sys.stdout.write('no newline')
+        sys.stdout.flush()
+        print
 
-        # Sample output:
+    if '## stderr':
 
-        #sys.version_info(major=2, minor=7, micro=4, releaselevel='final', serial=0)
+        sys.stderr.write('stderr')
 
-        if sys.version_info[0] == 2:
+    if '## stdin':
 
-            pass
+        # Read from stdin until an EOF, that is until:
+        #
+        # - program on other side of pipe terminates if pipe coming in
+        # - user hits ctrl+d on linux (ctrl+z on windows)
+
+        if False:
+            sys.stdin.read()
+
+        if '## isatty':
+
+            #check if stdin has a pipe comming in or if its the user who is typing
+
+            if False:
+
+                #test.py
+                if sys.stdin.isatty():
+                    print True
+                else:
+                    print False
+                print ins
+
+                #echo asdf | test.py
+
+            # prints False (is a pipe, not a terminal) and asdf (read from sdtin)
+
+                #test.py
+
+            # prints True is a user input terminal (no pipes) and waits for user input
+            # after ^D, prints what was input by keyboard.
+
+    if '## file IO':
+
+        if 'binary':
+
+            # Best way to open binary files:
+
+            path = os.path.join(tempfile.gettempdir(), 'pythone_fileio.tmp')
+            data = 'a\nb'
+            try:
+                with open(path, 'w') as f:
+                    f.write(data)
+            except IOError, e:
+                print e
+                raise
+            try:
+                with open(path, 'r') as f:
+                    assert f.read() == data
+            except IOError, e:
+                print e
+                raise
+            os.unlink(path)
+
+            # `with` is exception safe: on exception will first close file.
+
+            #http://preshing.com/20110920/the-python-with-statement-by-example
+            #http://effbot.org/zone/python-with-statement.htm
+
+        if 'unicode':
+
+            """
+            If all you want to do is slurp read, then encoding manually is a fine option as shown here.
+
+            There however operations which are non trivial to do, for example reading linewise,
+            which requires knowledge about the encoding to be done. For this kind of operation, use `codecs`.
+            """
+
+            path = os.path.join(tempfile.gettempdir(), "pythone_fileio.tmp")
+            # Euro sign
+            data = u"\u20AC"
+            try:
+                with open(path, "w") as f:
+                    # Raises on most implemtatoins:
+                    #     UnicodeEncodeError: 'ascii' codec can't encode character u'\u20ac' in position 0: ordinal not in range(128)
+                    #f.write(data)
+                    f.write(data.encode('utf-8'))
+
+                    # Might work because Python knows if its outputing to a terminal, and uses LC_CTYPE to determine encoding.
+                    # May fail if you pipe however, even if output to terminal works fine. In that case Python uses None as encoding.
+                    #sys.stdout.write(data)
+
+                    # To automatically change the default encoding non non terminal output, use on you main imported file:
+                    # http://stackoverflow.com/questions/2276200/changing-default-encoding-of-python
+                    #Output UTF-8 by default.
+                    #import sys
+                    #reload(sys)  # Reload is required.
+                    #sys.setdefaultencoding('utf-8')
+            except IOError, e:
+                print e
+                raise
+            try:
+                with open(path, "r") as f:
+                    read = f.read()
+                    assert type(read) == str
+                    # Because str, only the first byte!
+                    assert read[0] != data
+                    assert read.decode('utf-8')[0] == data
+            except IOError, e:
+                print e
+                raise
+            os.unlink(path)
+
+            if '## codecs':
+
+                import codecs
+
+                # Linewise read. Requires the encoding to be known, and is a non-trival operation.
+
+                path = os.path.join(tempfile.gettempdir(), "pythone_fileio.tmp")
+                # Two line terminated euro signs.
+                data = u"\u20AC\n\u20AC\n"
+                with open(path, "w") as f:
+                    f.write(data.encode('utf-8'))
+                # 'r' is the default
+                f = codecs.open(path, encoding='utf-8', mode='r')
+                lines = []
+                for line in f:
+                    lines.append(line)
+                f.close()
+                assert lines[0] == u"\u20AC\n"
+                assert lines[1] == u"\u20AC\n"
+                os.unlink(path)
+
+    if '## read methods':
+
+        pass
+
+        # Read from handle until EOF:
+
+            #sys.stdin.read()
+            #f.read()
+
+        # Appends a newline at the end!
+
+        # Read up to 128 bytes:
+
+            #f.read(128)
+
+        # Read single ascii char:
+
+            #f.read(1)
+
+        # Read up to first \n or EOF:
+
+            #f.readline()
+
+        # Same as `f.read().split(\n)`. This is amost never useful because of `xreadlines`.
+
+            #lines = f.readlines()
+            #print lines[2];
+
+        # Never do for loops with `readlines`, always user `xreadlines` instead
+        # because that way you don't clutter memory, and you can read files larger
+        # than memory.
+
+        # Iterator based `readlines`:
+
+            #for l in f.xreadlines():
+                #print l
+
+        # This is the way to go for looping over lines one at a time.
+
+        # Each line ends in a newline.
 
             # Python 2.x code
 
@@ -2938,12 +3251,32 @@ if '## sys':
         # PEP 8 recommends that modules define `__version__`, but many packages don't do that.
         #http://legacy.python.org/dev/peps/pep-0008/#version-bookkeeping
 
-    if '## exit':
+if '## shutil':
 
+    """
+    High level file operations based on `os`.
+    """
+
+    import shutil
+
+    if '## rmtree ## rm -rf':
+
+        # Recursive directory removal like rm -rf:
+
+        temp = tempfile.mkdtemp()
+        with file(os.path.join(temp, 'a'), 'a'): pass
+        try:
+            os.rmdir(temp)
+        except OSError:
+            pass
+        else:
+            assert False
+        shutil.rmtree(temp)
+        assert not os.path.exists(temp)
+
+    if '## copyfile ## cp':
+
+        # Not a base utility since it can be done naively with with open read write.
+
+        #shutil.copyfile(src, dst)
         pass
-
-        # If no call is made to sys.exit, exit code is 0.
-
-        #sys.exit()
-        #sys.exit(0)
-        #sys.exit(1)

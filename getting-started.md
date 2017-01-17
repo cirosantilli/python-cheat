@@ -1,13 +1,13 @@
 # Getting started
 
-On Ubuntu 12.04 install all dependencies with:
+On Ubuntu 16.04 run the first time:
 
 	./install-ubuntu.sh
 
-Next time you come to work on this repo, for each shell run:
+Then every time you start working on this repo:
 
     . .venv/bin/activate
 
-## Instal Python
+And when you are done:
 
-Use `virtualenv` as early as possible. It's like Ruby `rvm` for Python, and allows you to have multiple installations at once.
+    deactivate

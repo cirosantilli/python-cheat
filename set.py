@@ -32,6 +32,12 @@ Quick reference:
 
 assert {0, 1} == set([0, 1])
 
+# Empty set literal: nope, syntax conflict with dict:
+# http://stackoverflow.com/questions/6130374/empty-set-literal-in-python
+
+assert {} == dict()
+assert set() == set([])
+
 # List *without* order of unique elements:
 
 assert {2, 1} == {1, 2}

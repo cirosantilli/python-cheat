@@ -1,20 +1,20 @@
 #docstrings
-def f(name, state=None):
+def f(arg1, arg2, arg3, state=None):
     r"""Short summary.
 
     Longer explanation.
 
     LaTeX math: :math:`a^2 + \alpha`.
 
-    refers to a function: :func:`f2`
+    Function link: :func:`f2`
 
-    refers to a function: :class:`C`
+    Class link: :class:`C`
 
-    refers to a function on another relative module: :func:`.a.f`
+    Relative module function link: :func:`.a.f`
 
-    cannot have headers here
+    Cannot have headers here.
 
-    othernormal `reST <http://docutils.sourceforge.net/rst.html>`_
+    Othernormal `reST <http://docutils.sourceforge.net/rst.html>`_
 
     - l1
     - l2
@@ -27,6 +27,24 @@ def f(name, state=None):
 
     :param arg3: the first value
     :type arg3: int
+
+    :param class_with_dot: another class with dot
+    :type arg4: :class:`.C`
+
+    :param class_without_dot: another class without dot
+    :type class_without_dot: :class:`C`
+
+    :param multi_type: multiple types!
+    :type multi_type: :class:`.C` or :class:`.D`
+
+    :param class_and_union: class and Union type hinting together
+    :type class_and_union: Union[:class:`C`, :class:`.D`]
+
+    :param type_hint: type_hint
+    :type type_hint: List[C]
+
+    http://stackoverflow.com/questions/21799554/how-do-i-automatically-link-to-a-parameter-type-in-rest-docstrings-in-sphinx
+    :param :class:`.C` inline_link: inline link
 
     :returns: 0
     :rtype: int
@@ -54,4 +72,30 @@ def f2():
     pass
 
 class C():
+    """
+    :ivar i: instance variable
+    :vartype i: int
+
+    :var v: TODO variable? TODO shows the same as the others in 1.2.2.
+    :vartype v: int
+
+    :cvar c: class variable. TODO shows the same as the others in 1.2.2.
+    :vartype c: int
+    """
+
+    def g(self):
+        """
+        Method link: :func:`g2`
+        """
+        pass
+
+    def g2(self):
+        """
+        """
+        pass
+
+    def __init__( self ):
+        self.i = 0
+
+class D():
     pass

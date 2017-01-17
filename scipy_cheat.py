@@ -5,6 +5,17 @@
 
 Current best math package for Python.
 
+## Install
+
+On Ubuntu 12.04:
+
+    sudo aptitude install python-scipy
+
+Pip may not work because of missing binary dependencies.
+
+    sudo pip install numpy
+    sudo pip install scipy
+
 ## NumPy vs SciPy
 
 SciPy uses and extends NumPy (think LAPACK BLAS).
@@ -15,13 +26,14 @@ Since NumPy is quite low level, just use SciPy all the time and avoid confusion.
 
 ## Sources
 
-- http://www.scipy.org/Tentative_NumPy_Tutorial
-- www.scipy.org/PerformancePython
-- https://github.com/rougier/numpy-100
-- https://github.com/scipy-lectures/scipy-lecture-notes
+- <http://www.scipy.org/Tentative_NumPy_Tutorial>
+- <www.scipy.org/PerformancePython>
+- <https://github.com/rougier/numpy-100>
+- <https://github.com/scipy-lectures/scipy-lecture-notes>
 """
 
 import math
+import StringIO
 
 import scipy as sp
 import scipy.constants
@@ -86,15 +98,15 @@ if '## data types':
     """
 
     assert sp.array_equal(
-        sp.array([1, 2, 3], dtype=sp.int_),
+        sp.array([1, 2, 3], dtype = sp.int_),
         sp.int_([1, 2, 3])
     )
 
     # Different types evaluate to equal sp.arrays
 
     assert sp.array_equal(
-        sp.array([1, 2, 3], dtype=sp.int_  ),
-        sp.array([1, 2, 3], dtype=sp.float_)
+        sp.array([1, 2, 3], dtype = sp.int_  ),
+        sp.array([1, 2, 3], dtype = sp.float_)
     )
 
     # Get type
@@ -309,6 +321,67 @@ if '## shape':
         sp.arange(6)
     )
 
+if '## file io':
+
+    # TODO: examples
+
+    """
+    a = sp.zeros((2, 3))
+
+    # Space separated.
+    sp.savetxt("a.tmp", a)
+
+    sp.savetxt("b.tmp", delimiter = ", ")
+
+    # single width format
+    sp.savetxt("c.tmp", delimiter = 3)
+
+    # multi width format
+    sp.savetxt("d.tmp", delimiter = (4, 3, 2))
+
+    # strip trailing/starting whitespace
+    sp.savetxt("e.tmp", autostrip = True)
+
+    # stop reading line when # is found
+    sp.savetxt("f.tmp", comments = '# ')
+
+    # skip first line, and last two lines
+    sp.savetxt("g.tmp", skip_header = 1, skip_footer = 2)
+
+    # only use first and last columns
+    sp.savetxt("h.tmp", usecols = (0, -1))
+
+    # same, give names
+    sp.savetxt("b.tmp", names = "a, b, c", usecols = ("a", "c"))
+
+    b = genfromtxt("a.tmp")
+
+    b = loadtxt("a.tmp")
+    """
+
+    if 'loadtxt':
+
+        assert array_equal(
+            sp.loadtxt(StringIO.StringIO("0 1\n2 3")),
+            [
+                [0, 1],
+                [2, 3],
+            ]
+        )
+
+        assert array_equal(
+            sp.loadtxt(
+                StringIO.StringIO("0 1\n2 3"),
+                usecols = (1,)
+            ),
+            [
+                [1, 3],
+            ]
+        )
+
+        # It is slow for large files:
+        # http://stackoverflow.com/questions/18259393/numpy-loading-csv-too-slow-compared-to-matlab
+
 if '## indexing':
 
     x = sp.arange(5.1)
@@ -331,11 +404,43 @@ if '## indexing':
     # TODO:
 
     x = sp.arange(5.1)
-    x.shape = (2, 3)
+    x.shape = (2,3)
     # assert sp.array_equal(
         # x[ sp.array([[1,0], [0,1]]) ],
         # sp.array([3, 1])
     # )
+
+if '## slicing':
+
+    x = sp.array([
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+    ])
+
+    assert sp.array_equal(
+        x[:, 0],
+        [0, 3, 6]
+    )
+
+    assert sp.array_equal(
+        x[0, :],
+        [0, 1, 2]
+    )
+
+    assert sp.array_equal(
+        x[0:3:2, 0:3:2],
+        [
+            [0, 2],
+            [6, 8]
+        ]
+    )
+
+if '## broadcasting':
+
+    """
+    Means to decide the right operation based on input types.
+    """
 
 if '## sum':
 
@@ -369,6 +474,34 @@ if '## sum':
     assert array_equal(
         sp.arange(5.1) + 1,
         sp.arange(1,6.1)
+    )
+
+    # Over all elements:
+
+    assert array_equal(
+        sp.sum([
+            [0, 1],
+            [2, 3]
+        ]),
+        6
+    )
+
+    # Some dimensions only:
+
+    assert array_equal(
+        sp.sum([[0, 1], [2, 3]], axis = 0),
+        sp.array([2, 4])
+    )
+
+    assert array_equal(
+        sp.sum(
+            [
+                [0, 1],
+                [2, 3]
+            ],
+            axis = 1
+        ),
+        [1, 5]
     )
 
 if '## multiplication':
@@ -415,7 +548,7 @@ if '## multiplication':
 if '## vectorize':
 
     # vectorize a function that was meant for scalar use
-    # making it more efficient? TODO confirm. How?
+    # making it more efficient? TODO confirm.
 
     def add(a, b):
         return a + b
@@ -671,16 +804,18 @@ if '## constants':
 
     # http://docs.scipy.org/doc/scipy/reference/constants.html
 
-    assert array_equal(scipy.constants.pi, math.pi)
+    assert array_equal(sp.constants.pi, math.pi)
 
 if '## stats':
+
+    # print(stats.norm.rvs(loc=5,scale=10,size=500))
 
     if '## pearsonr':
 
         # https://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient
 
         assert array_equal(
-            scipy.stats.pearsonr(
+            sp.stats.pearsonr(
                 [1, 2, 3],
                 [2, 4, 6],
             )[0],
@@ -688,7 +823,7 @@ if '## stats':
         )
 
         assert array_equal(
-            scipy.stats.pearsonr(
+            sp.stats.pearsonr(
                 [1, 2, 3],
                 [-2, -4, -6],
             )[0],
