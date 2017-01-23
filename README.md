@@ -40,7 +40,7 @@ Python minimal examples. Asserts used wherever possible.
     1.  [Multi-threading](thread_cheat/)
     1.  [argparse](argparse_cheat.py)
     1.  [bisect](bisect_cheat.py)
-    1.  [collections](collection_cheat.py)
+    1.  [collections](collections_cheat.py)
     1.  [curses](curses_cheat/)
     1.  [datetime](datetime_cheat.py)
     1.  [expat](expat_cheat.py)
