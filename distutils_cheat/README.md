@@ -4,14 +4,14 @@ For each directory, do:
 
     # Fails because package not found, since the import
     # is on a different directory ("package").
-    python example.py
+    python test.py
 
     cd package
     sudo python package/setup.py install
 
     # Works, using the installed version.
     cd ..
-    python example.py
+    python test.py
 
     # Cleanup
     # http://stackoverflow.com/questions/402359/how-do-you-uninstall-a-python-package-that-was-installed-using-distutils/43650802#43650802
@@ -21,6 +21,6 @@ For each directory, do:
     rm -rf files.txt
 
     # Fails again.
-    python example.py
+    python test.py
 
 1. [min](min)
