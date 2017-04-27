@@ -1129,6 +1129,8 @@ if '## Iterate over all user defined class variables':
 
 if '## __slots__':
 
+    # Only in new style classes.
+
     class C(object):
         __slots__ = ('x')
         def __init__(self):
@@ -1142,3 +1144,11 @@ if '## __slots__':
         pass
     else:
         assert False
+
+if '## __getitem__':
+
+    class C(object):
+        def __getitem__(self, x):
+            return x + 1
+    assert C()[1] == 2
+    C()[1] = 2

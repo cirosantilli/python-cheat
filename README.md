@@ -16,6 +16,8 @@ Python minimal examples. Asserts used wherever possible.
 1.  Language
     1.  [class](class.py)
         1. [Special methods](special_methods.py)
+        1. [__slots__](slots.py)
+    1.  [Exception](exception.py)
     1.  [Decorator](decorator.py)
     1.  [Exception](exception.py)
     1.  [Iterator](iterator.py)
@@ -43,6 +45,7 @@ Python minimal examples. Asserts used wherever possible.
     1.  [collections](collections_cheat.py)
     1.  [curses](curses_cheat/)
     1.  [datetime](datetime_cheat.py)
+    1.  [distutils](distutils_cheat.py)
     1.  [expat](expat_cheat.py)
     1.  [fileinput](fileinput/)
     1.  [logging](logging_cheat.py)

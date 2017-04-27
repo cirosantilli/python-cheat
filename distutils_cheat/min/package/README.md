@@ -1,0 +1,3 @@
+# min
+
+Minimal sane package.

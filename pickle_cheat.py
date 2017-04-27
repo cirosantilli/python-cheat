@@ -1,17 +1,79 @@
 #!/usr/bin/env python
 import pickle
 
-if 'slots error':
+if 'slots':
 
-    # Use -1 pickling version.
-    # http://stackoverflow.com/questions/2204155/why-am-i-getting-an-error-about-my-class-defining-slots-when-trying-to-pickl/2204702#2204702
+    if 'Default getstate and setstate with slots':
 
-    class C(object):
-        __slots__ = 'a'
-        def __init__(self, a):
-            self.a = a
-    s = pickle.dumps(C(1), -1)
-    assert pickle.loads(s).a == 1
+        # Use -1 pickling version.
+        # http://stackoverflow.com/questions/2204155/why-am-i-getting-an-error-about-my-class-defining-slots-when-trying-to-pickl/2204702#2204702
+
+        class C(object):
+            __slots__ = 'a'
+            def __init__(self, a):
+                self.a = a
+        s = pickle.dumps(C(1), -1)
+        assert pickle.loads(s).a == 1
+
+        # Expects a tuple of (__dict__, dict with __slots__ as keys).
+        # https://www.python.org/dev/peps/pep-0307/
+
+        class C(object):
+            __slots__ = 'i', 'j'
+            def __init__(self, i):
+                self.i = i
+                self.j = -i
+            def __getstate__(self):
+                return (None, {'i': self.i})
+        assert pickle.loads(pickle.dumps(C(1), -1)).i == 1
+        try:
+            assert pickle.loads(pickle.dumps(C(1), -1)).j == -1
+        except AttributeError:
+            pass
+        else:
+            raise
+
+        class C(object):
+            __slots__ = 'i'
+            def __init__(self, i):
+                self.i = i
+            def __setstate__(self, t):
+                d = t[1]
+                self.i = d['i']
+        assert pickle.loads(pickle.dumps(C(1), -1)).i == 1
+
+        # Or fully explicit dict.
+
+        class C(object):
+            __slots__ = ('i',)
+            def __init__(self, i):
+                self.i = i
+            def __getstate__(self):
+                return { k:getattr(self, k) for k in self.__class__.__slots__ }
+            def __setstate__(self, d):
+                for k in d:
+                    setattr(self, k, d[k])
+        assert pickle.loads(pickle.dumps(C(1), -1)).i == 1
+
+        # All but one.
+        # http://stackoverflow.com/questions/6635331/pickle-all-attributes-except-one/41896767#41896767
+
+        class C(object):
+            _pickle_slots = ['i']
+            __slots__ = _pickle_slots + ['j']
+            def __init__(self, i, j):
+                self.i = i
+                self.j = j
+            def __getstate__(self):
+                return (None, {k:getattr(self, k) for k in C.pickle_slots})
+        o = pickle.loads(pickle.dumps(C(1, 2), -1))
+        assert o.i == 1
+        try:
+            o.j
+        except:
+            pass
+        else:
+            raise
 
 if 'instancemethod error':
 
@@ -77,9 +139,11 @@ if '# getstate # setstate':
                 self.i = d['a']
 
         assert pickle.loads(pickle.dumps(C(1), -1)).i == 1
+
+        # You don't need to pickle methods.
         assert pickle.loads(pickle.dumps(C(1), -1)).f() == 2
 
-    if 'Mischief example':
+    if 'Example that shows call order':
 
         x = 0
 
@@ -115,3 +179,18 @@ if '# getstate # setstate':
         assert x == 2
         assert c.i == 1
         assert c2.i == 6
+
+if '# inheritance':
+
+    # Works by default without custom methods.
+
+    class C(object):
+        def __init__(self, i):
+            self.i = i
+    class D(C):
+        def __init__(self, i, j):
+            super(self.__class__, self).__init__(i)
+            self.j = j
+    assert pickle.loads(pickle.dumps(C(1), -1)).i == 1
+    assert pickle.loads(pickle.dumps(D(1, 2), -1)).i == 1
+    assert pickle.loads(pickle.dumps(D(1, 2), -1)).j == 2
