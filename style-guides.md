@@ -4,7 +4,7 @@
 
     Official recommendations.
 
--   [Google Python Style Guide](https://google-styleguide.googlecode.com/svn/trunk/pyguide.html)
+-   [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html)
 
     Since Google is a heavy Python user, this one should be very good.
 
