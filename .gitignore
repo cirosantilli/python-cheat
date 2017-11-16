@@ -49,3 +49,6 @@ _out
 
 # Data files.
 *.dat
+
+# Jupyter
+.ipynb_checkpoints

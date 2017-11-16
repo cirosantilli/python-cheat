@@ -121,6 +121,9 @@ if '## re module':
         assert re.search(r'a.c', 'abcaBc')
         # . == b, stops at first match. to find all matches, use finditer
 
+        # Line start and end are still honoured.
+        assert not re.search(r'^a', 'ba')
+
     if '## finditer':
 
         # A list of all non-overlapping match objects.

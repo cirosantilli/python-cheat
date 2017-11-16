@@ -1,4 +1,6 @@
-#docstrings
+#: globvar doc
+globalvar = 1
+
 def f(arg1, arg2, arg3, state=None):
     r"""Short summary.
 

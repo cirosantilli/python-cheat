@@ -7,6 +7,7 @@ Makes it very easy to create complex POSIX / GNU command line interfaces!
 """
 
 import argparse
+import os
 import sys
 
 if "Basic usage":
@@ -458,3 +459,18 @@ if '##inheritnace via arguments':
     args = foo_parser.parse_args(['2', '1'])
     assert args.parent == '2'
     assert args.child == '1'
+
+if "##readable_dir":
+
+    class readable_dir(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            if not os.path.isdir(values):
+                raise argparse.ArgumentTypeError("{0} is not a valid path".format(values))
+            if not os.access(values, os.R_OK):
+                raise argparse.ArgumentTypeError("{0} is not a readable dir".format(values))
+            setattr(namespace, self.dest,values)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('dir', action=readable_dir)
+    args = parser.parse_args(['.'])
+    assert args.dir == '.'

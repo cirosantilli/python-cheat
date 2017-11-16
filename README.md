@@ -83,6 +83,7 @@ Python minimal examples. Asserts used wherever possible.
         1.  [SciPy](scipy_cheat.py)
         1.  [SimPy](simpy_cheat.py)
         1.  [matplotlib](matplotlib/)
+        1.  [jupyter](jupyter/)
     1.  [Interactive friendly](interactive-friendly.md)
         1. [ipython](ipython.ipy)
 1.  [Bibliography](bibliography.md)
