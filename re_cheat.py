@@ -124,6 +124,11 @@ if '## re module':
         # Line start and end are still honoured.
         assert not re.search(r'^a', 'ba')
 
+        # search and group
+        assert re.search(r'a(.)c(.)e', 'Xa0c1eYa2c3eZ').group(1) == ('0')
+        assert re.search(r'a(.)c(.)e', 'Xa0c1eYa2c3eZ').group(2) == ('1')
+        assert re.search(r'a(.)c(.)e', 'Xa0c1eYa2c3eZ').group(1, 2) == ('0', '1')
+
     if '## finditer':
 
         # A list of all non-overlapping match objects.

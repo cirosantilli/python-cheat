@@ -1,3 +1,4 @@
 # Jupyter
 
-1.  [inc.ipynb](inc.ipynb)
+1.  [inc](inc.ipynb)
+1.  [plotly](plotly.ipynb)
