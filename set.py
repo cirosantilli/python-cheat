@@ -84,3 +84,7 @@ except TypeError:
 else:
     assert False
 
+# Union of multiple sets
+
+sets = [{0,1}, {2,3}, {4,5}]
+assert set.union(*sets) == set(range(6))
