@@ -327,7 +327,7 @@ if '## filter':
         # For lists of objects they say it is best to assign all alements to the existing list instead: l[:] = []
         # http://stackoverflow.com/questions/1207406/remove-items-from-a-list-while-iterating-in-python
 
-    ##ifilter
+    ## ifilter
 
         # `itertools.ifilter` for iterators.
         # https://docs.python.org/2/library/itertools.html#itertools.ifilter

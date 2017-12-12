@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# https://stackoverflow.com/questions/15998491/how-to-convert-ipython-notebooks-to-pdf-and-html/47773252#47773252
+# https://stackoverflow.com/questions/36901154/how-export-a-jupyter-notebook-to-html-from-the-command-line/47773056#47773056
+for nb in *.ipynb; do
+  jupyter nbconvert --execute --to html "$nb"
+done

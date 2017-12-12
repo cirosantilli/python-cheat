@@ -88,3 +88,15 @@ else:
 
 sets = [{0,1}, {2,3}, {4,5}]
 assert set.union(*sets) == set(range(6))
+
+# Add multiple elements to a set at once:
+
+s = set()
+s.update([1, 2, 3])
+assert s == set([1, 2, 3])
+
+# Remove multiple elements to a set at once:
+
+s = set([1, 2, 3])
+s.difference_update([1, 2])
+assert s == set([3])
