@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# https://stackoverflow.com/questions/28908319/how-to-clear-an-ipython-notebooks-output-in-all-cells-from-the-linux-terminal/47774393#47774393
+for nb in *.ipynb; do
+  jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace "$nb"
+done
