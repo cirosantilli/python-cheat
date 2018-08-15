@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/cirosantilli/python-cheat.svg?branch=master)](https://travis-ci.org/cirosantilli/python-cheat)
 
-Python minimal examples. Asserts used wherever possible.
+Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 16.04.
 
 1. [Getting started](getting-started.md)
 1.  Introduction
