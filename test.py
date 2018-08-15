@@ -11,32 +11,37 @@ import sys
 import os
 import os.path
 
-# Either:
-#
-# - requires user input
-# - takes too long
-# - dependencies that are complicated to install
-# - uses network resources
-# - simply broken
-#
+rootdir = os.path.split(os.path.realpath(__file__))[0]
+
 blacklist = [
-    # Broken.
+    # Broken, haven't fixed or investigated further because lazy.
     'main',
+
+    # RuntimeError: module compiled against API version 0xb but this version of numpy is 0xa
+    'pandas_cheat',
+
     # Large download.
     'nltk_cheat',
-    # pip build takes too long.
+
+    # pip build takes too long
     'numpy_cheat',
     'scipy_cheat',
+
     # Networking.
     'smtplib_cheat',
-    # infinite loop!
-    'test',
-    # Meant to fail.
-    'unittest_cheat',
+
     # Networking.
     'urllib2_cheat',
+
     # Interactive.
-    'wsgi',
+
+        # Infinite loop!
+        'test',
+
+        # Meant to fail.
+        'unittest_cheat',
+
+        'wsgi',
 ]
 
 ext = '.py'
@@ -61,4 +66,12 @@ for script in scripts:
     if process.wait() != 0:
         print('ASSERT FAILED: ' + script)
         sys.exit(1)
+
+os.chdir(os.path.join(rootdir, 'c_from_py'))
+subprocess.check_call(['make'])
+
+os.chdir(os.path.join(rootdir, 'py_from_c'))
+subprocess.check_call(['make'])
+subprocess.check_call(['./test'])
+
 print 'ALL ASSERTS PASSED'

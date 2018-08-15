@@ -1,8 +1,8 @@
 # Getting started
 
-On Ubuntu 16.04 run the first time:
+On Ubuntu:
 
-	./install-ubuntu.sh
+	./configure
 
 Then every time you start working on this repo:
 

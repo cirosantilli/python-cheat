@@ -65,7 +65,7 @@ if 'slots':
                 self.i = i
                 self.j = j
             def __getstate__(self):
-                return (None, {k:getattr(self, k) for k in C.pickle_slots})
+                return (None, {k:getattr(self, k) for k in C._pickle_slots})
         o = pickle.loads(pickle.dumps(C(1, 2), -1))
         assert o.i == 1
         try:

@@ -1151,4 +1151,3 @@ if '## __getitem__':
         def __getitem__(self, x):
             return x + 1
     assert C()[1] == 2
-    C()[1] = 2
