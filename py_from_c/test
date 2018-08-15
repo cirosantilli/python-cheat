@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -eux
+./eval.out
+./pure.out pure multiply 3 2

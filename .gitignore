@@ -52,3 +52,7 @@ _out
 
 # Jupyter
 .ipynb_checkpoints
+
+# C compilation outputs.
+*.o
+*.out
