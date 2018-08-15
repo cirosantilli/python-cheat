@@ -4,6 +4,6 @@ int f( int i, float f )
 {
     i = i + 1;
     f = f + 1.0f;
-    printf( "c(int,float): %d\n", i, f);
+    printf( "c(int,float): %d %f\n", i, f);
     return i;
 }
