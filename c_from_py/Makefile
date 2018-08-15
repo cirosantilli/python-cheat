@@ -1,11 +1,11 @@
 .POSIX:
 
 CFLGS := -Wall
-CNAME := test
+CNAME := mylib
 
 .PHONY: run clean
 
-run: libtest.so
+run: lib$(CNAME).so
 	./main.py
 
 lib$(CNAME).so: $(CNAME).c

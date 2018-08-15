@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+./stdlib.py
+./cdll.py
+./cdll_relative.py
