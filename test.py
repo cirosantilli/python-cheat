@@ -69,6 +69,7 @@ for script in scripts:
 
 os.chdir(os.path.join(rootdir, 'c_from_py'))
 subprocess.check_call(['make'])
+subprocess.check_call(['./test'])
 
 os.chdir(os.path.join(rootdir, 'py_from_c'))
 subprocess.check_call(['make'])

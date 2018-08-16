@@ -1,12 +1,9 @@
 .POSIX:
 
 CFLGS := -Wall
-CNAME := mylib
+CNAME := ctypes_cheat
 
-.PHONY: run clean
-
-run: lib$(CNAME).so
-	./main.py
+.PHONY: clean
 
 lib$(CNAME).so: $(CNAME).c
 	gcc $(CFLGS) -fPIC -c "$<" -o $(CNAME).o

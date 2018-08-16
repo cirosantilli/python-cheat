@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-./stdlib.py
-./cdll.py
-./cdll_relative.py
+./ctypes_cheat.py
+LD_LIBRARY_PATH=. ./ctypes_cheat_relative.py
+./import_cheat.py
