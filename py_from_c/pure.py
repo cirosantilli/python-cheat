@@ -1,3 +1,6 @@
+# This is provided by the C file.
+# But since we are embedding Python, we don't even need to create a separate
+# .so file: it is provided directly through the Python invocation.
 import emb
 
 def multiply(a,b):
