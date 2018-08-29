@@ -845,21 +845,6 @@ if '## Function':
 
         assert f.__call__() == 1
 
-    if '## lambda':
-
-        """
-        Lambda is a function without name
-
-        Lambda functions can only contain a single expression.
-
-        This means in particular that they cannot contain assigments,
-        so they are very limited.
-        """
-
-        f = lambda x: x + 1
-        assert f(0) == 1
-        assert f(1) == 2
-
     if '## scope':
 
         """

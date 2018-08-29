@@ -16,7 +16,7 @@ try:
         universal_newlines = True
     )
 except OSError:
-    #typically gets here if the executable is not found
+    # Typically gets here if the executable is not found.
     sys.stderr.write(' '.join(commands) + '\nfailed')
 
 stdin = 'stdin1\nstdin2'
