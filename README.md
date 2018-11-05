@@ -45,7 +45,8 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
     1.  [argparse](argparse_cheat.py)
     1.  [bisect](bisect_cheat.py)
     1.  [collections](collections_cheat.py)
-    1.  [curses](curses_cheat/)
+    1.  curses
+        1.  [curses/collision.py](curses/collision.py)
     1.  [datetime](datetime_cheat.py)
     1.  [distutils](distutils_cheat.py)
     1.  [expat](expat_cheat.py)
@@ -72,7 +73,8 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
         1.  [urllib2](urllib2_cheat.py)
         1.  [wsgi](wsgi.py)
 1.  Third party
-        1.  [NumPy](numpy_cheat.py)
+    1.  Pexpect
+        1.  [pexpect/python_test.py](pexpect/python_test.py)
     1.  [pip](pip.md)
     1.  [sphinx](sphinx/)
     1.  [trac](trac.md)
