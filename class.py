@@ -1151,3 +1151,15 @@ if '## __getitem__':
         def __getitem__(self, x):
             return x + 1
     assert C()[1] == 2
+
+if '## __nested__ ## __inner__':
+
+    class C(object):
+        class D(object):
+            def qwer(self):
+                # Nested clases are messy, you always have to refer to them with the parent prefix,
+                # even when inside the class itself!
+                return C.D()
+        def asdf(self):
+            return self.D()
+    assert type(C().asdf()) is type(C.D().qwer())

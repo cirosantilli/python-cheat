@@ -96,12 +96,6 @@ if '## Create new list':
         assert l[0:3:2] == [0, 2]
         assert l[::-1]  == [4, 3, 2, 1, 0] #invert list!
 
-        if '## ellipsis ## ...':
-
-            """
-            TODO
-            """
-
         if '## slice':
 
             # There is also a slice object that represents slices
@@ -140,7 +134,11 @@ if '## Create new list':
             assert C()[:, 1] == (slice(None, None, None), 1)
 
             # Ellipsis class object.
-            assert C()[...] == Ellipsis
+            # https://stackoverflow.com/a/33087462/895245
+            assert C()[...] is Ellipsis
+
+            # Int, slice and Ellipsis example.
+            assert C()[1, 2:3:4, ..., 6] == (1, slice(2,3,4), Ellipsis, 6)
 
     if '## sorted':
 

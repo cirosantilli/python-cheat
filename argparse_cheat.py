@@ -39,8 +39,8 @@ if "Good parser template":
         epilog=r"""
     EXAMPLES
 
-    %(f)s
-    """.format(f=sys.argv[0]),                           # f contains command name.
+    %(prog)s
+    """,
         formatter_class=argparse.RawTextHelpFormatter,   # Keep newlines.
     )
 
