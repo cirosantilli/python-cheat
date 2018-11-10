@@ -33,14 +33,11 @@ if "Basic usage":
 if "Good parser template":
 
     parser = argparse.ArgumentParser(
-        # One line description.
-        description="",
-        # Full description.
-        epilog=r"""
-    EXAMPLES
+        description="""\
+EXAMPLES
 
-    %(prog)s
-    """,
+%(prog)s
+""",
         formatter_class=argparse.RawTextHelpFormatter,   # Keep newlines.
     )
 

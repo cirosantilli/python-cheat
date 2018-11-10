@@ -135,6 +135,8 @@ assert d == {1: 3}
 
 if '## update':
 
+    # https://stackoverflow.com/questions/577234/python-extend-for-a-dictionary
+
     # Add update all keys on d0 with those of d1:
 
     d0 = {0: 'zero', 1: 'one'}
