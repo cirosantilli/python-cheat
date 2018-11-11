@@ -1,33 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-"""
-## re
-
-## Regular expressions
-
-Perl like.
-
-General operation:
-
-- *string regexes* must frist be compiled into *pattern* objects. This has some overhead.
-- compiled pattern objects can be used to find *match objects* on test strings.
-
-## Regex methods
-
-    match() get match for **THE ENTIRE**!!!!!!! string
-    search() first match anywhere in the string
-    findall() iterator of matching *strings*, **NOT**!!! match objects
-    finditer() iterator of match objects
-
-## Predefined character classes
-
-    - \d [0-9]
-    - \D [^0-9]
-    - \s [ \t\n\r\f\v]
-    - \S
-    - \w [a-zA-Z0-9_].
-    - \W
-"""
+'''
+https://docs.python.org/3/library/re.html
+'''
 
 import re
 
@@ -62,12 +37,11 @@ if '## re module':
 
     if '## flags':
 
-        """
-        ##DOTALL: dot matches all characters, including newlines
-        ##MULTILINE: ^ and $ also matches at newlines
-        """
+        assert re.match('a', 'A', re.IGNORECASE)
 
-        assert re.match(r'a', 'A', re.IGNORECASE)
+        # Need flags= for re.sub, or set the count=
+        # https://stackoverflow.com/questions/42581/python-re-sub-with-a-flag-does-not-replace-all-occurrences/42597#42597
+        assert re.sub('^a', '0', 'ab\nab\n', flags=re.MULTILINE) == '0b\n0b\n'
 
     if '## sub':
 
