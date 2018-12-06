@@ -18,7 +18,6 @@ if "Basic usage":
     parser.add_argument('a')
     parser.add_argument('b')
     args = parser.parse_args()
-    print type(args)
     # Same:
     #args = parser.parse_args(sys.argv)
     assert args.a == '0'
@@ -234,7 +233,6 @@ if "##nargs":
     parser.add_argument(
         'a',
         nargs='*',
-        default=[],
     )
     args = parser.parse_args(['1', '2', '3', '4'])
     assert args.a == ['1', '2', '3', '4']

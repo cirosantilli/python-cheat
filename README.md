@@ -14,7 +14,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
 1.  Meta
     1. [test.py](test.py)
 1.  Language
-    1.  Functions
+    1.  [Functions](function.py)
         1.  [lambda](lambda.py)
     1.  [class](class.py)
         1.  [Special methods](special_methods.py)
