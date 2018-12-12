@@ -55,6 +55,7 @@ for f in os.listdir(u'.'):
 directories.sort()
 scripts.sort()
 
+# Files.
 for script in scripts:
     print(script)
     process = subprocess.Popen(
@@ -69,6 +70,7 @@ for script in scripts:
         print('ASSERT FAILED: ' + script)
         sys.exit(1)
 
+# Directories.
 make_dir_set = {'c_from_py', 'py_from_c'}
 for directory in directories:
     if os.path.exists(os.path.join(directory, 'test')):

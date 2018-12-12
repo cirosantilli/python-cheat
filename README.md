@@ -12,7 +12,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
     1. [Pros and cons](pros-and-cons.md)
     1. [How to hack Python projects](how-to-hack-python-projects.md)
 1.  Meta
-    1. [test.py](test.py)
+    1. [test](test)
 1.  Language
     1.  [Functions](function.py)
         1.  [lambda](lambda.py)

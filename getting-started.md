@@ -11,3 +11,7 @@ Then every time you start working on this repo:
 And when you are done:
 
     deactivate
+
+Run all tests:
+
+    ./test
