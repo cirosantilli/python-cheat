@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eu
 ./ctypes_cheat.py
 LD_LIBRARY_PATH=. ./ctypes_cheat_relative.py
 ./import_cheat.py

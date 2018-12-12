@@ -39,8 +39,13 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
     1.  [Operators](operators.py)
     1.  [Python 3](python3/)
     1.  Cross-language
-        1. [C from Python](c_from_py/)
-        1. [Python from C](python_from_c/)
+        1.  [C from Python](c_from_py/)
+        1.  [Python from C](py_from_c/)
+            1.  [py_from_c/eval.c](py_from_c/eval.c)
+            1.  Pure embedding
+                1.  [pure.py](pure.py)
+                1.  [pure.c](pure.c)
+            1.  [py_from_c/test](py_from_c/test)
 1.  Standard library
     1.  [Multi-threading](thread_cheat/)
     1.  [argparse](argparse_cheat.py)

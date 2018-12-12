@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Run all scripts.
@@ -29,32 +29,34 @@ blacklist = [
 
     # Networking.
     'smtplib_cheat',
-
-    # Networking.
     'urllib2_cheat',
 
-    # Interactive.
+    # Infinite loop!
+    'test',
 
-        # Infinite loop!
-        'test',
+    # Meant to fail.
+    'unittest_cheat',
 
-        # Meant to fail.
-        'unittest_cheat',
-
-        'wsgi',
+    'wsgi',
 ]
 
 ext = '.py'
 # TODO: remove this and run all .py files
 scripts = []
+directories = []
 for f in os.listdir(u'.'):
-    if os.path.isfile(f) and os.access(f, os.X_OK):
-        noext, ext = os.path.splitext(f)
-        if ext == '.py' and not noext in blacklist:
-            scripts.append(f)
+    if os.path.isfile(f):
+        if os.access(f, os.X_OK):
+            noext, ext = os.path.splitext(f)
+            if ext == '.py' and not noext in blacklist:
+                scripts.append(f)
+    elif os.path.isdir(f):
+        directories.append(f)
+directories.sort()
 scripts.sort()
+
 for script in scripts:
-    print script
+    print(script)
     process = subprocess.Popen(
         ['./' + script],
         shell  = False,
@@ -67,12 +69,12 @@ for script in scripts:
         print('ASSERT FAILED: ' + script)
         sys.exit(1)
 
-os.chdir(os.path.join(rootdir, 'c_from_py'))
-subprocess.check_call(['make'])
-subprocess.check_call(['./test'])
+make_dir_set = {'c_from_py', 'py_from_c'}
+for directory in directories:
+    if os.path.exists(os.path.join(directory, 'test')):
+        os.chdir(directory)
+        if directory in make_dir_set:
+            subprocess.check_call(['make'])
+        subprocess.check_call(['./test'])
 
-os.chdir(os.path.join(rootdir, 'py_from_c'))
-subprocess.check_call(['make'])
-subprocess.check_call(['./test'])
-
-print 'ALL ASSERTS PASSED'
+print('ALL ASSERTS PASSED')

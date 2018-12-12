@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-#stdin --> stdout
-#argv  --> stderr
+# stdin --> stdout
+# argv  --> stderr
 
 import sys
 

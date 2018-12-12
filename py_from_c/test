@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-set -eux
-./eval.out
-./pure.out pure multiply 3 2
+set -eu
+[ "$(./eval.out 'print(2 ** 3)')" = 8 ]
+[ "$(./pure.out pure multiply_plus_2 3 2)" = 8 ]

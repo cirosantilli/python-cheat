@@ -1,18 +1,23 @@
-#include <Python.h>
+/* Adapted from: https://docs.python.org/3.7/extending/embedding.html#pure-embedding
+ *
+ * Full integration: pass function arguments and get results back.
+ * Called a "pure embedding" by Python.
+ *
+ * Also shows how to extend Python with C through the embedding,
+ * providing a C implementation of a Python functionality.
+ */
 
-static int numargs=0;
+#include <Python.h>
 
 /* Return the number of arguments of the application command line */
 static PyObject*
-emb_numargs(PyObject *self, PyObject *args)
+emb_get_offset(PyObject *self, PyObject *args)
 {
-    if(!PyArg_ParseTuple(args, ":numargs"))
-        return NULL;
-    return Py_BuildValue("i", numargs);
+    return Py_BuildValue("i", 2);
 }
 
 static PyMethodDef EmbMethods[] = {
-    {"numargs", emb_numargs, METH_VARARGS,
+    {"get_offset", emb_get_offset, METH_VARARGS,
      "Return the number of arguments received by the process."},
     {NULL, NULL, 0, NULL}
 };
@@ -30,7 +35,6 @@ main(int argc, char *argv[])
     }
 
     Py_Initialize();
-    numargs = argc;
     Py_InitModule("emb", EmbMethods);
     pName = PyString_FromString(argv[1]);
     /* Error checking of pName left out */
@@ -58,7 +62,7 @@ main(int argc, char *argv[])
             pValue = PyObject_CallObject(pFunc, pArgs);
             Py_DECREF(pArgs);
             if (pValue != NULL) {
-                printf("Result of call: %ld\n", PyInt_AsLong(pValue));
+                printf("%ld\n", PyInt_AsLong(pValue));
                 Py_DECREF(pValue);
             }
             else {
