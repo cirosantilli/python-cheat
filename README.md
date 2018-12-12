@@ -16,6 +16,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
 1.  Language
     1.  [Functions](function.py)
         1.  [lambda](lambda.py)
+        1.  [keyword-only argument](keyword_only.py)
     1.  [class](class.py)
         1.  [Special methods](special_methods.py)
         1.  [__slots__](slots.py)

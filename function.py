@@ -437,4 +437,3 @@ if '## call function from its name on a string':
     # http://stackoverflow.com/questions/3061/calling-a-function-from-a-string-with-the-functions-name-in-python
 
     pass
-
