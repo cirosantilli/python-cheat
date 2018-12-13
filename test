@@ -51,13 +51,14 @@ for f in os.listdir(u'.'):
             if ext == '.py' and not noext in blacklist:
                 scripts.append(f)
     elif os.path.isdir(f):
-        directories.append(f)
+        directories.append(os.path.abspath(f))
 directories.sort()
 scripts.sort()
 
 # Files.
 for script in scripts:
     print(script)
+    sys.stdout.flush()
     process = subprocess.Popen(
         ['./' + script],
         shell  = False,
@@ -74,6 +75,7 @@ for script in scripts:
 make_dir_set = {'c_from_py', 'py_from_c'}
 for directory in directories:
     if os.path.exists(os.path.join(directory, 'test')):
+        print(os.path.basename(directory))
         os.chdir(directory)
         if directory in make_dir_set:
             subprocess.check_call(['make'])
