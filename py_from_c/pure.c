@@ -9,7 +9,7 @@
 
 #include <Python.h>
 
-/* Return the number of arguments of the application command line */
+/* Define a function in C to be accessible from the Python code. */
 static PyObject*
 emb_get_offset(PyObject *self, PyObject *args)
 {

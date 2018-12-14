@@ -14,6 +14,9 @@ import os.path
 rootdir = os.path.split(os.path.realpath(__file__))[0]
 
 blacklist = [
+    # Sleep, thread dependent.
+    'concurrent_cheat',
+
     # Broken, haven't fixed or investigated further because lazy.
     'main',
 
@@ -72,13 +75,30 @@ for script in scripts:
         sys.exit(1)
 
 # Directories.
-make_dir_set = {'c_from_py', 'py_from_c'}
 for directory in directories:
-    if os.path.exists(os.path.join(directory, 'test')):
-        print(os.path.basename(directory))
+    directory_base = os.path.basename(directory)
+    test_script = os.path.join(directory, 'test')
+    if os.path.exists(test_script):
+        print(directory_base + os.sep)
         os.chdir(directory)
-        if directory in make_dir_set:
-            subprocess.check_call(['make'])
-        subprocess.check_call(['./test'])
+        if os.path.exists(os.path.join(directory, 'Makefile')):
+            process = subprocess.Popen(
+                ['make'],
+                shell  = False,
+                stdin  = subprocess.PIPE,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.PIPE,
+            )
+            assert process.wait() == 0
+        process = subprocess.Popen(
+            [test_script],
+            shell  = False,
+            stdin  = subprocess.PIPE,
+            stdout = subprocess.PIPE,
+            stderr = subprocess.PIPE,
+        )
+        if process.wait() != 0:
+            print('ASSERT FAILED: ' + directory_base)
+            sys.exit(1)
 
 print('ALL ASSERTS PASSED')
