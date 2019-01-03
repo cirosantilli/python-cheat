@@ -186,34 +186,6 @@ if '## type':
         C = type('C', (B,), {'a': 1})
         assert C.a == 1
 
-if '## __class__':
-
-    """
-    Corresponding class object of a object.
-
-    The only difference from `type()` seems to be for old style classes:
-    <http://stackoverflow.com/questions/1060499/difference-between-typeobj-and-obj-class>
-
-    Therefore, there is no difference in Python 3.
-    """
-
-    assert object.__class__ == type
-    assert (1).__class__    == int
-
-    """
-    `__class__` can be set to something else however.
-
-    This has no special effect.
-    """
-
-    class D(object): pass
-
-    class C(object):
-        __class__ = D
-
-    assert type(C()) == C
-    assert C().__class__ == D
-
 if '## isinstance':
 
     """

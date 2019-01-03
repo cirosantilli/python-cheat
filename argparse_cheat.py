@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 
-"""
+'''
 stdlib.
 
 Makes it very easy to create complex POSIX / GNU command line interfaces!
-"""
+'''
 
 import argparse
 import os
 import sys
 
-if "Basic usage":
+if 'Basic usage':
 
     # parse_args takes by default sys.argv[1:], which we have artificially set here.
     sys.argv = ['program_name', '0', '1']
@@ -29,20 +29,20 @@ if "Basic usage":
     - add a `-h` / `--help` option that prints usage and exits after `parse_args`.
     '''
 
-if "Good parser template":
+if 'Good parser template':
 
     parser = argparse.ArgumentParser(
-        description="""\
+        description='''\
 EXAMPLES
 
 %(prog)s
-""",
+''',
         formatter_class=argparse.RawTextHelpFormatter,   # Keep newlines.
     )
 
-if "##Automatic option names.":
+if '## Automatic option names.':
 
-    """
+    '''
     Given the command line argument form, argparse automatically derives a Python variable name from it:
 
     - removes leading '-'
@@ -51,7 +51,7 @@ if "##Automatic option names.":
     **NOT** done on positional arguments!
     `dest=` also fails, and you just have to `getattr` those:
     http://stackoverflow.com/questions/12834785/having-options-in-argparse-with-a-dash#comment30212495_20250435
-    """
+    '''
 
     # In case of name conflicts, it becomes simply impossible to access one of the variables.
 
@@ -65,7 +65,7 @@ if "##Automatic option names.":
 
     # This can be resolved this with the `dest` parameter.
 
-    if "##dest":
+    if '## dest':
 
         # Specifies where input is stored explicitly.
 
@@ -82,7 +82,7 @@ if "##Automatic option names.":
         assert not hasattr(args, 'a')
         assert not hasattr(args, 'a_long')
 
-if "##Positional args":
+if '## Positional args':
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -96,13 +96,13 @@ if "##Positional args":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '0',
-        default=""
+        default=''
     )
     args = parser.parse_args(['a'])
     assert True
     #TODO
 
-if "##help":
+if '## help':
 
     # Gives description to users in case of error/help. Always define it.
 
@@ -113,7 +113,7 @@ if "##help":
     )
     args = parser.parse_args(['1'])
 
-if "##Optional args":
+if '## Optional args':
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -127,7 +127,7 @@ if "##Optional args":
 
     # boolean flags: see store_true and action.
 
-if "##default":
+if '## default':
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -147,7 +147,7 @@ if "##default":
         default='1'
     )
 
-if "##Long name":
+if '## Long name':
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -160,7 +160,7 @@ if "##Long name":
     assert args.a_long == '1'
     assert not hasattr(args, 'a')
 
-if "##type":
+if '## type':
 
     # int
 
@@ -186,7 +186,7 @@ if "##type":
 
     # boolean: see store_true and action.
 
-    if "##file type":
+    if '## file type':
 
         parser = argparse.ArgumentParser()
         parser.add_argument(
@@ -200,7 +200,7 @@ if "##type":
         assert type( args.a ) == file
         args.a.close()
 
-if "## nargs":
+if '## nargs':
 
     # Fixed number:
 
@@ -278,9 +278,9 @@ if "## nargs":
     # ERROR: even if default:
     #args = parser.parse_args([])
 
-if "##action":
+if '## action':
 
-    if "##store":
+    if '## store':
 
         # Is the default action:
 
@@ -288,21 +288,21 @@ if "##action":
         parser.add_argument(
             '-a',
             action='store',
-            default='2'
+            default=2
         )
         args = parser.parse_args(['-a', '1'])
         assert args.a == '1'
         args = parser.parse_args([])
-        assert args.a == '2'
+        assert args.a == 2
 
-    if "##store_true false":
+    if '## store_true false':
 
         # Good to make switches:
 
         parser = argparse.ArgumentParser()
         parser.add_argument(
             '-a',
-            action="store_true",
+            action='store_true',
             default=False,
         )
         args = parser.parse_args([])
@@ -313,7 +313,7 @@ if "##action":
         parser = argparse.ArgumentParser()
         parser.add_argument(
             '-a',
-            action="store_false",
+            action='store_false',
             default=True,
         )
         args = parser.parse_args([])
@@ -321,7 +321,7 @@ if "##action":
         args = parser.parse_args(['-a'])
         assert args.a == False
 
-    if "##store_const":
+    if '## store_const':
 
         # Generalizes `store_true`.
 
@@ -337,20 +337,38 @@ if "##action":
         args = parser.parse_args([])
         assert args.a == '2'
 
-    if "##append":
+    if '## append':
+
+        # Without any default, is None if option not given.
 
         parser = argparse.ArgumentParser()
         parser.add_argument(
             '-a',
             action='append',
-            default=[],
         )
+        args = parser.parse_args([])
+        assert args.a is None
         args = parser.parse_args(['-a', '1'])
         assert args.a == ['1']
         args = parser.parse_args(['-a', '1', '-a', '2'])
         assert args.a == ['1', '2']
 
-    if "##append_const":
+        # With default, is [] if option not given.
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '-a',
+            action='append',
+            default=[]
+        )
+        args = parser.parse_args([])
+        assert args.a == []
+        args = parser.parse_args(['-a', '1'])
+        assert args.a == ['1']
+        args = parser.parse_args(['-a', '1', '-a', '2'])
+        assert args.a == ['1', '2']
+
+    if '## append_const':
 
         parser = argparse.ArgumentParser()
         parser.add_argument(
@@ -363,11 +381,11 @@ if "##action":
         args = parser.parse_args(['-a', '-a'])
         assert args.a == ['1', '1']
 
-    if "##custom actions":
+    if '## custom actions':
 
         class FooAction(argparse.Action):
             def __call__(self, parser, namespace, values, option_string=None):
-                """only called if not default value"""
+                '''only called if not default value'''
                 #print('%r %r %r' % (namespace, values, option_string))
                 setattr(namespace, self.dest, values)
 
@@ -384,11 +402,11 @@ if "##action":
         assert args.foo == '1'
         assert args.bar == '2'
 
-if '##choices':
+if '## choices':
 
     # Restrict argument to a set.
 
-    if '##list':
+    if '## list':
 
         # Argment must be in the list.
 
@@ -438,7 +456,7 @@ if '##choices':
 
         # args = parser.parse_args(['1', '3'])
 
-    if '##string':
+    if '## string':
 
         # Argment must be a character in the string.
 
@@ -454,7 +472,7 @@ if '##choices':
         #error:
             #args = parser.parse_args(['d'])
 
-if '##inheritnace via arguments':
+if '## inheritnace via arguments':
 
     # *add_help=False is obligatory here*!!
     # or else will conflict with child help argument.
@@ -468,14 +486,14 @@ if '##inheritnace via arguments':
     assert args.parent == '2'
     assert args.child == '1'
 
-if "##readable_dir":
+if '## readable_dir':
 
     class readable_dir(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
             if not os.path.isdir(values):
-                raise argparse.ArgumentTypeError("{0} is not a valid path".format(values))
+                raise argparse.ArgumentTypeError('{0} is not a valid path'.format(values))
             if not os.access(values, os.R_OK):
-                raise argparse.ArgumentTypeError("{0} is not a readable dir".format(values))
+                raise argparse.ArgumentTypeError('{0} is not a readable dir'.format(values))
             setattr(namespace, self.dest,values)
 
     parser = argparse.ArgumentParser()

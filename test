@@ -14,9 +14,6 @@ import os.path
 rootdir = os.path.split(os.path.realpath(__file__))[0]
 
 blacklist = [
-    # Sleep, thread dependent.
-    'concurrent_cheat',
-
     # Broken, haven't fixed or investigated further because lazy.
     'main',
 

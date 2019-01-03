@@ -45,7 +45,7 @@ if '## re module':
 
     if '## sub':
 
-        # Replce what was matched.
+        # Replace what was matched.
 
         p = re.compile('(a.|b.)')
 

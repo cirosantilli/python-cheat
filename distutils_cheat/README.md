@@ -7,7 +7,7 @@ For each directory, do:
     python test.py
 
     cd package
-    sudo python package/setup.py install
+    python package/setup.py install --user
 
     # Works, using the installed version.
     cd ..
@@ -23,4 +23,5 @@ For each directory, do:
     # Fails again.
     python test.py
 
-1. [min](min)
+1. [min](min/)
+1. [script](script/)

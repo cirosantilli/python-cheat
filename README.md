@@ -4,7 +4,7 @@
 
 Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
 
-1. [Getting started](getting-started.md)
+1.  [Getting started](getting-started.md)
 1.  Introduction
     1. [Implementations](implementations.md)
     1. [python utility](python-utility.md)
@@ -21,6 +21,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
         1.  [Special methods](special_methods.py)
         1.  [__slots__](slots.py)
         1.  [issubclass](issubclass.py)
+        1.  [__class__](class_attribute.py)
     1.  [Exception](exception.py)
     1.  [Decorator](decorator.py)
     1.  [Exception](exception.py)
@@ -49,8 +50,9 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
             1.  [py_from_c/test](py_from_c/test)
 1.  Standard library
     1.  Multi-threading
-        1. [Multi threading hello world](thread_cheat/hello.py)
-        1. [Limit the number of threads](thread_cheat/limit.py)
+        1.  [Multi threading hello world](thread_hello.py)
+        1.  [Limit the number of threads](thread_limit.py)
+        1.  [concurrent](concurrent_cheat.py)
     1.  [argparse](argparse_cheat.py)
     1.  [bisect](bisect_cheat.py)
     1.  [collections](collections_cheat.py)
