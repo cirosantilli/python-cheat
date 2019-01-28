@@ -200,7 +200,7 @@ if "##type":
         assert type( args.a ) == file
         args.a.close()
 
-if "##nargs":
+if "## nargs":
 
     # Fixed number:
 
@@ -239,7 +239,20 @@ if "##nargs":
     args = parser.parse_args([])
     assert args.a == []
 
-    # Zero or one. Doe not store return a list, but the element itself.
+    # Zero or more arguments with a default:
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'a',
+        default=['1', '2'],
+        nargs='*',
+    )
+    args = parser.parse_args(['1', '2', '3', '4'])
+    assert args.a == ['1', '2', '3', '4']
+    args = parser.parse_args([])
+    assert args.a == ['1', '2']
+
+    # Zero or one. Does not store return a list, but the element itself.
 
     parser = argparse.ArgumentParser()
     parser.add_argument(

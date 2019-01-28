@@ -20,6 +20,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
     1.  [class](class.py)
         1.  [Special methods](special_methods.py)
         1.  [__slots__](slots.py)
+        1.  [issubclass](issubclass.py)
     1.  [Exception](exception.py)
     1.  [Decorator](decorator.py)
     1.  [Exception](exception.py)
