@@ -113,6 +113,18 @@ if '## re module':
 
         assert re.split(r'[ab]+', '0abba1aaaaa2') == ['0', '1', '2']
 
+        # https://stackoverflow.com/questions/2136556/in-python-how-do-i-split-a-string-and-keep-the-separators
+        assert re.split('(0|1)', 'a0bc1d0ef') == ['a', '0', 'bc', '1', 'd', '0', 'ef']
+
+        def split_and_keep(reg, string):
+            __import__('ipdb').set_trace(context=31)
+            lst = re.split(reg, string)
+            for x, y in zip(lst[0::2], lst[1::2]):
+                yield x + y
+        __import__('ipdb').set_trace(context=31)
+        print(list(split_and_keep('(0|1)', 'a0bc1d0ef') == ['a0', 'bc1', 'd0', 'ef']))
+        assert list(split_and_keep('(0|1)', 'a0bc1d0ef')) == ['a0', 'bc1', 'd0', 'ef']
+
 """
 ## Match object
 
