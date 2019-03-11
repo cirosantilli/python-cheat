@@ -13,9 +13,15 @@ import os.path
 
 rootdir = os.path.split(os.path.realpath(__file__))[0]
 
-blacklist = [
+blacklist = set([
     # Broken, haven't fixed or investigated further because lazy.
     'main',
+
+    # Ubuntu 18.10, f7a18231432ccd41595e62a6be9c8b4b336a1dbb + 1:
+    #
+    #     ImportError: No module named pure
+    #     Failed to load "pure"
+    'py_from_c',
 
     # RuntimeError: module compiled against API version 0xb but this version of numpy is 0xa
     'pandas_cheat',
@@ -34,26 +40,29 @@ blacklist = [
     # Infinite loop!
     'test',
 
+    # Perceptible time.
+    'concurrent_cheat',
+    'thread_limit',
+
     # Meant to fail.
     'unittest_cheat',
 
     'wsgi',
-]
+])
 
 ext = '.py'
 # TODO: remove this and run all .py files
 scripts = []
 directories = []
-for f in os.listdir(u'.'):
+for f in sorted(os.listdir(u'.')):
     if os.path.isfile(f):
         if os.access(f, os.X_OK):
             noext, ext = os.path.splitext(f)
             if ext == '.py' and not noext in blacklist:
                 scripts.append(f)
     elif os.path.isdir(f):
-        directories.append(os.path.abspath(f))
-directories.sort()
-scripts.sort()
+        if not f in blacklist:
+            directories.append(os.path.abspath(f))
 
 # Files.
 for script in scripts:

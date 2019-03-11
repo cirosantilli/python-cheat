@@ -52,14 +52,14 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
     1.  Multi-threading
         1.  [Multi threading hello world](thread_hello.py)
         1.  [Limit the number of threads](thread_limit.py)
-        1.  [concurrent](concurrent_cheat.py)
+        1.  [concurrent](concurrent_submit.py)
+            1.  [concurrent map](concurrent_map.py)
     1.  [argparse](argparse_cheat.py)
     1.  [bisect](bisect_cheat.py)
     1.  [collections](collections_cheat.py)
     1.  curses
         1.  [curses/collision.py](curses/collision.py)
     1.  [datetime](datetime_cheat.py)
-    1.  [distutils](distutils_cheat.py)
     1.  [expat](expat_cheat.py)
     1.  [fileinput](fileinput/)
     1.  [logging](logging_cheat.py)
@@ -71,7 +71,6 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
     1.  [random](random_cheat.py)
     1.  [re](re_cheat.py)
     1.  [sqlite3](sqlite3.py)
-    1.  [subprocess](subprocess_cheat/)
     1.  [sys](sys_cheat.py)
     1.  [tempfile](tempfile_cheat.py)
     1.  [termcolor](termcolor_cheat.py)
@@ -83,6 +82,11 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
         1.  [smtplib](smtplib_cheat.py)
         1.  [urllib2](urllib2_cheat.py)
         1.  [wsgi](wsgi.py)
+    1.  Multi-thread
+        1.  concurrent
+            1.  [concurrent map](concurrent_map.py)
+            1.  [concurrent submit](concurrent_submit.py)
+        1.  [subprocess](subprocess_cheat/)
 1.  Third party
     1.  Pexpect
         1.  [pexpect/python_test.py](pexpect/python_test.py)
@@ -102,5 +106,8 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
         1.  [pandas](pandas_cheat.py)
     1.  [Interactive friendly](interactive-friendly.md)
         1. [ipython](ipython.ipy)
+1.  Packaging
+    1.  [distutils](distutils_cheat/)
+    1.  [setuptools](setuptools_cheat/)
 1.  [Bibliography](bibliography.md)
 1.  [CONTRIBUTING](CONTRIBUTING.md)

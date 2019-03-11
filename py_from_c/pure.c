@@ -11,8 +11,9 @@
 
 /* Define a function in C to be accessible from the Python code. */
 static PyObject*
-emb_get_offset(PyObject *self, PyObject *args)
-{
+emb_get_offset(PyObject *self, PyObject *args) {
+    (void)self;
+    (void)args;
     return Py_BuildValue("i", 2);
 }
 
@@ -22,9 +23,7 @@ static PyMethodDef EmbMethods[] = {
     {NULL, NULL, 0, NULL}
 };
 
-int
-main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     PyObject *pName, *pModule, *pFunc;
     PyObject *pArgs, *pValue;
     int i;
@@ -33,19 +32,13 @@ main(int argc, char *argv[])
         fprintf(stderr,"Usage: call pythonfile funcname [args]\n");
         return 1;
     }
-
     Py_Initialize();
     Py_InitModule("emb", EmbMethods);
     pName = PyString_FromString(argv[1]);
-    /* Error checking of pName left out */
-
     pModule = PyImport_Import(pName);
     Py_DECREF(pName);
-
     if (pModule != NULL) {
         pFunc = PyObject_GetAttrString(pModule, argv[2]);
-        /* pFunc is a new reference */
-
         if (pFunc && PyCallable_Check(pFunc)) {
             pArgs = PyTuple_New(argc - 3);
             for (i = 0; i < argc - 3; ++i) {
@@ -56,7 +49,6 @@ main(int argc, char *argv[])
                     fprintf(stderr, "Cannot convert argument\n");
                     return 1;
                 }
-                /* pValue reference stolen here: */
                 PyTuple_SetItem(pArgs, i, pValue);
             }
             pValue = PyObject_CallObject(pFunc, pArgs);
@@ -64,24 +56,21 @@ main(int argc, char *argv[])
             if (pValue != NULL) {
                 printf("%ld\n", PyInt_AsLong(pValue));
                 Py_DECREF(pValue);
-            }
-            else {
+            } else {
                 Py_DECREF(pFunc);
                 Py_DECREF(pModule);
                 PyErr_Print();
                 fprintf(stderr,"Call failed\n");
                 return 1;
             }
-        }
-        else {
+        } else {
             if (PyErr_Occurred())
                 PyErr_Print();
             fprintf(stderr, "Cannot find function \"%s\"\n", argv[2]);
         }
         Py_XDECREF(pFunc);
         Py_DECREF(pModule);
-    }
-    else {
+    } else {
         PyErr_Print();
         fprintf(stderr, "Failed to load \"%s\"\n", argv[1]);
         return 1;
