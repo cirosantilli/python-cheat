@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 ## dict
@@ -65,17 +65,16 @@ assert set(d.keys()) == set([1, 2])
 # http://stackoverflow.com/questions/13886129/why-does-pythons-dict-keys-return-a-list-and-not-a-set
 # set() didn't exist yet!
 
-# To string:
-
-print "dict str() = "
-print d
-
-# Undefined output because undefined key order.
-
 # Get value of key:
 
 d = {1: 'one', 2: 'two'}
 assert d[1] == 'one'
+
+# Access one arbitrary element from dict.
+# https://stackoverflow.com/questions/3097866/access-an-arbitrary-element-in-a-dictionary-in-python
+d = {1:2}
+assert next(iter(d)) == 1
+assert next(iter(d.values())) == 2
 
 # If not in dict, `KeyError` exception:
 
@@ -156,22 +155,11 @@ if 'Iterate / loop over dict':
 
     # Unspecified order. Python 3 has `collections.OrderedDict` (backported to 2.7).
 
-    # Keys only:
-
+    # Keys only.
     assert sorted([i for i in {1:-1, 2:-2}]) == [1, 2]
 
-    if '##iteritems':
-
-        # Keys value pairs:
-
-        assert sorted([(i,j) for i,j in {1:-1, 2:-2}.iteritems()]) == [(1, -1), (2, -2)]
-
-    # Iteritems sorted by key. Must pull all into memory first.
-
-    assert [(i,j) for i,j in sorted({2:-2, 1:-1}.iteritems())] == [(1, -1), (2, -2)]
-
-    # Iteritems is out of Python3. Items is present in both 2 and 3
-    # but returns a list, not an iterator. 2to3 converts it automatically.
+    # Keys value pairs with iteritems.
+    assert sorted([(i,j) for i,j in {1:-1, 2:-2}.items()]) == [(1, -1), (2, -2)]
 
 if '## filter':
 

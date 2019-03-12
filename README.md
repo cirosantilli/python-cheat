@@ -28,7 +28,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
     1.  Data types
         1.  Built-in types
             1. [Number](number.py)
-        1.  [dict](dict.py)
+        1.  [dict](dict_cheat.py)
         1.  [frozenset](frozenset.py)
         1.  [list](list.py)
         1.  [set](set.py)

@@ -118,12 +118,13 @@ if '## re module':
 
         # https://stackoverflow.com/questions/24443995/list-comprehension-joining-every-two-elements-together-in-a-list
         def split_and_keep(reg, string):
+            reg = '(' + reg + ')'
             lst = re.split(reg, string)
             if len(lst) % 2 == 1:
                 lst.append('')
             for x, y in zip(lst[0::2], lst[1::2]):
                 yield x + y
-        assert list(split_and_keep('(0|1)', 'a0bc1d0ef')) == ['a0', 'bc1', 'd0', 'ef']
+        assert list(split_and_keep('0|1', 'a0bc1d0ef')) == ['a0', 'bc1', 'd0', 'ef']
 
 """
 ## Match object
