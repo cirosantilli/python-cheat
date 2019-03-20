@@ -48,7 +48,9 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
                 1.  [pure.c](pure.c)
             1.  [py_from_c/test](py_from_c/test)
 1.  Standard library
-    1.  [Multi-threading](thread_cheat/)
+    1.  Multi-threading
+        1. [Multi threading hello world](thread_cheat/hello.py)
+        1. [Limit the number of threads](thread_cheat/limit.py)
     1.  [argparse](argparse_cheat.py)
     1.  [bisect](bisect_cheat.py)
     1.  [collections](collections_cheat.py)
