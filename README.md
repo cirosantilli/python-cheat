@@ -49,11 +49,6 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
                 1.  [pure.c](pure.c)
             1.  [py_from_c/test](py_from_c/test)
 1.  Standard library
-    1.  Multi-threading
-        1.  [Multi threading hello world](thread_hello.py)
-        1.  [Limit the number of threads](thread_limit.py)
-        1.  [concurrent](concurrent_submit.py)
-            1.  [concurrent map](concurrent_map.py)
     1.  [argparse](argparse_cheat.py)
     1.  [bisect](bisect_cheat.py)
     1.  [collections](collections_cheat.py)
@@ -83,10 +78,14 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
         1.  [urllib2](urllib2_cheat.py)
         1.  [wsgi](wsgi.py)
     1.  Multi-thread
+        1.  [subprocess](subprocess_cheat/)
+        1.  [Multi threading hello world](thread_hello.py)
+        1.  [Limit the number of threads](thread_limit.py)
         1.  concurrent
             1.  [concurrent map](concurrent_map.py)
+            1.  [concurrent map exception](concurrent_map_exception.py)
             1.  [concurrent submit](concurrent_submit.py)
-        1.  [subprocess](subprocess_cheat/)
+
 1.  Third party
     1.  Pexpect
         1.  [pexpect/python_test.py](pexpect/python_test.py)

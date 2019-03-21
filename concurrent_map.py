@@ -15,6 +15,8 @@ Extremely likely outcome:
 
 Interpretation:
 
+-   like map(), the return order is fixed and matches the input
+
 -   threads run in parallel, runtime is just 4 seconds
 
     All threads started running immediately from beginning.
