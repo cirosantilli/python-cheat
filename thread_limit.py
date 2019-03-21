@@ -14,7 +14,7 @@ To see error handling in action, start from a negative integer, e.g.:
 Notice how execution stops soon after the error.
 '''
 
-from typing import Any, Callable, Union
+from typing import Any, Callable, Dict, Iterable, Union
 import multiprocessing
 import queue
 import sys
@@ -23,7 +23,7 @@ import time
 
 def run_in_parallel(
         func: Callable,
-        get_work: Callable[[], Any],
+        works: Iterable[Dict[str,Any]],
         handle_output: Union[Callable,None] = None,
         nthreads: Union[int,None] = None
     ):
@@ -40,7 +40,7 @@ def run_in_parallel(
     :param func: main function to be evaluated. If an exception is raised,
                  stop submiting new work and exit as soon as currently
                  running work finishes.
-    :param get_work: returns a kwargs dict with inputs for func
+    :param works: returns a kwargs dict with inputs for func
     :param handle_output: called on func return values as they
                  are returned
     :param nthreads: number of threads to use
@@ -79,7 +79,7 @@ def run_in_parallel(
         threads.append(thread)
         thread.start()
     error_output = None
-    for work in get_work():
+    for work in works:
         in_queue.put(work)
         if not out_queue.empty():
             output = out_queue.get()
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     # Action.
     error = run_in_parallel(
         my_func,
-        lambda: my_get_work(min_, max_),
+        my_get_work(min_, max_),
         my_handle_output,
         my_nthreads
     )
