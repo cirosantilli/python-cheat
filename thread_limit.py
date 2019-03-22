@@ -3,22 +3,7 @@
 '''
 https://stackoverflow.com/questions/19369724/the-right-way-to-limit-maximum-number-of-threads-running-at-once/55263676#55263676
 
-Usage:
-
-    ./thread_limit.py [nproc [min [max [output_handler]]]
-
-To see error handling in action, start from a negative integer, e.g.:
-
-    ./thread_limit.py 2 -10 1000 0
-
-Notice how execution stops soon after the error.
-
-Quick tests with:
-
-    ./thread_limit.py 2 -10 20 0
-    ./thread_limit.py 2 -10 20 1
-    ./thread_limit.py 2 -10 20 2
-    ./thread_limit.py 2 -10 20 3
+Full docs and canonical version at: https://github.com/cirosantilli/linux-kernel-module-cheat/blob/287c83f3f99db8c1ff9bbc85a79576da6a78e986/thread_pool.py
 '''
 
 from typing import Any, Callable, Dict, Iterable, Union
@@ -34,36 +19,6 @@ def run_in_parallel(
     handle_output: Union[Callable[[Any,Any,Exception],Any],None] = None,
     nthreads: Union[int,None] = None
 ):
-    """
-    Run a function in parallel.
-
-    Design goals:
-
-    - the input funcion does not need to be modified
-    - limit the number of threads
-    - queue sizes closely follow number of threads
-    - if an exception happens, optionally stop soon afterwards
-
-    :param func: main function to be evaluated.
-    :param works: list of kwargs dicts with inputs for func
-    :param handle_output: called on func return values as they
-        are returned.
-
-        Signature is: handle_output(input, output, exception) where:
-
-        - input: input given to func
-        - output: return value of func
-        - exception: the exception that func raised, or None otherwise
-
-        If this function returns non-None or raises, stop feeding
-        new input and exit ASAP when all currently running threads
-        have finished.
-
-        Default: a handler that does nothing.
-    :param nthreads: number of threads to use. Default: nproc.
-    :return: None in case of success, otherwise the return
-             value of handle_output
-    """
     error_output = None
     error_output_lock = threading.Lock()
     def func_runner(func, in_queue, handle_output):
