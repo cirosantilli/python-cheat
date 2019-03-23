@@ -41,7 +41,11 @@ blacklist = set([
     'test',
 
     # Perceptible time.
-    'concurrent_cheat',
+    'concurrent_submit',
+    'concurrent_map',
+    'concurrent_map_exception',
+    'thread_add',
+    'thread_cpu_bound',
     'thread_limit',
 
     # Meant to fail.

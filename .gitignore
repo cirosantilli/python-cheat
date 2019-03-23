@@ -1,6 +1,7 @@
 *.py[cod]
 *.tmp
 tmp.*
+*.tmp.*
 *_local.py
 
 # Extensions

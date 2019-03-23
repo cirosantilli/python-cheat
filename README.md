@@ -80,6 +80,8 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
     1.  Multi-thread
         1.  [subprocess](subprocess_cheat/)
         1.  [Multi threading hello world](thread_hello.py)
+        1.  [Multi threading adder](thread_add.py)
+        1.  [Thread CPU bound vs IO bound](thread_cpu_bound.py)
         1.  [Limit the number of threads](thread_limit.py)
         1.  concurrent
             1.  [concurrent map](concurrent_map.py)

@@ -1,30 +1,23 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-"""
-Minimal threading.Thread example.
-
-Note that this example does not give any performance gain in non-NUMA PCs
-because RAM is the bottleneck and there is only one RAM access.
-
-Making multiple network requests concurrently would be a real world use case however.
-"""
+'''
+It is asynchronous, I promise.
+'''
 
 import threading
 
-class SummingThread(threading.Thread):
-     def __init__(self, values):
-         super(SummingThread, self).__init__()
-         self.values = values
-         self.total = 0
-     def run(self):
-         for i in self.values:
-             self.total += i
-
-thread1 = SummingThread([1, 2, 3])
-thread2 = SummingThread([4, 5, 6])
-thread1.start()
-thread2.start()
-thread1.join()
-thread2.join()
-assert thread1.total == 6
-assert thread2.total == 15
+def f():
+    global ok
+    lock.acquire()
+    lock.release()
+    ok = (x == 1)
+ok = False
+x = 0
+lock = threading.Lock()
+lock.acquire()
+thread = threading.Thread(target=f)
+thread.start()
+x = 1
+lock.release()
+thread.join()
+assert ok
