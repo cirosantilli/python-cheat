@@ -22,11 +22,11 @@ if '## string literals':
 
     if '## Single vs double quotes':
 
-        # There is no semantical difference:
+        # There is no semantic difference:
 
         assert 'abc' == 'abc'
 
-        # Except for excaping quotes themselves:
+        # Except for escaping quotes themselves:
 
         assert "'" == '\''
         assert '"' == "\""
