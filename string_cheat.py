@@ -443,3 +443,8 @@ if '## unicode ## encodings':
     # GOOD:
 
     print u'中文'.encode('utf-8')
+
+if '## lower and upper case':
+
+    assert 'aBcD'.lower() == 'abcd'
+    assert 'aBcD'.upper() == 'ABCD'
