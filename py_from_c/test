@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
 set -eu
+make clean
+make
 [ "$(./eval.out 'print(2 ** 3)')" = 8 ]
+[ "$(./eval.out 'import sys; print(sys.version_info.major)')" = 2 ]
 [ "$(PYTHONPATH="$(pwd):${PYTHONPATH:-}" ./pure.out pure multiply_plus_2 3 2)" = 8 ]
+make clean
+make PYTHON_CONFIG=python3-config
+[ "$(./eval.out 'print(2 ** 3)')" = 8 ]
+[ "$(./eval.out 'import sys; print(sys.version_info.major)')" = 3 ]
+# TODO get working. Compiles but does not find the defined_in_c module.
+# I didn't spend much time on it though, should be easy to get working by properly reading
+# https://docs.python.org/3/extending/extending.html
+# [ "$(PYTHONPATH="$(pwd):${PYTHONPATH:-}" ./pure.out pure multiply_plus_2 3 2)" = 8 ]
