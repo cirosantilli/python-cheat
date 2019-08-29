@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -eu
 [ "$(./eval.out 'print(2 ** 3)')" = 8 ]
-[ "$(./pure.out pure multiply_plus_2 3 2)" = 8 ]
+[ "$(PYTHONPATH="$(pwd):${PYTHONPATH:-}" ./pure.out pure multiply_plus_2 3 2)" = 8 ]

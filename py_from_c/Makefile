@@ -12,7 +12,7 @@ OUTS = $(addsuffix $(OUT_EXT), $(basename $(wildcard *$(IN_EXT))))
 all: $(OUTS)
 
 %$(OUT_EXT): %$(IN_EXT)
-	$(CC) $(CFLGS) $$(pkg-config --cflags python) -o '$@' '$<' $$(pkg-config --libs python)
+	$(CC) $(CFLGS) $$(python-config --cflags) -o '$@' '$<' $$(python-config --libs)
 
 clean:
 	rm -f *'$(OUT_EXT)'
