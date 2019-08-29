@@ -39,6 +39,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
             1. [Format operator %](format_operator.py)
         1.  [tuple](tuple.py)
     1.  [Multi-file operations](multifile/): `import`, modules, `imp`
+        1.  [import_cheat](import_cheat/)
     1.  [Operators](operators.py)
     1.  [Python 3](python3/)
     1.  Cross-language
