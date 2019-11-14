@@ -61,6 +61,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
     1.  [fileinput](fileinput/)
     1.  [logging](logging_cheat.py)
     1.  [math](math_cheat.py)
+    1.  [optparse](optparse_cheat.py)
     1.  [os](os_cheat.py)
         1.  [environ](environ.py)
         1.  [path](path_cheat.py)
