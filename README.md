@@ -1,5 +1,9 @@
 # Python Cheat ![logo](logo.png)
 
+This repo is in the process of moving to: https://cirosantilli.com/linux-kernel-module-cheat#python
+
+The move will be done progressively as examples are needed there, and no new content will be added here.
+
 [![Build Status](https://travis-ci.org/cirosantilli/python-cheat.svg?branch=master)](https://travis-ci.org/cirosantilli/python-cheat)
 
 Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
