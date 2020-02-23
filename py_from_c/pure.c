@@ -362,6 +362,8 @@ my_native_module_init_func(void) {
     }
 
     /* Create MyDerivedNativeClass */
+    /* This is the line that actually specifies the base class in Python. */
+    my_native_module_MyDerivedNativeClassType.tp_base = &my_native_module_MyNativeClassType;
     if (PyType_Ready(&my_native_module_MyDerivedNativeClassType) < 0)
         return NULL;
     Py_INCREF(&my_native_module_MyDerivedNativeClassType);
