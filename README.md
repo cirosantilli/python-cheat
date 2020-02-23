@@ -112,6 +112,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
         1.  [matplotlib](matplotlib/)
         1.  [jupyter](jupyter/)
         1.  [pandas](pandas_cheat.py)
+        1.  [h5py](h5py_cheat.py) HDF5
     1.  [Interactive friendly](interactive-friendly.md)
         1. [ipython](ipython.ipy)
 1.  Packaging

@@ -1,26 +1,25 @@
 .POSIX:
 
 CC = gcc
-CFLGS = -ggdb3 -O0 -pedantic-errors -std=c99 -Wall -Wextra
+CXX = g++
+CFLGS = -std=c99
+CCFLGS = -ggdb3 -O0 -pedantic-errors -Wall -Wextra
+CXXFLGS = -std=c++11
 IN_EXT = .c
+IN_CXX_EXT = .cpp
 OUT_EXT = .out
-PYTHON_CONFIG = python-config
-ifeq ($(PYTHON_CONFIG),python3-config)
-	# https://askubuntu.com/questions/1169364/building-python-3-c-extension-modules-in-ubuntu-18-04-fails-with-relocation-r-x
-	CONFIG_CFLAGS = -I/usr/include/python3.6m -I/usr/include/python3.6m  -Wno-unused-result -Wsign-compare -g -fdebug-prefix-map=/build/python3.6-PEMn0O/python3.6-3.6.8=. -fstack-protector -Wformat -Werror=format-security  -DNDEBUG -g -fwrapv -O3 -Wall
-else
-	CONFIG_CFLAGS = $$($(PYTHON_CONFIG) --cflags)
-endif
 
-OUTS = $(addsuffix $(OUT_EXT), $(basename $(wildcard *$(IN_EXT))))
+OUTS = $(addsuffix $(OUT_EXT), $(basename $(wildcard *$(IN_EXT))) $(basename $(wildcard *$(IN_CXX_EXT))))
 
 .PHONY: all clean test
 
 all: $(OUTS)
 
 %$(OUT_EXT): %$(IN_EXT)
-	@# UNDEBUG: https://stackoverflow.com/questions/4541565/how-can-i-assert-from-python-c-code
-	$(CC) $(CFLGS) $(CONFIG_CFLAGS) $$($(PYTHON_CONFIG) --ldflags) -UNDEBUG -o '$@' '$<' $$($(PYTHON_CONFIG) --libs)
+	$(CC) $(CFLGS) $(CCFLGS) $$(pkg-config --cflags python3) -o '$@' '$<' $$(pkg-config --libs python3)
+
+%$(OUT_EXT): %$(IN_CXX_EXT)
+	$(CXX) $(CXXFLGS) $(CCFLGS) $$(pkg-config --cflags python3) -o '$@' '$<' $$(pkg-config --libs python3)
 
 clean:
 	rm -f *'$(OUT_EXT)'
