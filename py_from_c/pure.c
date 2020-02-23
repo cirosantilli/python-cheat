@@ -83,6 +83,22 @@ my_native_module_MyNativeClass_dealloc(my_native_module_MyNativeClass *self) {
     Py_TYPE(self)->tp_free((PyObject *) self);
 }
 
+static int
+my_native_module_MyNativeClass_traverse(my_native_module_MyNativeClass *self, visitproc visit, void *arg)
+{
+    Py_VISIT(self->first);
+    Py_VISIT(self->last);
+    return 0;
+}
+
+static int
+my_native_module_MyNativeClass_clear(my_native_module_MyNativeClass *self)
+{
+    Py_CLEAR(self->first);
+    Py_CLEAR(self->last);
+    return 0;
+}
+
 static PyObject *
 my_native_module_MyNativeClass_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
@@ -170,10 +186,12 @@ static PyTypeObject my_native_module_MyNativeClassType = {
     .tp_doc = "My native class",
     .tp_basicsize = sizeof(my_native_module_MyNativeClass),
     .tp_itemsize = 0,
-    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_HAVE_GC,
     .tp_new = my_native_module_MyNativeClass_new,
     .tp_init = (initproc) my_native_module_MyNativeClass_init,
     .tp_dealloc = (destructor) my_native_module_MyNativeClass_dealloc,
+    .tp_traverse = (traverseproc) my_native_module_MyNativeClass_traverse,
+    .tp_clear = (inquiry) my_native_module_MyNativeClass_clear,
     .tp_members = my_native_module_MyNativeClass_members,
     .tp_methods = my_native_module_MyNativeClass_methods,
 };
@@ -190,6 +208,22 @@ my_native_module_MyDerivedNativeClass_dealloc(my_native_module_MyDerivedNativeCl
     Py_XDECREF(self->first2);
     Py_XDECREF(self->last2);
     Py_TYPE(self)->tp_free((PyObject *) self);
+}
+
+static int
+my_native_module_MyDerivedNativeClass_traverse(my_native_module_MyDerivedNativeClass *self, visitproc visit, void *arg)
+{
+    Py_VISIT(self->first2);
+    Py_VISIT(self->last2);
+    return 0;
+}
+
+static int
+my_native_module_MyDerivedNativeClass_clear(my_native_module_MyDerivedNativeClass *self)
+{
+    Py_CLEAR(self->first2);
+    Py_CLEAR(self->last2);
+    return 0;
 }
 
 static PyObject *
@@ -291,10 +325,12 @@ static PyTypeObject my_native_module_MyDerivedNativeClassType = {
     .tp_doc = "My native class",
     .tp_basicsize = sizeof(my_native_module_MyDerivedNativeClass),
     .tp_itemsize = 0,
-    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_HAVE_GC,
     .tp_new = my_native_module_MyDerivedNativeClass_new,
     .tp_init = (initproc) my_native_module_MyDerivedNativeClass_init,
     .tp_dealloc = (destructor) my_native_module_MyDerivedNativeClass_dealloc,
+    .tp_traverse = (traverseproc) my_native_module_MyDerivedNativeClass_traverse,
+    .tp_clear = (inquiry) my_native_module_MyDerivedNativeClass_clear,
     .tp_members = my_native_module_MyDerivedNativeClass_members,
     .tp_methods = my_native_module_MyDerivedNativeClass_methods,
 };
