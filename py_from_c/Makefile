@@ -22,7 +22,7 @@ all: $(OUTS)
 	$(CXX) $(CXXFLGS) $(CCFLGS) $$(pkg-config --cflags python3) -o '$@' '$<' $$(pkg-config --libs python3)
 
 clean:
-	rm -f *'$(OUT_EXT)'
+	rm -rf *'$(OUT_EXT)' __pycache__ *.pyc
 
 test: all
 	@\
