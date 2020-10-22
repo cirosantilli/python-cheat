@@ -10,13 +10,19 @@ bisect.insort_left(l, 1)
 assert l == [0, 1, 2, 4]
 
 # Find in sorted list.
+# bisect_left gives the position at which insertion would keep the list sorted.
 
 l = [0, 0, 2]
 assert bisect.bisect_left(l, -1) == 0
 assert bisect.bisect_left(l, 0) == 0
-assert bisect.bisect_right(l, 0) == 2
 assert bisect.bisect_left(l, 1) == 2
 assert bisect.bisect_left(l, 2) == 2
+assert bisect.bisect_left(l, 3) == 3
+
+assert bisect.bisect_right(l, -1) == 0
+assert bisect.bisect_right(l, 0) == 2
+assert bisect.bisect_right(l, 1) == 2
+assert bisect.bisect_right(l, 2) == 3
 
 # Slice sorted list.
 # https://stackoverflow.com/questions/13631720/python-optimized-method-of-cutting-slicing-sorted-lists/47477642#47477642

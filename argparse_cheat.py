@@ -127,6 +127,25 @@ if '## Optional args':
 
     # boolean flags: see store_true and action.
 
+if '## Optional args with nargs="?"':
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-a', '--arg', nargs='?', default=None, action='append')
+    parser.add_argument('-b', '--brg', action='store_true', default=False)
+    args = parser.parse_args([])
+    assert args.arg == None
+    assert not args.brg
+    args = parser.parse_args(['-a', '-b'])
+    assert args.arg == [None]
+    assert args.brg
+    args = parser.parse_args(['-a', '1', '-b'])
+    assert args.arg == ['1']
+    assert args.brg
+    # If the value starts with -, you have to add =:
+    args = parser.parse_args(['-a=-b', '-b'])
+    assert args.arg == ['-b']
+    assert args.brg
+
 if '## default':
 
     parser = argparse.ArgumentParser()
@@ -186,7 +205,8 @@ if '## type':
 
     # boolean: see store_true and action.
 
-    if '## file type':
+    if False and '## file type':
+        # TODO port to python3.
 
         parser = argparse.ArgumentParser()
         parser.add_argument(

@@ -49,7 +49,7 @@ _out
 .venv/
 
 # Data files.
-*.dat
+/thread_cpu_bound.dat
 
 # Jupyter
 .ipynb_checkpoints
