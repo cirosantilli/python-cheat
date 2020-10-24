@@ -12,6 +12,8 @@ This will automatically be done with a `Makefile` outside this dir.
 
 If you want to generate more than one plot per file, put the file that will do that outside this dir and customize the makefile.
 
+1.  [Hello](hello.py)
+1.  [Educational](educational.py)
 1.  [Axis](axis.py)
 1.  [Label title](label_title.py)
 1.  Line style
