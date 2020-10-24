@@ -109,7 +109,7 @@ Python minimal examples. Asserts used wherever possible. Tested in Ubuntu 18.04.
         1.  [NumPy](numpy_cheat.py)
         1.  [SciPy](scipy_cheat.py)
         1.  [SimPy](simpy_cheat.py)
-        1.  [matplotlib](matplotlib/)
+        1.  [matplotlib](matplotlib.md). Moving to https://cirosantilli.com#matplotlib
         1.  [jupyter](jupyter/)
         1.  [pandas](pandas_cheat.py)
         1.  [h5py](h5py_cheat.py) HDF5
